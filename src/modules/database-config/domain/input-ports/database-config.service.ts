@@ -1,8 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../../../../common/entities/user.entity';
-import { Role } from '../../../../common/entities/role.entity';
+
+//Entity
+import { RoleEntity } from '../../../../common/entities/role.entity';
+import { SystemUsers } from '../../../../common/entities/system-users.entity';
+import { DepartmentEntity } from '../../../../common/entities/department.entity';
+import { MunicipalityEntity } from '../../../../common/entities/municipality.entity';
+import { IdentificationTypeEntity } from '../../../../common/entities/identification-type.entity';
+import { EpsEntity } from '../../../../common/entities/eps.entity';
+import { GenderEntity } from '../../../../common/entities/gender.entity';
+import { AreaEntity } from '../../../../common/entities/area.entity';
+import { AffiliateTypeEntity } from '../../../../common/entities/affiliate-type.entity';
+import { DisabilityTypeEntity } from '../../../../common/entities/disability-type.entity';
+import { MethodologyEntity } from '../../../../common/entities/methodology.entity';
+import { LevelEntity } from '../../../../common/entities/level.entity';
+import { GroupSubgroupEntity } from '../../../../common/entities/group-subgroup.entity';
+import { MembershipClassEntity } from '../../../../common/entities/membership-class.entity';
+import { PopulationTypeEntity } from '../../../../common/entities/population-type.entity';
+import { EthnicityEntity } from '../../../../common/entities/ethnicity.entity';
+import { CommunityEntity } from '../../../../common/entities/community.entity';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -26,7 +43,25 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       database,
       username,
       password,
-      entities: [User, Role],
+      entities: [
+        SystemUsers,
+        RoleEntity,
+        DepartmentEntity,
+        MunicipalityEntity,
+        IdentificationTypeEntity,
+        EpsEntity,
+        GenderEntity,
+        AreaEntity,
+        AffiliateTypeEntity,
+        DisabilityTypeEntity,
+        MethodologyEntity,
+        LevelEntity,
+        GroupSubgroupEntity,
+        MembershipClassEntity,
+        PopulationTypeEntity,
+        EthnicityEntity,
+        CommunityEntity,
+      ],
       synchronize: false,
     };
   }

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database/data:/var/lib/mysql
+      - ./database/characterization.sql:/docker-entrypoint-initdb.d/characterization.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=toor
+      - MYSQL_PASSWORD=toor
+
+  database-admin:
+    container_name: database_admin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: toor
+      PMA_HOST: db
+    restart: always
+    ports:
+      - 8082:80
+    volumes:
+      - /sessions
+
+volumes:
+  db_data:

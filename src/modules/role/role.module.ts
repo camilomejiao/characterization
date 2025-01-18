@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { JsonApiModule } from 'json-api-nestjs';
 
 //
-import { Role } from '../../common/entities/role.entity';
+import { RoleEntity } from '../../common/entities/role.entity';
 
 //Use Case
 import { CreateRoleUseCase } from './domain/input-ports/use-cases/create-role.usecase';
@@ -17,7 +17,7 @@ import { RoleController } from './adapters/input/role.controller';
 @Module({
   imports: [
     JsonApiModule.forRoot({
-      entities: [Role],
+      entities: [RoleEntity],
       providers: [
         CreateRoleUseCase,
         {

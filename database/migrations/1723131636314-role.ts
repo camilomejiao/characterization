@@ -20,6 +20,12 @@ export class Role1723131636314 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'description',
+            type: 'varchar',
+            length: '255',
+            isNullable: true,
+          },
+          {
             name: 'is_active',
             type: 'int',
             length: '1',
@@ -42,6 +48,13 @@ export class Role1723131636314 implements MigrationInterface {
           },
         ],
         foreignKeys: [],
+        indices: [
+          {
+            name: 'data_unique',
+            columnNames: ['name'],
+            isUnique: true,
+          },
+        ],
         engine: 'InnoDB',
       }),
     );

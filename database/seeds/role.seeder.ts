@@ -1,15 +1,16 @@
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
-import { Role } from '../../src/common/entities/role.entity';
+import { RoleEntity } from '../../src/common/entities/role.entity';
 
 export class RolesSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
-    const repository = dataSource.getRepository(Role);
+    const repository = dataSource.getRepository(RoleEntity);
 
     const regs = [
       {
         id: 1,
         name: 'SUPER_ADMIN',
+        description: 'SUPER_ADMIN',
         is_active: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -17,7 +18,8 @@ export class RolesSeeder implements Seeder {
       },
       {
         id: 2,
-        name: 'ADMIN_FILE',
+        name: 'REGISTER',
+        description: 'REGISTER',
         is_active: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),

@@ -1,7 +1,7 @@
-import { Attributes } from '../../../adapters/input/dto/role.dto';
+import { RoleDto } from '../../../adapters/input/dto/role.dto';
 import { IRoleRepository } from '../../output-ports/role.repository';
 import { Inject } from '@nestjs/common';
-import { Role } from '../../../../../common/entities/role.entity';
+import { RoleEntity } from '../../../../../common/entities/role.entity';
 
 export class CreateRoleUseCase {
   constructor(
@@ -9,10 +9,11 @@ export class CreateRoleUseCase {
     private roleRepository: IRoleRepository,
   ) {}
 
-  public async handler(roleDto: Attributes): Promise<Role> {
+  public async handler(roleDto: RoleDto): Promise<RoleEntity> {
     try {
-      const role = new Role({
+      const role = new RoleEntity({
         name: roleDto.name,
+        description: roleDto.description,
         is_active: roleDto.is_active,
       });
       return await this.roleRepository.create(role);

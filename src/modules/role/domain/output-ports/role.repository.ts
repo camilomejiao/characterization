@@ -1,6 +1,10 @@
-import { Role } from '../../../../common/entities/role.entity';
+import { RoleEntity } from '../../../../common/entities/role.entity';
 
 export interface IRoleRepository {
-  create(entity: Partial<Role>): Promise<Role>;
+  create(entity: Partial<RoleEntity>): Promise<RoleEntity>;
+
+  findAll(): Promise<RoleEntity[]>;
+
+  findOneBy(condition: Partial<RoleEntity>): Promise<RoleEntity | null>;
 }
 export const IRoleRepository = Symbol('IRoleRepository');

@@ -1,36 +1,34 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Inject,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleDto } from './dto/role.dto';
 import { CreateRoleUseCase } from '../../domain/input-ports/use-cases/create-role.usecase';
-import { Role } from '../../../../common/entities/role.entity';
+import { RoleEntity } from '../../../../common/entities/role.entity';
 import { excludeMethod, JsonApi, JsonBaseController } from 'json-api-nestjs';
+import { IRoleRepository } from '../../domain/output-ports/role.repository';
+import { AuthGuard } from '@nestjs/passport';
 
-@JsonApi(Role, {
-  allowMethod: excludeMethod([
-    'patchOne',
-    'postOne',
-    'deleteOne',
-    'deleteRelationship',
-    'getRelationship',
-    'postRelationship',
-    'patchRelationship',
-  ]),
+@JsonApi(RoleEntity, {
+  allowMethod: excludeMethod([]),
   requiredSelectField: true,
   overrideRoute: 'roles',
 })
 @ApiTags('roles')
 @Controller('roles')
-export class RoleController extends JsonBaseController<Role> {
+export class RoleController extends JsonBaseController<RoleEntity> {
   constructor(
     @Inject(CreateRoleUseCase)
     private readonly createRoleUseCase: CreateRoleUseCase,
+    @Inject(IRoleRepository)
+    private readonly roleRepository: IRoleRepository,
   ) {
     super();
   }
@@ -96,19 +94,16 @@ export class RoleController extends JsonBaseController<Role> {
     },
   })
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   public async create(@Body() roleDto: RoleDto) {
-    const role = await this.createRoleUseCase.handler(roleDto.data.attributes);
+    const role = await this.createRoleUseCase.handler(roleDto);
 
     if (role) {
       return {
-        meta: {},
         data: {
           type: 'users',
           id: `${role.id}`,
           attributes: role,
-          links: {
-            self: `/role/${role.id}`,
-          },
         },
       };
     }
@@ -116,5 +111,11 @@ export class RoleController extends JsonBaseController<Role> {
     if (!role) {
       throw new HttpException('Role not created', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  public async get(): Promise<RoleEntity[]> {
+    return await this.roleRepository.findAll(); // Utiliza el método del repositorio
   }
 }

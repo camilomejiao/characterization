@@ -22,7 +22,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  setupSwagger(app);
+  //setupSwagger(app);
 
   await app.listen(3000);
 }

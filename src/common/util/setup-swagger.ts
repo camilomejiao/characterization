@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function setupSwagger(app: INestApplication): void {
   const options = new DocumentBuilder()
-    .setTitle('Goals Service API')
+    .setTitle('Characterization Service API')
     .setVersion('1.0.0')
     .addBearerAuth({
       type: 'http',

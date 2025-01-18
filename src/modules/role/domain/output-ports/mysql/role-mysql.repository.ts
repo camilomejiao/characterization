@@ -1,18 +1,26 @@
 import { IRoleRepository } from '../role.repository';
 import { Injectable } from '@nestjs/common';
-import { Role } from '../../../../../common/entities/role.entity';
+import { RoleEntity } from '../../../../../common/entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class RoleMysqlRepository implements IRoleRepository {
   constructor(
-    @InjectRepository(Role)
-    private readonly repository: Repository<Role>,
+    @InjectRepository(RoleEntity)
+    private readonly repository: Repository<RoleEntity>,
     private readonly entityManager: EntityManager,
   ) {}
 
-  async create(entity: Role): Promise<Role> {
+  async create(entity: RoleEntity): Promise<RoleEntity> {
     return await this.entityManager.save(entity);
+  }
+
+  async findOneBy(condition: Partial<RoleEntity>): Promise<RoleEntity | null> {
+    return await this.repository.findOneBy(condition);
+  }
+
+  async findAll(): Promise<RoleEntity[]> {
+    return await this.repository.find(); // Implementa el método para obtener todos los registros
   }
 }

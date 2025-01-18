@@ -5,11 +5,19 @@ import { JsonApiErrorFilter } from './common/util/jsonapi-error.handler';
 import { ConfigModule } from '@nestjs/config';
 import environment from './config/environment';
 import { RoleModule } from './modules/role/role.module';
+import { DepartmentMunicipalityModule } from './modules/department-municipality/department-municipality.module';
+import { SystemUserModule } from './modules/sysyem-user/system-user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { CommonModule } from './modules/common/common.module';
 
 @Module({
   imports: [
     DatabaseModule,
+    AuthModule,
     RoleModule,
+    DepartmentMunicipalityModule,
+    CommonModule,
+    SystemUserModule,
     ConfigModule.forRoot({
       load: [environment],
       isGlobal: true,
