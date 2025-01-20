@@ -4,7 +4,7 @@ export class AffiliateType1735235493375 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'affiliate-type',
+        name: 'affiliate_type',
         columns: [
           {
             name: 'id',
@@ -28,6 +28,6 @@ export class AffiliateType1735235493375 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('affiliate-type');
+    await queryRunner.dropTable('affiliate_type');
   }
 }

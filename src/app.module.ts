@@ -9,6 +9,7 @@ import { DepartmentMunicipalityModule } from './modules/department-municipality/
 import { SystemUserModule } from './modules/sysyem-user/system-user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
+import { AffiliatesModule } from './modules/affiliates/affiliates.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CommonModule } from './modules/common/common.module';
     DepartmentMunicipalityModule,
     CommonModule,
     SystemUserModule,
+    AffiliatesModule,
     ConfigModule.forRoot({
       load: [environment],
       isGlobal: true,

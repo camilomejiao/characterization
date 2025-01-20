@@ -20,8 +20,9 @@ export class SystemUserController {
 
   @Post('create')
   @UseGuards(AuthGuard('jwt'))
-  public async create(@Body() systemUserDto: SystemUserDto) {
-    console.log('SystemUserDto: ', SystemUserDto);
+  public async create(
+    @Body() systemUserDto: SystemUserDto,
+  ): Promise<{ data: { type: string; id: string } }> {
     const user = await this.createUserUsecase.handler(systemUserDto);
 
     if (user) {

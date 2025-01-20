@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 //Entity
 import { RoleEntity } from '../../../../common/entities/role.entity';
-import { SystemUsers } from '../../../../common/entities/system-users.entity';
+import { SystemUsersEntity } from '../../../../common/entities/system-users.entity';
 import { DepartmentEntity } from '../../../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../../../common/entities/municipality.entity';
 import { IdentificationTypeEntity } from '../../../../common/entities/identification-type.entity';
@@ -20,6 +20,7 @@ import { MembershipClassEntity } from '../../../../common/entities/membership-cl
 import { PopulationTypeEntity } from '../../../../common/entities/population-type.entity';
 import { EthnicityEntity } from '../../../../common/entities/ethnicity.entity';
 import { CommunityEntity } from '../../../../common/entities/community.entity';
+import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -44,7 +45,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       username,
       password,
       entities: [
-        SystemUsers,
+        SystemUsersEntity,
         RoleEntity,
         DepartmentEntity,
         MunicipalityEntity,
@@ -61,6 +62,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         PopulationTypeEntity,
         EthnicityEntity,
         CommunityEntity,
+        AffiliatesEntity,
       ],
       synchronize: false,
     };

@@ -1,14 +1,14 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { SystemUsers } from '../../src/common/entities/system-users.entity';
+import { SystemUsersEntity } from '../../src/common/entities/system-users.entity';
 import { RoleEntity } from '../../src/common/entities/role.entity';
 import { DepartmentEntity } from '../../src/common/entities/department.entity';
 import { MunicipalityEntity } from '../../src/common/entities/municipality.entity';
 
 export class System_userSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
-    const repository = dataSource.getRepository(SystemUsers);
+    const repository = dataSource.getRepository(SystemUsersEntity);
     const roleRepository = dataSource.getRepository(RoleEntity);
     const departmentRepository = dataSource.getRepository(DepartmentEntity);
     const municipalityRepository = dataSource.getRepository(MunicipalityEntity);

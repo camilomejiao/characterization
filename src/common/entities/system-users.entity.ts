@@ -4,8 +4,8 @@ import { RoleEntity } from './role.entity';
 import { DepartmentEntity } from './department.entity';
 import { MunicipalityEntity } from './municipality.entity';
 
-@Entity('system-user')
-export class SystemUsers extends AbstractEntity<SystemUsers> {
+@Entity('system_user')
+export class SystemUsersEntity extends AbstractEntity<SystemUsersEntity> {
   @Column()
   name: string;
 

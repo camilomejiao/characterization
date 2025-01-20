@@ -4,7 +4,7 @@ export class MembershipClass1736547483985 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'membership-class',
+        name: 'membership_class',
         columns: [
           {
             name: 'id',
@@ -28,6 +28,6 @@ export class MembershipClass1736547483985 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('membership-class');
+    await queryRunner.dropTable('membership_class');
   }
 }

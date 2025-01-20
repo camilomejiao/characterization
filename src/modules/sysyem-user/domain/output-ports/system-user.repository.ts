@@ -1,11 +1,11 @@
-import { SystemUsers } from '../../../../common/entities/system-users.entity';
+import { SystemUsersEntity } from '../../../../common/entities/system-users.entity';
 
 export interface ISystemUserRepository {
-  create(entity: SystemUsers): Promise<SystemUsers>;
+  create(entity: SystemUsersEntity): Promise<SystemUsersEntity>;
 
-  findOneBy(condition: Partial<SystemUsers>): Promise<SystemUsers>;
+  findOneBy(condition: Partial<SystemUsersEntity>): Promise<SystemUsersEntity>;
 
-  getUser(condition: Partial<SystemUsers>): Promise<SystemUsers>;
+  getUser(condition: Partial<SystemUsersEntity>): Promise<SystemUsersEntity>;
 }
 
 export const ISystemUserRepository = Symbol('ISystemUserRepository');

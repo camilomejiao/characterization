@@ -4,7 +4,7 @@ export class GroupSubgroup1736544939934 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'group-subgroup',
+        name: 'group_subgroup',
         columns: [
           {
             name: 'id',
@@ -34,6 +34,6 @@ export class GroupSubgroup1736544939934 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('group-subgroup');
+    await queryRunner.dropTable('group_subgroup');
   }
 }

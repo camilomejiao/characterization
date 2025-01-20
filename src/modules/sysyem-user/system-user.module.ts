@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 //Entity
-import { SystemUsers } from '../../common/entities/system-users.entity';
+import { SystemUsersEntity } from '../../common/entities/system-users.entity';
 import { RoleEntity } from '../../common/entities/role.entity';
 import { DepartmentEntity } from '../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../common/entities/municipality.entity';
@@ -30,12 +30,12 @@ import { MunicipalityMysqlRepository } from '../department-municipality/domain/o
       RoleEntity,
       DepartmentEntity,
       MunicipalityEntity,
-      SystemUsers,
+      SystemUsersEntity,
     ]),
   ],
   controllers: [SystemUserController],
   providers: [
-    CreateUserUsecase, // Caso de uso
+    CreateUserUsecase, //Caso de uso
     {
       provide: IRoleRepository,
       useClass: RoleMysqlRepository,

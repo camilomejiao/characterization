@@ -4,7 +4,7 @@ export class SystemUsers1735155096824 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'system-user',
+        name: 'system_user',
         columns: [
           {
             name: 'id',

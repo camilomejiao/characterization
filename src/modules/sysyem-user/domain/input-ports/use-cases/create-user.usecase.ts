@@ -7,7 +7,7 @@ import {
 import * as bcrypt from 'bcrypt';
 
 //Entity
-import { SystemUsers } from '../../../../../common/entities/system-users.entity';
+import { SystemUsersEntity } from '../../../../../common/entities/system-users.entity';
 import { RoleEntity } from '../../../../../common/entities/role.entity';
 import { DepartmentEntity } from '../../../../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../../../../common/entities/municipality.entity';
@@ -26,15 +26,18 @@ export class CreateUserUsecase {
     @Inject(ISystemUserRepository)
     private systemUserRepository: ISystemUserRepository,
     @Inject(IRoleRepository)
-    private readonly roleRepository: IRoleRepository,
+    private roleRepository: IRoleRepository,
     @Inject(IDepartmentRepository)
-    private readonly departmentRepository: IDepartmentRepository,
+    private departmentRepository: IDepartmentRepository,
     @Inject(IMunicipalityRepository)
-    private readonly municipalityRepository: IMunicipalityRepository,
+    private municipalityRepository: IMunicipalityRepository,
   ) {}
 
-  public async handler(systemUserDto: SystemUserDto): Promise<SystemUsers> {
+  public async handler(
+    systemUserDto: SystemUserDto,
+  ): Promise<SystemUsersEntity> {
     try {
+      //Validar relaciones
       const role = await this.getRole(systemUserDto.role_id);
       const department = await this.getDepartment(systemUserDto.department_id);
       const municipality = await this.getMunicipality(
@@ -43,7 +46,7 @@ export class CreateUserUsecase {
 
       await this.existUser(systemUserDto.email);
 
-      const user = new SystemUsers({
+      const user = new SystemUsersEntity({
         name: systemUserDto.name,
         email: systemUserDto.email,
         password: await bcrypt.hash(systemUserDto.password, 10),
