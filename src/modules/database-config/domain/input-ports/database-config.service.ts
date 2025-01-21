@@ -21,6 +21,9 @@ import { PopulationTypeEntity } from '../../../../common/entities/population-typ
 import { EthnicityEntity } from '../../../../common/entities/ethnicity.entity';
 import { CommunityEntity } from '../../../../common/entities/community.entity';
 import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
+import { ApplicationStatusEntity } from '../../../../common/entities/application-status.entity';
+import { PqrsTypeEntity } from '../../../../common/entities/pqrs-type.entity';
+import { PqrsEntity } from '../../../../common/entities/pqrs.entity';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -63,6 +66,9 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         EthnicityEntity,
         CommunityEntity,
         AffiliatesEntity,
+        ApplicationStatusEntity,
+        PqrsTypeEntity,
+        PqrsEntity,
       ],
       synchronize: false,
     };

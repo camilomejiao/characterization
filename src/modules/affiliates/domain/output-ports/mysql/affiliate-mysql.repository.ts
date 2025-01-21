@@ -22,11 +22,7 @@ export class AffiliateMysqlRepository implements IAffiliateRepository {
     return await this.repository.findOneBy(condition);
   }
 
-  async update(
-    id: number,
-    updateData: Partial<AffiliatesEntity>,
-  ): Promise<AffiliatesEntity> {
-    await this.repository.update(id, updateData);
-    return await this.findOneBy({ id });
+  async update(entity: Partial<AffiliatesEntity>): Promise<AffiliatesEntity> {
+    return this.repository.save(entity);
   }
 }

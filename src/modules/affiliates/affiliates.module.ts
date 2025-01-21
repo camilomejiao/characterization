@@ -17,12 +17,16 @@ import { IdentificationTypeEntity } from '../../common/entities/identification-t
 import { LevelEntity } from '../../common/entities/level.entity';
 import { MembershipClassEntity } from '../../common/entities/membership-class.entity';
 import { MethodologyEntity } from '../../common/entities/methodology.entity';
+import { GroupSubgroupEntity } from '../../common/entities/group-subgroup.entity';
 
 //Controller
 import { AffiliatesController } from './adapters/input/affiliates.controller';
 
 //Use Case
 import { CreateAffiliateUsecase } from './domain/input-ports/use-cases/create-affiliate.usecase';
+import { UpdateAffiliateUsecase } from './domain/input-ports/use-cases/update-affiliate.usecase';
+import { GetAffiliateUsecase } from './domain/input-ports/use-cases/get-affiliate.usecase';
+import { ValidateAndAssignRelationsUsecase } from './domain/input-ports/use-cases/validate-and-assign-relations.usecase';
 
 //Repository
 import { IAffiliateRepository } from './domain/output-ports/affiliate.repository';
@@ -55,9 +59,8 @@ import { IMembershipClassRepository } from '../common/domain/output-ports/member
 import { MembershipClassMysqlRepository } from '../common/domain/output-ports/mysql/membership-class-mysql.repository';
 import { IMethodologyRepository } from '../common/domain/output-ports/methodology.repository';
 import { MethodologyMysqlRepository } from '../common/domain/output-ports/mysql/methodology-mysql.repository';
-import { GroupSubgroupEntity } from '../../common/entities/group-subgroup.entity';
-import { UpdateAffiliateUsecase } from './domain/input-ports/use-cases/update-affiliate.usecase';
-import { GetAffiliateUsecase } from './domain/input-ports/use-cases/get-affiliate.usecase';
+import { IGroupSubgroupRespository } from '../common/domain/output-ports/group-subgroup.respository';
+import { GroupSubgroupMysqlRespository } from '../common/domain/output-ports/mysql/group-subgroup-mysql.respository';
 
 @Module({
   imports: [
@@ -85,6 +88,7 @@ import { GetAffiliateUsecase } from './domain/input-ports/use-cases/get-affiliat
     CreateAffiliateUsecase,
     GetAffiliateUsecase,
     UpdateAffiliateUsecase,
+    ValidateAndAssignRelationsUsecase,
     {
       provide: IAffiliateRepository,
       useClass: AffiliateMysqlRepository,
@@ -144,6 +148,10 @@ import { GetAffiliateUsecase } from './domain/input-ports/use-cases/get-affiliat
     {
       provide: IMethodologyRepository,
       useClass: MethodologyMysqlRepository,
+    },
+    {
+      provide: IGroupSubgroupRespository,
+      useClass: GroupSubgroupMysqlRespository,
     },
   ],
   exports: [AffiliatesModule],

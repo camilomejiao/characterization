@@ -83,6 +83,11 @@ export class UpdateAffiliateDto {
   @IsNumber()
   communityId: number;
 
+  @ApiProperty({ example: 1 })
+  @IsOptional()
+  @IsNumber()
+  groupSubgroupId: number;
+
   @ApiProperty({ example: 'Juan', required: false })
   @IsOptional()
   @IsString()
@@ -117,4 +122,44 @@ export class UpdateAffiliateDto {
   @IsOptional()
   @IsString()
   phoneNumber: string;
+
+  @ApiProperty({ example: '', required: false })
+  @IsOptional()
+  @IsString()
+  neighborhood: string;
+
+  @ApiProperty({ example: '', required: false })
+  @IsOptional()
+  @IsString()
+  address: string;
+
+  @ApiProperty({ example: 10, required: false })
+  @IsOptional()
+  @IsNumber()
+  sisbenScore: number;
+
+  @ApiProperty({ example: '1990-01-01', required: false })
+  @IsOptional()
+  @IsDateString()
+  sisbenRegistrationDate: string;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @IsNumber()
+  highCost: number;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @IsNumber()
+  featuresSurvival: number;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @IsNumber()
+  namesake: number;
+
+  @ApiProperty({ example: 'Observations', required: false })
+  @IsOptional()
+  @IsString()
+  observations: string;
 }

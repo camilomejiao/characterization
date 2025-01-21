@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { DepartmentEntity } from './department.entity';
 import { MunicipalityEntity } from './municipality.entity';
@@ -14,6 +14,8 @@ import { LevelEntity } from './level.entity';
 import { MembershipClassEntity } from './membership-class.entity';
 import { EthnicityEntity } from './ethnicity.entity';
 import { CommunityEntity } from './community.entity';
+import { GroupSubgroupEntity } from './group-subgroup.entity';
+import { PqrsEntity } from './pqrs.entity';
 
 @Entity('affiliates')
 export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
@@ -76,6 +78,10 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
   @JoinColumn({ name: 'community_id' })
   community: CommunityEntity;
 
+  @ManyToOne(() => GroupSubgroupEntity)
+  @JoinColumn({ name: 'group_subgroup_id' })
+  groupSubgroup: GroupSubgroupEntity;
+
   @Column({ name: 'first_name', type: 'varchar', length: 100 })
   firstName: string;
 
@@ -101,4 +107,45 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
 
   @Column({ name: 'phone_number', type: 'varchar', length: 20, nullable: true })
   phoneNumber: string;
+
+  @Column({
+    name: 'neighborhood',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  neighborhood: string;
+
+  @Column({ name: 'address', type: 'varchar', length: 100, nullable: true })
+  address: string;
+
+  @Column({ name: 'sisben_score', type: 'int' })
+  sisbenScore: number;
+
+  @Column({ name: 'sisben_registration_date', type: 'date' })
+  sisbenRegistrationDate: string;
+
+  @Column({ name: 'high_cost', type: 'int', nullable: true })
+  highCost: number;
+
+  @Column({
+    name: 'features_survival',
+    type: 'int',
+    nullable: true,
+  })
+  featuresSurvival: number;
+
+  @Column({ name: 'namesake', type: 'int', nullable: true })
+  namesake: number;
+
+  @Column({
+    name: 'observations',
+    type: 'varchar',
+    length: 200,
+    nullable: true,
+  })
+  observations: string;
+
+  @OneToMany(() => PqrsEntity, (pqrs) => pqrs.user)
+  pqrs: PqrsEntity[];
 }

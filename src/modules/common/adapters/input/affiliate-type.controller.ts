@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AffiliateTypeEntity } from '../../../../common/entities/affiliate-type.entity';
 
-@Controller('affiliate-type')
+@Controller('affiliate_type')
 export class AffiliateTypeController {
   constructor(
     @InjectRepository(AffiliateTypeEntity)

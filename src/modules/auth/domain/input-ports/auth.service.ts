@@ -48,7 +48,13 @@ export class AuthService {
 
   // Método auxiliar para generar el token JWT
   private generateJwtToken(user: SystemUsersEntity): string {
-    const payload = { id: user.id, email: user.email, role: user.role };
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      department: user.department,
+      municipality: user.municipality,
+    };
     return this.jwtService.sign(payload);
   }
 
@@ -61,6 +67,8 @@ export class AuthService {
         name: user.name,
         email: user.email,
         role: user.role,
+        department: user.department,
+        municipality: user.municipality,
       },
     };
   }

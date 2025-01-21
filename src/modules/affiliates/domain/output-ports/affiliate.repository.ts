@@ -5,10 +5,7 @@ export interface IAffiliateRepository {
 
   findOneBy(condition: Partial<AffiliatesEntity>): Promise<AffiliatesEntity>;
 
-  update(
-    id: number,
-    updateData: Partial<AffiliatesEntity>,
-  ): Promise<AffiliatesEntity>;
+  update(entity: AffiliatesEntity): Promise<AffiliatesEntity>;
 }
 
 export const IAffiliateRepository = Symbol('IAffiliateRepository');

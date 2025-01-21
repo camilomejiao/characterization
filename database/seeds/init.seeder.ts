@@ -16,6 +16,8 @@ import { GroupSubgroupSeeder } from './group-subgroup.seeder';
 import { MembershipClassSeeder } from './membership-class.seeder';
 import { PopulationTypeSeeder } from './population-type.seeder';
 import { EthnicitySeeder } from './ethnicity.seeder';
+import { PqrsTypeSeeder } from './pqrs-type.seeder';
+import { AppplicationStatusSeeder } from './appplication-status.seeder';
 
 export default class InitSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
@@ -37,6 +39,8 @@ export default class InitSeeder implements Seeder {
         PopulationTypeSeeder,
         EthnicitySeeder,
         System_userSeeder,
+        PqrsTypeSeeder,
+        AppplicationStatusSeeder,
       ],
     });
   }

@@ -89,6 +89,11 @@ export class Affiliates1737233554161 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'group_subgroup_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'first_name',
             type: 'varchar',
             length: '100',
@@ -127,6 +132,49 @@ export class Affiliates1737233554161 implements MigrationInterface {
             name: 'phone_number',
             type: 'varchar',
             length: '20',
+            isNullable: true,
+          },
+          {
+            name: 'neighborhood',
+            type: 'varchar',
+            length: '100',
+            isNullable: true,
+          },
+          {
+            name: 'address',
+            type: 'varchar',
+            length: '100',
+            isNullable: true,
+          },
+          {
+            name: 'sisben_score',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'sisben_registration_date',
+            type: 'date',
+            isNullable: true,
+          },
+          {
+            name: 'high_cost',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'features_survival',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'namesake',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'observations',
+            type: 'varchar',
+            length: '200',
             isNullable: true,
           },
           {

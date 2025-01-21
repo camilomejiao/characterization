@@ -84,6 +84,11 @@ export class AffiliateDto {
   @IsNumber()
   communityId: number;
 
+  @ApiProperty({ example: 1 })
+  @IsNotEmpty()
+  @IsNumber()
+  groupSubgroupId: number;
+
   @ApiProperty({ example: 'Juan' })
   @IsNotEmpty()
   @IsString()
@@ -92,7 +97,7 @@ export class AffiliateDto {
   @ApiProperty({ example: 'Carlos', required: false })
   @IsOptional()
   @IsString()
-  middleName?: string;
+  middleName: string;
 
   @ApiProperty({ example: 'Pérez' })
   @IsNotEmpty()
@@ -102,7 +107,7 @@ export class AffiliateDto {
   @ApiProperty({ example: 'López', required: false })
   @IsOptional()
   @IsString()
-  middleLastName?: string;
+  middleLastName: string;
 
   @ApiProperty({ example: '1990-01-01' })
   @IsNotEmpty()
@@ -117,5 +122,45 @@ export class AffiliateDto {
   @ApiProperty({ example: '+573001234567', required: false })
   @IsOptional()
   @IsString()
-  phoneNumber?: string;
+  phoneNumber: string;
+
+  @ApiProperty({ example: 'Neighborhood', required: false })
+  @IsOptional()
+  @IsString()
+  neighborhood: string;
+
+  @ApiProperty({ example: '', required: false })
+  @IsOptional()
+  @IsString()
+  address: string;
+
+  @ApiProperty({ example: 10, required: false })
+  @IsOptional()
+  @IsNumber()
+  sisbenScore: number;
+
+  @ApiProperty({ example: '1990-01-01', required: false })
+  @IsOptional()
+  @IsDateString()
+  sisbenRegistrationDate: string;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @IsNumber()
+  highCost: number;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @IsNumber()
+  featuresSurvival: number;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsOptional()
+  @IsNumber()
+  namesake: number;
+
+  @ApiProperty({ example: 'Observations', required: false })
+  @IsOptional()
+  @IsString()
+  observations: string;
 }

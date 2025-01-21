@@ -83,7 +83,6 @@ export class AffiliatesController {
     @Param('id') id: number,
     @Body() updateAffiliateDto: UpdateAffiliateDto,
   ) {
-    console.log('updateAffiliateDto: ', updateAffiliateDto);
     const updatedAffiliate = await this.updateAffiliateUseCase.handler(
       id,
       updateAffiliateDto,

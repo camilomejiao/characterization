@@ -10,6 +10,7 @@ import { SystemUserModule } from './modules/sysyem-user/system-user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
 import { AffiliatesModule } from './modules/affiliates/affiliates.module';
+import { PqrsModule } from './modules/pqrs/pqrs.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AffiliatesModule } from './modules/affiliates/affiliates.module';
     CommonModule,
     SystemUserModule,
     AffiliatesModule,
+    PqrsModule,
     ConfigModule.forRoot({
       load: [environment],
       isGlobal: true,

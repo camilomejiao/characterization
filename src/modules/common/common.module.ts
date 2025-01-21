@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JsonApiModule } from 'json-api-nestjs';
 
 // Entities
 import { AffiliateTypeEntity } from '../../common/entities/affiliate-type.entity';
@@ -55,6 +54,18 @@ import { IMethodologyRepository } from './domain/output-ports/methodology.reposi
 import { MethodologyMysqlRepository } from './domain/output-ports/mysql/methodology-mysql.repository';
 import { IPopulationTypeRepository } from './domain/output-ports/population-type.repository';
 import { PopulationTypeMysqlRepository } from './domain/output-ports/mysql/population-type-mysql.repository';
+import { PqrsTypeEntity } from '../../common/entities/pqrs-type.entity';
+import { ApplicationStatusEntity } from '../../common/entities/application-status.entity';
+import { PqrsTypeController } from './adapters/input/pqrs-type.controller';
+import { ApplicationStatusController } from './adapters/input/application-status.controller';
+import { GroupSubgroupController } from './adapters/input/group-subgroup.controller';
+import { GroupSubgroupEntity } from '../../common/entities/group-subgroup.entity';
+import { GroupSubgroupMysqlRespository } from './domain/output-ports/mysql/group-subgroup-mysql.respository';
+import { IGroupSubgroupRespository } from './domain/output-ports/group-subgroup.respository';
+import { PqrsTypeMysqlRepository } from './domain/output-ports/mysql/pqrs-type-mysql.repository';
+import { ApplicationStatusMysqlRepository } from './domain/output-ports/mysql/application-status-mysql.repository';
+import { IApplicationStatusRepository } from './domain/output-ports/application-status.repository';
+import { IPqrsTypeRepository } from './domain/output-ports/pqrs-type.repository';
 
 @Module({
   imports: [
@@ -66,11 +77,14 @@ import { PopulationTypeMysqlRepository } from './domain/output-ports/mysql/popul
       EpsEntity,
       EthnicityEntity,
       GenderEntity,
+      GroupSubgroupEntity,
       IdentificationTypeEntity,
       LevelEntity,
       MembershipClassEntity,
       MethodologyEntity,
       PopulationTypeEntity,
+      PqrsTypeEntity,
+      ApplicationStatusEntity,
     ]),
   ],
   controllers: [
@@ -81,11 +95,14 @@ import { PopulationTypeMysqlRepository } from './domain/output-ports/mysql/popul
     EpsController,
     EthnicityController,
     GenderController,
+    GroupSubgroupController,
     IdentificationTypeController,
     LevelController,
     MembershipClassController,
     MethodologyController,
     PopulationTypeController,
+    PqrsTypeController,
+    ApplicationStatusController,
   ],
   providers: [
     {
@@ -117,6 +134,10 @@ import { PopulationTypeMysqlRepository } from './domain/output-ports/mysql/popul
       useClass: GenderMysqlRepository,
     },
     {
+      provide: IGroupSubgroupRespository,
+      useClass: GroupSubgroupMysqlRespository,
+    },
+    {
       provide: IIdentificationTypeRepository,
       useClass: IdentificationTypeMysqlRepository,
     },
@@ -135,6 +156,14 @@ import { PopulationTypeMysqlRepository } from './domain/output-ports/mysql/popul
     {
       provide: IPopulationTypeRepository,
       useClass: PopulationTypeMysqlRepository,
+    },
+    {
+      provide: IPqrsTypeRepository,
+      useClass: PqrsTypeMysqlRepository,
+    },
+    {
+      provide: IApplicationStatusRepository,
+      useClass: ApplicationStatusMysqlRepository,
     },
   ],
   exports: [CommonModule],
