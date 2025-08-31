@@ -15,6 +15,12 @@ export class SystemUsersEntity extends AbstractEntity<SystemUsersEntity> {
   @Column()
   password: string;
 
+  @Column()
+  organizationName: string;
+
+  @Column({ type: 'boolean', default: true })
+  active: number;
+
   @ManyToOne(() => RoleEntity, (role) => role.id)
   @JoinColumn({ name: 'role_id' })
   role: RoleEntity;

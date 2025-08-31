@@ -1,20 +1,40 @@
 import { Inject } from '@nestjs/common';
-import { IPqrsRepository } from '../../output-ports/pqrs.repository';
+
+//Dto
 import { UpdatePqrsDto } from '../../../adapter/input/dto/pqrs.dto';
+
+//Use Case
 import { ValidateAndAssignRelationsUsecase } from './validate-and-assign-relations.usecase';
+
+//Interface
+import { IPqrsRepository } from '../../output-ports/pqrs.repository';
+import { IFileSigningPortRepository } from '../../output-ports/s3/file-signing.port.repository';
+
+//Adapter
+import { S3FileStorageAdapter } from '../../../adapter/output/s3/s3-file-storage.adapter';
 
 export class UpdatePqrsUsecase {
   constructor(
     @Inject(IPqrsRepository)
     private readonly pqrsRepository: IPqrsRepository,
+    @Inject(IFileSigningPortRepository)
+    private readonly storage: S3FileStorageAdapter,
     private readonly validateAndAssignRelations: ValidateAndAssignRelationsUsecase,
   ) {}
 
-  public async handler(id: number, updatePqrsDto: UpdatePqrsDto) {
+  public async handler(
+    id: number,
+    updatePqrsDto: UpdatePqrsDto,
+    file?: Express.Multer.File | null,
+  ) {
     const pqrs = await this.pqrsRepository.findOneBy({ id });
 
     if (!pqrs) {
       throw new Error(`PQRS with ID ${id} not found`);
+    }
+
+    if (file) {
+      pqrs.files = await this.storage.upload(file);
     }
 
     // Validar y asignar relaciones

@@ -30,6 +30,16 @@ export class SystemUsers1735155096824 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'organizationName',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'active',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'role_id',
             type: 'int',
             isNullable: false,

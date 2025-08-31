@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class Pqrs1737410755549 implements MigrationInterface {
+export class Pqrs1738695451334 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -34,24 +34,22 @@ export class Pqrs1737410755549 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'reason_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'eps_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'user_id',
             type: 'int',
             isNullable: false,
           },
           {
-            name: 'reason',
-            type: 'varchar',
-            length: '255',
-            isNullable: false,
-          },
-          {
             name: 'entity',
-            type: 'varchar',
-            length: '255',
-            isNullable: false,
-          },
-          {
-            name: 'responsible',
             type: 'varchar',
             length: '255',
             isNullable: false,
@@ -67,27 +65,31 @@ export class Pqrs1737410755549 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'address',
+            name: 'files',
             type: 'varchar',
             length: '255',
+            isNullable: true,
+          },
+          {
+            name: 'user_system_id',
+            type: 'int',
             isNullable: false,
           },
           {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'datetime',
             default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'datetime',
             default: 'CURRENT_TIMESTAMP',
             onUpdate: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'deleted_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP',
+            type: 'datetime',
+            isNullable: true,
           },
         ],
         foreignKeys: [
@@ -120,8 +122,29 @@ export class Pqrs1737410755549 implements MigrationInterface {
             onUpdate: 'CASCADE',
           },
           {
+            columnNames: ['reason_id'],
+            referencedTableName: 'reason',
+            referencedColumnNames: ['id'],
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          {
+            columnNames: ['eps_id'],
+            referencedTableName: 'eps',
+            referencedColumnNames: ['id'],
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          {
             columnNames: ['user_id'],
-            referencedTableName: 'affiliates',
+            referencedTableName: 'users',
+            referencedColumnNames: ['id'],
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          {
+            columnNames: ['user_system_id'],
+            referencedTableName: 'system_user',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',

@@ -9,8 +9,9 @@ import { DepartmentMunicipalityModule } from './modules/department-municipality/
 import { SystemUserModule } from './modules/sysyem-user/system-user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
-import { AffiliatesModule } from './modules/affiliates/affiliates.module';
 import { PqrsModule } from './modules/pqrs/pqrs.module';
+import { UsersModule } from './modules/users/users.module';
+import { AffiliatesModule } from './modules/affiliates/affiliates.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PqrsModule } from './modules/pqrs/pqrs.module';
     DepartmentMunicipalityModule,
     CommonModule,
     SystemUserModule,
+    UsersModule,
     AffiliatesModule,
     PqrsModule,
     ConfigModule.forRoot({

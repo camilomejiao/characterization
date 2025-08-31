@@ -9,23 +9,23 @@ export class PqrsTypeSeeder implements Seeder {
     const pqrsTypes = [
       {
         id: 1,
-        name: 'Petición',
+        name: 'PETICIÓN',
         description: 'Solicitud de información o servicios',
       },
       {
         id: 2,
-        name: 'Queja',
+        name: 'QUEJA',
         description: 'Expresión de inconformidad sobre un servicio',
       },
       {
         id: 3,
-        name: 'Reclamo',
+        name: 'RECLAMO',
         description: 'Solicitud de corrección por una acción u omisión',
       },
       {
-        id: 4,
-        name: 'Sugerencia',
-        description: 'Propuesta de mejora para un proceso o servicio',
+        id: 3,
+        name: 'SUGERENCIA',
+        description: 'Solicitud de corrección por una acción u omisión',
       },
     ];
 

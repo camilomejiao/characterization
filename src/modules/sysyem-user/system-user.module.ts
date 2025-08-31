@@ -12,6 +12,10 @@ import { SystemUserController } from './adapters/input/system-user.controller';
 
 //Use-case
 import { CreateUserUsecase } from './domain/input-ports/use-cases/create-user.usecase';
+import { ListUserUsecase } from './domain/input-ports/use-cases/list-user.usecase';
+import { UpdateUserUsecase } from './domain/input-ports/use-cases/update-user.usecase';
+import { ToogleUserUsecase } from './domain/input-ports/use-cases/toogle-user.usecase';
+import { DeleteUserUsecase } from './domain/input-ports/use-cases/delete-user.usecase';
 
 //Repository
 import { ISystemUserRepository } from './domain/output-ports/system-user.repository';
@@ -36,6 +40,10 @@ import { MunicipalityMysqlRepository } from '../department-municipality/domain/o
   controllers: [SystemUserController],
   providers: [
     CreateUserUsecase, //Caso de uso
+    ListUserUsecase,
+    UpdateUserUsecase,
+    DeleteUserUsecase,
+    ToogleUserUsecase,
     {
       provide: IRoleRepository,
       useClass: RoleMysqlRepository,

@@ -13,7 +13,7 @@ import { DepartmentEntity } from '../../../../../common/entities/department.enti
 import { MunicipalityEntity } from '../../../../../common/entities/municipality.entity';
 
 //Dto
-import { SystemUserDto } from '../../../adapters/input/dto/system-user.dto';
+import { CreateUserDto } from '../../../adapters/input/dto/create-user.dto';
 
 //Interfaces
 import { ISystemUserRepository } from '../../output-ports/system-user.repository';
@@ -34,7 +34,7 @@ export class CreateUserUsecase {
   ) {}
 
   public async handler(
-    systemUserDto: SystemUserDto,
+    systemUserDto: CreateUserDto,
   ): Promise<SystemUsersEntity> {
     try {
       //Validar relaciones
@@ -50,6 +50,8 @@ export class CreateUserUsecase {
         name: systemUserDto.name,
         email: systemUserDto.email,
         password: await bcrypt.hash(systemUserDto.password, 10),
+        organizationName: systemUserDto?.organization_name,
+        active: systemUserDto.active,
         role,
         department,
         municipality,

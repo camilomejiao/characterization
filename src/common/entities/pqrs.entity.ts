@@ -1,13 +1,21 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { PqrsTypeEntity } from './pqrs-type.entity';
 import { ApplicationStatusEntity } from './application-status.entity';
 import { DepartmentEntity } from './department.entity';
 import { MunicipalityEntity } from './municipality.entity';
-import { AffiliatesEntity } from './affiliate.entity';
+import { UserEntity } from './user.entity';
+import { ReasonPqrsEntity } from './reason-pqrs.entity';
+import { PqrsNotificationEntity } from './pqrs-notification.entity';
+import { EpsEntity } from './eps.entity';
+import { SystemUsersEntity } from './system-users.entity';
 
 @Entity('pqrs')
 export class PqrsEntity extends AbstractEntity<PqrsEntity> {
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
+
   @ManyToOne(() => PqrsTypeEntity)
   @JoinColumn({ name: 'pqrs_type_id' })
   pqrsType: PqrsTypeEntity;
@@ -24,18 +32,16 @@ export class PqrsEntity extends AbstractEntity<PqrsEntity> {
   @JoinColumn({ name: 'municipality_id' })
   municipality: MunicipalityEntity;
 
-  @ManyToOne(() => AffiliatesEntity)
-  @JoinColumn({ name: 'user_id' })
-  user: AffiliatesEntity;
+  @ManyToOne(() => ReasonPqrsEntity)
+  @JoinColumn({ name: 'reason_id' })
+  reason: ReasonPqrsEntity;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  reason: string;
+  @ManyToOne(() => EpsEntity)
+  @JoinColumn({ name: 'eps_id' })
+  eps: EpsEntity;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   entity: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  responsible: string;
 
   @Column({ name: 'date_of_events', type: 'date', nullable: false })
   dateOfEvents: string;
@@ -43,6 +49,20 @@ export class PqrsEntity extends AbstractEntity<PqrsEntity> {
   @Column({ name: 'description_of_events', type: 'text', nullable: false })
   descriptionOfEvents: string;
 
-  @Column({ name: 'address', type: 'varchar', length: 255, nullable: false })
-  address: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  files: string;
+
+  @ManyToOne(() => SystemUsersEntity)
+  @JoinColumn({ name: 'user_system_id' })
+  userSystem: SystemUsersEntity;
+
+  @OneToMany(
+    () => PqrsNotificationEntity,
+    (notification) => notification.pqrs,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+    },
+  )
+  notifications: PqrsNotificationEntity[];
 }

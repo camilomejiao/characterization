@@ -5,11 +5,15 @@ export interface IPqrsRepository {
 
   findOneBy(condition: Partial<PqrsEntity>): Promise<PqrsEntity>;
 
+  findAll(): Promise<PqrsEntity[]>;
+
   findByAffiliateIdentification(
     identificationNumber: number,
   ): Promise<PqrsEntity[]>;
 
   update(entity: PqrsEntity): Promise<PqrsEntity>;
+
+  delete(id: number);
 }
 
 export const IPqrsRepository = Symbol('IPqrsRepository');

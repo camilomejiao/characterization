@@ -14,8 +14,9 @@ export class System_userSeeder implements Seeder {
     const municipalityRepository = dataSource.getRepository(MunicipalityEntity);
 
     // Crear roles
-    const adminRole = await roleRepository.findOne({ where: { id: 1 } });
-    const userRole = await roleRepository.findOne({ where: { id: 2 } });
+    const superAdminRole = await roleRepository.findOne({ where: { id: 1 } });
+    const adminRole = await roleRepository.findOne({ where: { id: 2 } });
+    const userRole = await roleRepository.findOne({ where: { id: 3 } });
 
     // Crear departamentos
     const department1 = await departmentRepository.findOne({
@@ -36,18 +37,33 @@ export class System_userSeeder implements Seeder {
     const regs = [
       {
         id: 1,
-        name: 'Administrador',
+        name: 'Super Administrador',
         email: 'cmejia@gmail.com',
         password: await bcrypt.hash('Mon1014*', 10),
-        role: adminRole,
+        organizationName: 'test',
+        active: 1,
+        role: superAdminRole,
         department: department1,
         municipality: municipality1,
       },
       {
         id: 2,
+        name: 'Administrador',
+        email: 'cmejia1@gmail.com',
+        password: await bcrypt.hash('Mon1014*', 10),
+        organizationName: 'test',
+        active: 1,
+        role: adminRole,
+        department: department1,
+        municipality: municipality1,
+      },
+      {
+        id: 3,
         name: 'Usuario prueba',
         email: 'user@gmail.com',
         password: await bcrypt.hash('Mon1014*', 10),
+        organizationName: 'test 2',
+        active: 1,
         role: userRole,
         department: department2,
         municipality: municipality2,

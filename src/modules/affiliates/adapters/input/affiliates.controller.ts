@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,19 +17,31 @@ import { AffiliateDto } from './dto/affiliate.dto';
 
 //Use case
 import { CreateAffiliateUsecase } from '../../domain/input-ports/use-cases/create-affiliate.usecase';
-import { GetAffiliateUsecase } from '../../domain/input-ports/use-cases/get-affiliate.usecase';
+import { GetAffiliateByIdentifiactionUsecase } from '../../domain/input-ports/use-cases/get-affiliate-by-identifiaction.usecase';
 import { UpdateAffiliateUsecase } from '../../domain/input-ports/use-cases/update-affiliate.usecase';
-import { UpdateAffiliateDto } from './dto/update-affiliate.dto';
+import { BulkAffiliateUsecase } from '../../domain/input-ports/use-cases/bulk-affiliate.usecase';
+import { GetAffiliateListUsecase } from '../../domain/input-ports/use-cases/get-affiliate-list.usecase';
+
+//Entity
+import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
+import { GetAffilateByIdUsecase } from '../../domain/input-ports/use-cases/get-affilate-by-id.usecase';
+import { Data } from './dto/dataBulk.dto';
 
 @Controller('affiliates')
 export class AffiliatesController {
   constructor(
     @Inject(CreateAffiliateUsecase)
     private createAffiliatesUseCase: CreateAffiliateUsecase,
-    @Inject(GetAffiliateUsecase)
-    private getAffiliateUseCase: GetAffiliateUsecase,
+    @Inject(GetAffilateByIdUsecase)
+    private getAffilateByIdUseCase: GetAffilateByIdUsecase,
+    @Inject(GetAffiliateListUsecase)
+    private getAffiliateListUseCase: GetAffiliateListUsecase,
+    @Inject(GetAffiliateByIdentifiactionUsecase)
+    private getAffiliateUseCase: GetAffiliateByIdentifiactionUsecase,
     @Inject(UpdateAffiliateUsecase)
     private updateAffiliateUseCase: UpdateAffiliateUsecase,
+    @Inject(BulkAffiliateUsecase)
+    private bulkAffiliateUsecase: BulkAffiliateUsecase,
   ) {}
 
   @Post('create')
@@ -54,26 +65,32 @@ export class AffiliatesController {
     }
   }
 
-  @Get()
+  @Get('list')
+  @UseGuards(AuthGuard('jwt'))
+  public async listAffiliate(): Promise<AffiliatesEntity[]> {
+    return await this.getAffiliateListUseCase.handler();
+  }
+
+  @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
+  public async getUserById(@Param('id') id: number): Promise<AffiliatesEntity> {
+    return await this.getAffilateByIdUseCase.handler(id);
+  }
+
+  @Get(':identificationNumber')
   @UseGuards(AuthGuard('jwt'))
   public async getUserByIdentification(
-    @Query('identificationNumber') idNumber: number,
+    @Param('identificationNumber') identificationNumber: number,
   ) {
-    if (!idNumber) {
+    if (!identificationNumber) {
       throw new HttpException(
         'Identification number is required',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    const affiliate = await this.getAffiliateUseCase.handler(idNumber);
-
-    if (!affiliate) {
-      throw new HttpException(
-        `User with identification number ${idNumber} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    const affiliate =
+      await this.getAffiliateUseCase.handler(identificationNumber);
 
     return { data: affiliate };
   }
@@ -81,7 +98,7 @@ export class AffiliatesController {
   @Put('update/:id')
   public async updateUser(
     @Param('id') id: number,
-    @Body() updateAffiliateDto: UpdateAffiliateDto,
+    @Body() updateAffiliateDto: AffiliateDto,
   ) {
     const updatedAffiliate = await this.updateAffiliateUseCase.handler(
       id,
@@ -96,5 +113,11 @@ export class AffiliatesController {
     }
 
     return { data: updatedAffiliate };
+  }
+
+  @Post('bulk')
+  @UseGuards(AuthGuard('jwt'))
+  public async bulk(@Body() dataBulkDto: Data) {
+    const process = this.bulkAffiliateUsecase.handler(dataBulkDto);
   }
 }

@@ -25,6 +25,12 @@ export class Eps1735235455669 implements MigrationInterface {
             length: '25',
             isNullable: true,
           },
+          {
+            name: 'cod',
+            type: 'varchar',
+            length: '25',
+            isNullable: true,
+          },
         ],
         foreignKeys: [],
         indices: [],

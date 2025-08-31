@@ -25,6 +25,15 @@ export class RolesSeeder implements Seeder {
         updated_at: new Date().toISOString(),
         deleted_at: null,
       },
+      {
+        id: 3,
+        name: 'AUDITOR',
+        description: 'AUDITOR',
+        is_active: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted_at: null,
+      },
     ];
 
     for (const data of regs) {

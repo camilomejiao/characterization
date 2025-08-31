@@ -18,6 +18,9 @@ import { PopulationTypeSeeder } from './population-type.seeder';
 import { EthnicitySeeder } from './ethnicity.seeder';
 import { PqrsTypeSeeder } from './pqrs-type.seeder';
 import { AppplicationStatusSeeder } from './appplication-status.seeder';
+import { ReasonPqrsSeeder } from './reason-pqrs.seeder';
+import { AffiliatedStateSeeder } from './affiliated-state.seeder';
+import { CountrySeeder } from "./country.seeder";
 
 export default class InitSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
@@ -41,6 +44,9 @@ export default class InitSeeder implements Seeder {
         System_userSeeder,
         PqrsTypeSeeder,
         AppplicationStatusSeeder,
+        ReasonPqrsSeeder,
+        AffiliatedStateSeeder,
+        CountrySeeder
       ],
     });
   }

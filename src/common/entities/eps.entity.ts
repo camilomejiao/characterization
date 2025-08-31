@@ -10,4 +10,7 @@ export class EpsEntity {
 
   @Column()
   nit: string;
+
+  @Column()
+  cod: string;
 }

@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class Affiliates1737233554161 implements MigrationInterface {
+export class Users1738695404689 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'affiliates',
+        name: 'users',
         columns: [
           {
             name: 'id',
@@ -16,12 +16,12 @@ export class Affiliates1737233554161 implements MigrationInterface {
           {
             name: 'department_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'municipality_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'identification_type_id',
@@ -32,21 +32,12 @@ export class Affiliates1737233554161 implements MigrationInterface {
             name: 'identification_number',
             type: 'int',
             isNullable: false,
-          },
-          {
-            name: 'population_type_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'eps_id',
-            type: 'int',
-            isNullable: false,
+            isUnique: true,
           },
           {
             name: 'disability_type_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'gender_id',
@@ -54,44 +45,14 @@ export class Affiliates1737233554161 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'affiliate_type_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
             name: 'area_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
-            name: 'methodology_id',
+            name: 'country_id',
             type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'level_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'membership_class_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'ethnicity_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'community_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'group_subgroup_id',
-            type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'first_name',
@@ -147,37 +108,6 @@ export class Affiliates1737233554161 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'sisben_score',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'sisben_registration_date',
-            type: 'date',
-            isNullable: true,
-          },
-          {
-            name: 'high_cost',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'features_survival',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'namesake',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'observations',
-            type: 'varchar',
-            length: '200',
-            isNullable: true,
-          },
-          {
             name: 'created_at',
             type: 'datetime',
             default: 'CURRENT_TIMESTAMP',
@@ -186,6 +116,7 @@ export class Affiliates1737233554161 implements MigrationInterface {
             name: 'updated_at',
             type: 'datetime',
             default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'deleted_at',
@@ -198,13 +129,13 @@ export class Affiliates1737233554161 implements MigrationInterface {
             columnNames: ['department_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'departments',
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
           },
           {
             columnNames: ['municipality_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'municipalities',
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
           },
           {
             columnNames: ['identification_type_id'],
@@ -213,22 +144,10 @@ export class Affiliates1737233554161 implements MigrationInterface {
             onDelete: 'CASCADE',
           },
           {
-            columnNames: ['population_type_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'population_type',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['eps_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'eps',
-            onDelete: 'CASCADE',
-          },
-          {
             columnNames: ['disability_type_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'disability_type',
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
           },
           {
             columnNames: ['gender_id'],
@@ -237,46 +156,10 @@ export class Affiliates1737233554161 implements MigrationInterface {
             onDelete: 'CASCADE',
           },
           {
-            columnNames: ['affiliate_type_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'affiliate_type',
-            onDelete: 'CASCADE',
-          },
-          {
             columnNames: ['area_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'area',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['methodology_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'methodology',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['level_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'level',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['membership_class_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'membership_class',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['ethnicity_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'ethnicity',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['community_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'community',
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
           },
         ],
         indices: [
@@ -292,6 +175,6 @@ export class Affiliates1737233554161 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('affiliates');
+    await queryRunner.dropTable('users');
   }
 }

@@ -7,11 +7,11 @@ export class EpsSeeder implements Seeder {
     const repository = dataSource.getRepository(EpsEntity);
 
     const regs = [
-      { id: 1, name: 'COMPENSAR', nit: '1323' },
-      { id: 2, name: 'FAMISANAR', nit: '1324' },
-      { id: 3, name: 'NUEVA EPS', nit: '1325' },
-      { id: 4, name: 'SALUD TOTAL', nit: '1326' },
-      { id: 5, name: 'SANITAS', nit: '1327' },
+      { id: 1, name: 'COMPENSAR', nit: '1323', cod: '1323' },
+      { id: 2, name: 'FAMISANAR', nit: '1324', cod: '1323' },
+      { id: 3, name: 'NUEVA EPS', nit: '1325', cod: '1323' },
+      { id: 4, name: 'SALUD TOTAL', nit: '1326', cod: '1323' },
+      { id: 5, name: 'SANITAS', nit: '1327', cod: '1323' },
     ];
 
     for (const data of regs) {

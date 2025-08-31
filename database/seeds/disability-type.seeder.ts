@@ -13,6 +13,7 @@ export class DisabilityTypeSeeder implements Seeder {
       { id: 4, name: 'Discapacidad mental temporal' },
       { id: 5, name: 'Discapacidad neuro-sensorial permanente' },
       { id: 6, name: 'Discapacidad neuro-sensorial temporal' },
+      { id: 7, name: 'Ninguna' },
     ];
 
     for (const data of regs) {

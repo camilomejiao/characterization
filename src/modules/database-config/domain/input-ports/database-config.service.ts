@@ -24,6 +24,11 @@ import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
 import { ApplicationStatusEntity } from '../../../../common/entities/application-status.entity';
 import { PqrsTypeEntity } from '../../../../common/entities/pqrs-type.entity';
 import { PqrsEntity } from '../../../../common/entities/pqrs.entity';
+import { ReasonPqrsEntity } from '../../../../common/entities/reason-pqrs.entity';
+import { UserEntity } from '../../../../common/entities/user.entity';
+import { PqrsNotificationEntity } from '../../../../common/entities/pqrs-notification.entity';
+import { AffiliatedStateEntity } from '../../../../common/entities/affiliated-state.entity';
+import { CountryEntity } from "../../../../common/entities/country.entity";
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -65,12 +70,18 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         PopulationTypeEntity,
         EthnicityEntity,
         CommunityEntity,
-        AffiliatesEntity,
         ApplicationStatusEntity,
         PqrsTypeEntity,
+        ReasonPqrsEntity,
+        UserEntity,
+        AffiliatesEntity,
         PqrsEntity,
+        PqrsNotificationEntity,
+        AffiliatedStateEntity,
+        CountryEntity,
       ],
       synchronize: false,
+      //logging: true,
     };
   }
 }

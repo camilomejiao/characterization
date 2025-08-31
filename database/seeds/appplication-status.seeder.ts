@@ -9,16 +9,19 @@ export class AppplicationStatusSeeder implements Seeder {
     const applicationStatuses = [
       {
         id: 1,
-        name: 'En revisión',
-        description: 'La solicitud está en proceso de revisión',
+        name: 'Abierto',
+        description: 'Solicitud de información o servicios',
       },
-      { id: 2, name: 'Aprobado', description: 'La solicitud ha sido aprobada' },
+      {
+        id: 2,
+        name: 'En seguimiento',
+        description: 'Expresión de inconformidad sobre un servicio',
+      },
       {
         id: 3,
-        name: 'Rechazado',
-        description: 'La solicitud ha sido rechazada',
+        name: 'Cerrado',
+        description: 'Solicitud de corrección por una acción u omisión',
       },
-      { id: 4, name: 'Cerrado', description: 'La solicitud ha sido cerrada' },
     ];
 
     for (const status of applicationStatuses) {

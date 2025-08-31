@@ -16,8 +16,42 @@ export class PqrsMysqlRepository implements IPqrsRepository {
     return await this.entityManager.save(entity);
   }
 
+  async findAll(): Promise<PqrsEntity[]> {
+    return await this.repository.find({
+      relations: [
+        'pqrsType',
+        'department',
+        'municipality',
+        'applicationStatus',
+        'reason',
+        'eps',
+        'user',
+      ],
+    });
+  }
+
   async findOneBy(condition: Partial<PqrsEntity>): Promise<PqrsEntity> {
-    return await this.repository.findOneBy(condition);
+    return await this.repository.findOne({
+      where: condition,
+      relations: [
+        'pqrsType',
+        'applicationStatus',
+        'department',
+        'municipality',
+        'reason',
+        'eps',
+        'userSystem',
+        'user',
+        'user.identificationType',
+        'user.department',
+        'user.municipality',
+        'user.gender',
+        'user.area',
+        'user.disabilityType',
+        'notifications',
+        'notifications.status',
+      ],
+    });
   }
 
   async update(entity: Partial<PqrsEntity>): Promise<PqrsEntity> {
@@ -29,10 +63,14 @@ export class PqrsMysqlRepository implements IPqrsRepository {
   ): Promise<PqrsEntity[]> {
     return this.repository
       .createQueryBuilder('pqrs')
-      .innerJoinAndSelect('pqrs.user', 'user') // Relación con AffiliatesEntity
+      .innerJoinAndSelect('pqrs.user', 'user') // Relación con userEntity
       .where('user.identificationNumber = :identificationNumber', {
         identificationNumber,
       })
       .getMany();
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.repository.delete(id);
   }
 }

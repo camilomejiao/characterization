@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { IUserRepository } from '../../../../users/domain/output-ports/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 
-export class GetAffiliateUsecase {
+export class GetAffiliateByIdentifiactionUsecase {
   constructor(
     @Inject(IUserRepository)
     private userRepository: IUserRepository,

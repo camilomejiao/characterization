@@ -1,6 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConsoleLogger, RequestMethod, ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConsoleLogger,
+  RequestMethod,
+  ValidationPipe,
+} from '@nestjs/common';
 //import { setupSwagger } from './common/util/setup-swagger';
 
 async function bootstrap() {
@@ -20,10 +25,53 @@ async function bootstrap() {
     ],
   });
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: false,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+      exceptionFactory: (errors) => {
+        const extractErrors = (validationErrors, parentPath = '') => {
+          let result = [];
+
+          for (const err of validationErrors) {
+            const fieldPath = parentPath
+              ? `${parentPath}.${err.property}`
+              : err.property;
+
+            if (err.constraints) {
+              result.push({
+                field: fieldPath,
+                errors: Object.values(err.constraints),
+              });
+            }
+
+            if (err.children?.length) {
+              result = result.concat(extractErrors(err.children, fieldPath));
+            }
+          }
+
+          console.log(result);
+
+          return result;
+        };
+
+        const formattedErrors = extractErrors(errors);
+
+        return new BadRequestException({
+          message: 'Errores de validación',
+          errors: formattedErrors,
+        });
+      },
+    }),
+  );
 
   //setupSwagger(app);
 
-  await app.listen(3000);
+  await app.listen(3800);
 }
 bootstrap();

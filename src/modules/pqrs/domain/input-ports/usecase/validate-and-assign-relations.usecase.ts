@@ -4,11 +4,13 @@ import { Inject } from '@nestjs/common';
 import { PqrsEntity } from '../../../../../common/entities/pqrs.entity';
 
 //Repository
-import { IAffiliateRepository } from '../../../../affiliates/domain/output-ports/affiliate.repository';
 import { IMunicipalityRepository } from '../../../../department-municipality/domain/output-ports/municipality.repository';
 import { IDepartmentRepository } from '../../../../department-municipality/domain/output-ports/department.repository';
 import { IApplicationStatusRepository } from '../../../../common/domain/output-ports/application-status.repository';
 import { IPqrsTypeRepository } from '../../../../common/domain/output-ports/pqrs-type.repository';
+import { IUserRepository } from '../../../../users/domain/output-ports/user.repository';
+import { IReasonPqrsRepository } from '../../../../common/domain/output-ports/reason-pqrs.repository';
+import { IEpsRepository } from '../../../../common/domain/output-ports/eps.repository';
 
 export class ValidateAndAssignRelationsUsecase {
   constructor(
@@ -20,25 +22,41 @@ export class ValidateAndAssignRelationsUsecase {
     private readonly departmentRepository: IDepartmentRepository,
     @Inject(IMunicipalityRepository)
     private readonly municipalityRepository: IMunicipalityRepository,
-    @Inject(IAffiliateRepository)
-    private readonly affiliateRepository: IAffiliateRepository,
+    @Inject(IReasonPqrsRepository)
+    private readonly reasonPqrsRepository: IReasonPqrsRepository,
+    @Inject(IEpsRepository)
+    private readonly epsRepository: IEpsRepository,
+    @Inject(IUserRepository)
+    private readonly userRepository: IUserRepository,
   ) {}
 
   public async handler(dto: any, pqrs: PqrsEntity): Promise<PqrsEntity> {
     if (dto.pqrsTypeId) {
       pqrs.pqrsType = await this.getPqrsType(dto.pqrsTypeId);
     }
+
     if (dto.applicationStatusId) {
       pqrs.applicationStatus = await this.getApplicationStatus(
         dto.applicationStatusId,
       );
     }
+
     if (dto.departmentId) {
       pqrs.department = await this.getDepartment(dto.departmentId);
     }
+
     if (dto.municipalityId) {
       pqrs.municipality = await this.getMunicipality(dto.municipalityId);
     }
+
+    if (dto.reasonId) {
+      pqrs.reason = await this.getReason(dto.reasonId);
+    }
+
+    if (dto.epsId) {
+      pqrs.eps = await this.getEps(dto.epsId);
+    }
+
     if (dto.userId) {
       pqrs.user = await this.getUser(dto.userId);
     }
@@ -78,8 +96,16 @@ export class ValidateAndAssignRelationsUsecase {
     );
   }
 
+  private async getReason(reasonId: number) {
+    return this.validateEntity(this.reasonPqrsRepository, reasonId, 'Reason');
+  }
+
+  private async getEps(epsId: number) {
+    return this.validateEntity(this.epsRepository, epsId, 'Eps');
+  }
+
   private async getUser(userId: number) {
-    return this.validateEntity(this.affiliateRepository, userId, 'User');
+    return this.validateEntity(this.userRepository, userId, 'User');
   }
 
   private async validateEntity(

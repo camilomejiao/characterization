@@ -16,6 +16,43 @@ export class AffiliateMysqlRepository implements IAffiliateRepository {
     return await this.entityManager.save(entity);
   }
 
+  async findAll(): Promise<AffiliatesEntity[]> {
+    return await this.repository.find({
+      relations: [
+        'user',
+        'populationType',
+        'eps',
+        'state',
+        'affiliateType',
+        'methodology',
+        'level',
+        'membershipClass',
+        'ethnicity',
+        'community',
+        'groupSubgroup',
+      ],
+    });
+  }
+
+  async findById(id: number): Promise<AffiliatesEntity> {
+    return await this.repository.findOne({
+      where: { id },
+      relations: [
+        'user',
+        'populationType',
+        'eps',
+        'affiliateType',
+        'methodology',
+        'level',
+        'membershipClass',
+        'ethnicity',
+        'community',
+        'groupSubgroup',
+        'state',
+      ],
+    });
+  }
+
   async findOneBy(
     condition: Partial<AffiliatesEntity>,
   ): Promise<AffiliatesEntity> {

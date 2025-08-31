@@ -1,38 +1,58 @@
+import { Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { AffiliatesEntity } from '../../../../../common/entities/affiliate.entity';
 import { IAffiliateRepository } from '../../output-ports/affiliate.repository';
-import { UpdateAffiliateDto } from '../../../adapters/input/dto/update-affiliate.dto';
-import { Inject } from '@nestjs/common';
+import { IUserRepository } from '../../../../users/domain/output-ports/user.repository';
 import { ValidateAndAssignRelationsUsecase } from './validate-and-assign-relations.usecase';
+import { AffiliateDto } from '../../../adapters/input/dto/affiliate.dto';
 
 export class UpdateAffiliateUsecase {
   constructor(
     @Inject(IAffiliateRepository)
-    private affiliateRepository: IAffiliateRepository,
+    private readonly affiliateRepository: IAffiliateRepository,
+    @Inject(IUserRepository)
+    private readonly userRepository: IUserRepository,
     private readonly validateAndAssignRelations: ValidateAndAssignRelationsUsecase,
   ) {}
 
   public async handler(
     id: number,
-    updateAffiliateDto: UpdateAffiliateDto,
+    updateAffiliateDto: AffiliateDto,
   ): Promise<AffiliatesEntity> {
-    // Buscar el afiliado existente
-    const affiliate = await this.affiliateRepository.findOneBy({ id });
+    //Buscar afiliado asociado al usuario
+    const affiliate = await this.affiliateRepository.findById(id);
+
     if (!affiliate) {
-      throw new Error(`Affiliate with ID ${id} not found`);
+      throw new HttpException(
+        `Affiliate not found for User ID ${id}`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
-    // Validar y asignar relaciones
+    //Actualizar afiliado sin sobrescribir valores previos
+    const updateAffiliateData: Partial<AffiliatesEntity> = {};
+
+    if (updateAffiliateDto.sisbenNumber !== undefined)
+      updateAffiliateData.sisbenNumber = updateAffiliateDto.sisbenNumber;
+    if (updateAffiliateDto.observations !== undefined)
+      updateAffiliateData.observations = updateAffiliateDto.observations;
+    if (updateAffiliateDto.dateOfAffiliated !== undefined)
+      updateAffiliateData.dateOfAffiliated =
+        updateAffiliateDto.dateOfAffiliated;
+
+    //Validar y asignar relaciones nuevamente si hay cambios
     await this.validateAndAssignRelations.handler(
       updateAffiliateDto,
       affiliate,
     );
 
-    // Asignar campos directos
-    Object.assign(affiliate, updateAffiliateDto);
+    //Si hay cambios en el afiliado, se actualiza
+    if (Object.keys(updateAffiliateData).length > 0) {
+      // Fusionar los datos existentes con los nuevos valores
+      Object.assign(affiliate, updateAffiliateData);
 
-    console.log('affiliate2: ', affiliate);
+      return await this.affiliateRepository.update(affiliate);
+    }
 
-    //Guardar los cambios
-    return await this.affiliateRepository.update(affiliate);
+    return affiliate;
   }
 }

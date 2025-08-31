@@ -12,9 +12,11 @@ export class EthnicitySeeder implements Seeder {
       { id: 3, name: 'Raizal(Archipielago San Andrés y Providencia)' },
       { id: 4, name: 'Palenquero de SanBasilio' },
       {
-        id: 4,
+        id: 5,
         name: 'Negro(a) o mulato(a) o afrocolombiano(a) o afrodescendiente',
       },
+      { id: 6, name: 'Otras etnias' },
+      { id: 7, name: 'Ninguna' },
     ];
 
     for (const data of regs) {

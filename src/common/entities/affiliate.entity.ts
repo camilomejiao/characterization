@@ -1,142 +1,90 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
-import { DepartmentEntity } from './department.entity';
-import { MunicipalityEntity } from './municipality.entity';
-import { IdentificationTypeEntity } from './identification-type.entity';
+import { UserEntity } from './user.entity';
 import { PopulationTypeEntity } from './population-type.entity';
 import { EpsEntity } from './eps.entity';
-import { DisabilityTypeEntity } from './disability-type.entity';
-import { GenderEntity } from './gender.entity';
 import { AffiliateTypeEntity } from './affiliate-type.entity';
-import { AreaEntity } from './area.entity';
 import { MethodologyEntity } from './methodology.entity';
 import { LevelEntity } from './level.entity';
 import { MembershipClassEntity } from './membership-class.entity';
 import { EthnicityEntity } from './ethnicity.entity';
 import { CommunityEntity } from './community.entity';
 import { GroupSubgroupEntity } from './group-subgroup.entity';
-import { PqrsEntity } from './pqrs.entity';
+import { AffiliatedStateEntity } from './affiliated-state.entity';
+import { DepartmentEntity } from './department.entity';
+import { MunicipalityEntity } from './municipality.entity';
 
 @Entity('affiliates')
 export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
-  @ManyToOne(() => DepartmentEntity)
-  @JoinColumn({ name: 'department_id' })
-  department: DepartmentEntity;
+  @OneToOne(() => UserEntity, (user) => user.affiliate, { nullable: false })
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
 
-  @ManyToOne(() => MunicipalityEntity)
-  @JoinColumn({ name: 'municipality_id' })
-  municipality: MunicipalityEntity;
-
-  @ManyToOne(() => IdentificationTypeEntity)
-  @JoinColumn({ name: 'identification_type_id' })
-  identificationType: IdentificationTypeEntity;
-
-  @Column({ name: 'identification_number' })
-  identificationNumber: number;
-
-  @ManyToOne(() => PopulationTypeEntity)
+  //Tipo de población
+  @ManyToOne(() => PopulationTypeEntity, { nullable: true })
   @JoinColumn({ name: 'population_type_id' })
   populationType: PopulationTypeEntity;
 
-  @ManyToOne(() => EpsEntity)
+  //Eps
+  @ManyToOne(() => EpsEntity, { nullable: true })
   @JoinColumn({ name: 'eps_id' })
   eps: EpsEntity;
 
-  @ManyToOne(() => DisabilityTypeEntity)
-  @JoinColumn({ name: 'disability_type_id' })
-  disabilityType: DisabilityTypeEntity;
+  //State
+  @ManyToOne(() => AffiliatedStateEntity, { nullable: true })
+  @JoinColumn({ name: 'state_id' })
+  state: AffiliatedStateEntity;
 
-  @ManyToOne(() => GenderEntity)
-  @JoinColumn({ name: 'gender_id' })
-  gender: GenderEntity;
-
-  @ManyToOne(() => AffiliateTypeEntity)
+  //Tipo de afiliciación
+  @ManyToOne(() => AffiliateTypeEntity, { nullable: true })
   @JoinColumn({ name: 'affiliate_type_id' })
   affiliateType: AffiliateTypeEntity;
 
-  @ManyToOne(() => AreaEntity)
-  @JoinColumn({ name: 'area_id' })
-  area: AreaEntity;
-
-  @ManyToOne(() => MethodologyEntity)
+  //Metodologia
+  @ManyToOne(() => MethodologyEntity, { nullable: true })
   @JoinColumn({ name: 'methodology_id' })
   methodology: MethodologyEntity;
 
-  @ManyToOne(() => LevelEntity)
+  //Nivel del sisben
+  @ManyToOne(() => LevelEntity, { nullable: true })
   @JoinColumn({ name: 'level_id' })
   level: LevelEntity;
 
-  @ManyToOne(() => MembershipClassEntity)
+  //Tipo de afiliación
+  @ManyToOne(() => MembershipClassEntity, { nullable: true })
   @JoinColumn({ name: 'membership_class_id' })
   membershipClass: MembershipClassEntity;
 
-  @ManyToOne(() => EthnicityEntity)
+  //Etnia
+  @ManyToOne(() => EthnicityEntity, { nullable: true })
   @JoinColumn({ name: 'ethnicity_id' })
   ethnicity: EthnicityEntity;
 
-  @ManyToOne(() => CommunityEntity)
+  //Comunidad
+  @ManyToOne(() => CommunityEntity, { nullable: true })
   @JoinColumn({ name: 'community_id' })
   community: CommunityEntity;
 
-  @ManyToOne(() => GroupSubgroupEntity)
+  //Grupo y Subgrupo de sisben
+  @ManyToOne(() => GroupSubgroupEntity, { nullable: true })
   @JoinColumn({ name: 'group_subgroup_id' })
   groupSubgroup: GroupSubgroupEntity;
 
-  @Column({ name: 'first_name', type: 'varchar', length: 100 })
-  firstName: string;
+  @ManyToOne(() => DepartmentEntity)
+  @JoinColumn({ name: 'department_survival_id' })
+  department: DepartmentEntity;
 
-  @Column({ name: 'middle_name', type: 'varchar', length: 100, nullable: true })
-  middleName: string;
-
-  @Column({ name: 'first_last_name', type: 'varchar', length: 100 })
-  firstLastName: string;
+  @ManyToOne(() => MunicipalityEntity)
+  @JoinColumn({ name: 'municipality_survival_id' })
+  municipality: MunicipalityEntity;
 
   @Column({
-    name: 'middle_last_name',
+    name: 'sisben_number',
     type: 'varchar',
-    length: 100,
+    length: 25,
     nullable: true,
   })
-  middleLastName: string;
-
-  @Column({ type: 'date' })
-  birthdate: string;
-
-  @Column({ type: 'varchar', length: 150, nullable: true })
-  email: string;
-
-  @Column({ name: 'phone_number', type: 'varchar', length: 20, nullable: true })
-  phoneNumber: string;
-
-  @Column({
-    name: 'neighborhood',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  neighborhood: string;
-
-  @Column({ name: 'address', type: 'varchar', length: 100, nullable: true })
-  address: string;
-
-  @Column({ name: 'sisben_score', type: 'int' })
-  sisbenScore: number;
-
-  @Column({ name: 'sisben_registration_date', type: 'date' })
-  sisbenRegistrationDate: string;
-
-  @Column({ name: 'high_cost', type: 'int', nullable: true })
-  highCost: number;
-
-  @Column({
-    name: 'features_survival',
-    type: 'int',
-    nullable: true,
-  })
-  featuresSurvival: number;
-
-  @Column({ name: 'namesake', type: 'int', nullable: true })
-  namesake: number;
+  sisbenNumber: string;
 
   @Column({
     name: 'observations',
@@ -146,6 +94,6 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
   })
   observations: string;
 
-  @OneToMany(() => PqrsEntity, (pqrs) => pqrs.user)
-  pqrs: PqrsEntity[];
+  @Column({ name: 'date_of_affiliated', type: 'date', nullable: true })
+  dateOfAffiliated: string;
 }

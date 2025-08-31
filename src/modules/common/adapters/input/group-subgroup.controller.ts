@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupSubgroupEntity } from '../../../../common/entities/group-subgroup.entity';
 
-@Controller('group_subgroup')
+@Controller('group-subgroup')
 export class GroupSubgroupController {
   constructor(
     @InjectRepository(GroupSubgroupEntity)
