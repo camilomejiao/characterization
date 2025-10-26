@@ -7,8 +7,16 @@ export class GenderSeeder implements Seeder {
     const repository = dataSource.getRepository(GenderEntity);
 
     const regs = [
-      { id: 1, name: 'Femenino' },
-      { id: 2, name: 'Masculino' },
+      { id: 1, name: 'Heterosexual' },
+      { id: 2, name: 'Homosexual' },
+      { id: 3, name: 'Bisexualidad' },
+      { id: 4, name: 'Pansexual' },
+      { id: 5, name: 'Cisgénero' },
+      { id: 6, name: 'Transgénero' },
+      { id: 7, name: 'No binario' },
+      { id: 8, name: 'Intersexual' },
+      { id: 9, name: 'Género fluido' },
+      { id: 10, name: 'No conforme' },
     ];
 
     for (const data of regs) {

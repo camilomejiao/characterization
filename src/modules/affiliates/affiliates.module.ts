@@ -4,73 +4,87 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 //Entity
 import { UserEntity } from '../../common/entities/user.entity';
 import { AffiliatesEntity } from '../../common/entities/affiliate.entity';
-import { AffiliateTypeEntity } from '../../common/entities/affiliate-type.entity';
-import { PopulationTypeEntity } from '../../common/entities/population-type.entity';
+import { Affiliate_typeEntity } from '../../common/entities/affiliate_type.entity';
+import { Population_typeEntity } from '../../common/entities/population_type.entity';
 import { EpsEntity } from '../../common/entities/eps.entity';
+import { Ips_primaryEntity } from '../../common/entities/ips_primary.entity';
+import { Ips_dentalEntity } from '../../common/entities/ips_dental.entity';
 import { CommunityEntity } from '../../common/entities/community.entity';
 import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
 import { LevelEntity } from '../../common/entities/level.entity';
-import { MembershipClassEntity } from '../../common/entities/membership-class.entity';
+import { Membership_classEntity } from '../../common/entities/membership_class.entity';
 import { MethodologyEntity } from '../../common/entities/methodology.entity';
-import { GroupSubgroupEntity } from '../../common/entities/group-subgroup.entity';
+import { Group_subgroupEntity } from '../../common/entities/group_subgroup.entity';
+import { RegimeEntity } from '../../common/entities/regime.entity';
+import { DepartmentEntity } from '../../common/entities/department.entity';
+import { MunicipalityEntity } from '../../common/entities/municipality.entity';
 
 //Controller
 import { AffiliatesController } from './adapters/input/affiliates.controller';
 
 //Use Case
-import { CreateAffiliateUsecase } from './domain/input-ports/use-cases/create-affiliate.usecase';
+import { Create_affiliateUsecase } from './domain/input-ports/use-cases/create_affiliate.usecase';
 import { GetAffiliateListUsecase } from './domain/input-ports/use-cases/get-affiliate-list.usecase';
-import { GetAffilateByIdUsecase } from './domain/input-ports/use-cases/get-affilate-by-id.usecase';
-import { UpdateAffiliateUsecase } from './domain/input-ports/use-cases/update-affiliate.usecase';
-import { GetAffiliateByIdentifiactionUsecase } from './domain/input-ports/use-cases/get-affiliate-by-identifiaction.usecase';
-import { ValidateAndAssignRelationsUsecase } from './domain/input-ports/use-cases/validate-and-assign-relations.usecase';
-import { BulkAffiliateUsecase } from './domain/input-ports/use-cases/bulk-affiliate.usecase';
+import { Get_affilate_by_idUsecase } from './domain/input-ports/use-cases/get_affilate_by_id.usecase';
+import { Update_affiliateUsecase } from './domain/input-ports/use-cases/update_affiliate.usecase';
+import { Get_affiliate_by_identifiactionUsecase } from './domain/input-ports/use-cases/get_affiliate_by_identifiaction.usecase';
+import { Validate_and_assign_relationsUsecase } from './domain/input-ports/use-cases/validate_and_assign_relations.usecase';
+import { Bulk_affiliateUsecase } from './domain/input-ports/use-cases/bulk_affiliate.usecase';
 
 //Repository
 import { IAffiliateRepository } from './domain/output-ports/affiliate.repository';
-import { AffiliateMysqlRepository } from './domain/output-ports/mysql/affiliate-mysql.repository';
-import { IAffiliateTypeRepository } from '../common/domain/output-ports/affiliate-type.repository';
-import { AffiliateTypeMysqlRepository } from '../common/domain/output-ports/mysql/affiliate-type-mysql.repository';
-import { IPopulationTypeRepository } from '../common/domain/output-ports/population-type.repository';
-import { PopulationTypeMysqlRepository } from '../common/domain/output-ports/mysql/population-type-mysql.repository';
+import { IAffiliateTypeRepository } from '../common/domain/output-ports/affiliate_type.repository';
+import { IPopulationTypeRepository } from '../common/domain/output-ports/population_type.repository';
 import { IEpsRepository } from '../common/domain/output-ports/eps.repository';
-import { EpsMysqlRepository } from '../common/domain/output-ports/mysql/eps-mysql.repository';
 import { ICommunityRepository } from '../common/domain/output-ports/community.repository';
-import { CommunityMysqlRepository } from '../common/domain/output-ports/mysql/community-mysql.repository';
 import { IEthnicityRepository } from '../common/domain/output-ports/ethnicity.repository';
-import { EthnicityMysqlRepository } from '../common/domain/output-ports/mysql/ethnicity-mysql.repository';
 import { ILevelRepository } from '../common/domain/output-ports/level.repository';
-import { LevelMysqlRepository } from '../common/domain/output-ports/mysql/level-mysql.repository';
-import { IMembershipClassRepository } from '../common/domain/output-ports/membership-class.repository';
-import { MembershipClassMysqlRepository } from '../common/domain/output-ports/mysql/membership-class-mysql.repository';
+import { IMembershipClassRepository } from '../common/domain/output-ports/membership_class.repository';
 import { IMethodologyRepository } from '../common/domain/output-ports/methodology.repository';
-import { MethodologyMysqlRepository } from '../common/domain/output-ports/mysql/methodology-mysql.repository';
-import { IGroupSubgroupRespository } from '../common/domain/output-ports/group-subgroup.respository';
-import { GroupSubgroupMysqlRespository } from '../common/domain/output-ports/mysql/group-subgroup-mysql.respository';
-import { UsersModule } from '../users/users.module';
+import { IGroupSubgroupRespository } from '../common/domain/output-ports/group_subgroup.respository';
 import { IUserRepository } from '../users/domain/output-ports/user.repository';
-import { UserMysqlRepository } from '../users/domain/output-ports/mysql/user-mysql.repository';
 import { IDepartmentRepository } from '../department-municipality/domain/output-ports/department.repository';
-import { DepartmentMysqlRepository } from '../department-municipality/domain/output-ports/mysql/department-mysql.repository';
 import { IMunicipalityRepository } from '../department-municipality/domain/output-ports/municipality.repository';
-import { MunicipalityMysqlRepository } from '../department-municipality/domain/output-ports/mysql/municipality-mysql.repository';
-import { DepartmentEntity } from '../../common/entities/department.entity';
-import { MunicipalityEntity } from '../../common/entities/municipality.entity';
+import { IRegimeRepository } from '../common/domain/output-ports/regime.repository';
+import { IIps_primaryRepository } from '../common/domain/output-ports/ips_primary.repository';
+import { IIps_dentalRepository } from '../common/domain/output-ports/ips_dental.repository';
+
+//Mysql
+import { Affiliate_mysqlRepository } from './domain/output-ports/mysql/affiliate_mysql.repository';
+import { Affiliate_type_mysqlRepository } from '../common/domain/output-ports/mysql/affiliate_type_mysql.repository';
+import { Population_type_mysqlRepository } from '../common/domain/output-ports/mysql/population_type_mysql.repository';
+import { Eps_mysqlRepository } from '../common/domain/output-ports/mysql/eps_mysql.repository';
+import { Community_mysqlRepository } from '../common/domain/output-ports/mysql/community_mysql.repository';
+import { Ethnicity_mysqlRepository } from '../common/domain/output-ports/mysql/ethnicity_mysql.repository';
+import { Level_mysqlRepository } from '../common/domain/output-ports/mysql/level_mysql.repository';
+import { Membership_class_mysqlRepository } from '../common/domain/output-ports/mysql/membership_class_mysql.repository';
+import { Methodology_mysqlRepository } from '../common/domain/output-ports/mysql/methodology_mysql.repository';
+import { Group_subgroup_mysqlRespository } from '../common/domain/output-ports/mysql/group_subgroup_mysql.respository';
+import { UsersModule } from '../users/users.module';
+import { User_mysqlRepository } from '../users/domain/output-ports/mysql/user_mysql.repository';
+import { Department_mysqlRepository } from '../department-municipality/domain/output-ports/mysql/department_mysql.repository';
+import { Municipality_mysqlRepository } from '../department-municipality/domain/output-ports/mysql/municipality_mysql.repository';
+import { RegimeMysqlRepository } from '../common/domain/output-ports/mysql/regime_mysql.repository';
+import { IpsPrimaryMysqlRepository } from '../common/domain/output-ports/mysql/ips_primary_mysql.repository';
+import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ips_dental_mysql.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       AffiliatesEntity,
       UserEntity,
-      AffiliateTypeEntity,
-      PopulationTypeEntity,
+      RegimeEntity,
+      Affiliate_typeEntity,
+      Population_typeEntity,
       EpsEntity,
+      Ips_primaryEntity,
+      Ips_dentalEntity,
       CommunityEntity,
       EthnicityEntity,
       LevelEntity,
-      MembershipClassEntity,
+      Membership_classEntity,
       MethodologyEntity,
-      GroupSubgroupEntity,
+      Group_subgroupEntity,
       DepartmentEntity,
       MunicipalityEntity,
     ]),
@@ -78,64 +92,76 @@ import { MunicipalityEntity } from '../../common/entities/municipality.entity';
   ],
   controllers: [AffiliatesController],
   providers: [
-    CreateAffiliateUsecase,
+    Create_affiliateUsecase,
     GetAffiliateListUsecase,
-    GetAffilateByIdUsecase,
-    GetAffiliateByIdentifiactionUsecase,
-    UpdateAffiliateUsecase,
-    ValidateAndAssignRelationsUsecase,
-    BulkAffiliateUsecase,
+    Get_affilate_by_idUsecase,
+    Get_affiliate_by_identifiactionUsecase,
+    Update_affiliateUsecase,
+    Validate_and_assign_relationsUsecase,
+    Bulk_affiliateUsecase,
     {
       provide: IAffiliateRepository,
-      useClass: AffiliateMysqlRepository,
+      useClass: Affiliate_mysqlRepository,
     },
     {
       provide: IUserRepository,
-      useClass: UserMysqlRepository,
+      useClass: User_mysqlRepository,
+    },
+    {
+      provide: IRegimeRepository,
+      useClass: RegimeMysqlRepository,
     },
     {
       provide: IAffiliateTypeRepository,
-      useClass: AffiliateTypeMysqlRepository,
+      useClass: Affiliate_type_mysqlRepository,
     },
     {
       provide: IPopulationTypeRepository,
-      useClass: PopulationTypeMysqlRepository,
+      useClass: Population_type_mysqlRepository,
     },
     {
       provide: IEpsRepository,
-      useClass: EpsMysqlRepository,
+      useClass: Eps_mysqlRepository,
+    },
+    {
+      provide: IIps_primaryRepository,
+      useClass: IpsPrimaryMysqlRepository,
+    },
+    {
+      provide: IIps_dentalRepository,
+      useClass: IpsDentalMysqlRepository,
     },
     {
       provide: ICommunityRepository,
-      useClass: CommunityMysqlRepository,
+      useClass: Community_mysqlRepository,
     },
     {
       provide: IEthnicityRepository,
-      useClass: EthnicityMysqlRepository,
+      useClass: Ethnicity_mysqlRepository,
     },
     {
       provide: ILevelRepository,
-      useClass: LevelMysqlRepository,
+      useClass: Level_mysqlRepository,
     },
     {
       provide: IMembershipClassRepository,
-      useClass: MembershipClassMysqlRepository,
+      useClass: Membership_class_mysqlRepository,
     },
     {
       provide: IMethodologyRepository,
-      useClass: MethodologyMysqlRepository,
+      useClass: Methodology_mysqlRepository,
     },
     {
       provide: IGroupSubgroupRespository,
-      useClass: GroupSubgroupMysqlRespository,
+      useClass: Group_subgroup_mysqlRespository,
     },
     {
       provide: IDepartmentRepository,
-      useClass: DepartmentMysqlRepository,
+      useClass: Department_mysqlRepository,
     },
     {
       provide: IMunicipalityRepository,
-      useClass: MunicipalityMysqlRepository,
+      useClass: Municipality_mysqlRepository,
     },
   ],
   exports: [AffiliatesModule],

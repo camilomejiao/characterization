@@ -1,10 +1,10 @@
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
-import { PopulationTypeEntity } from '../../src/common/entities/population-type.entity';
+import { Population_typeEntity } from '../../src/common/entities/population_type.entity';
 
 export class PopulationTypeSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
-    const repository = dataSource.getRepository(PopulationTypeEntity);
+    const repository = dataSource.getRepository(Population_typeEntity);
 
     const regs = [
       { id: 1, name: 'Habitante de la calle' },

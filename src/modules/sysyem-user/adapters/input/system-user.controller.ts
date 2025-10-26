@@ -16,35 +16,35 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 //Dto
-import { CreateUserDto } from './dto/create-user.dto';
+import { Create_userDto } from './dto/create_user.dto';
 
 //Use Case
-import { CreateUserUsecase } from '../../domain/input-ports/use-cases/create-user.usecase';
-import { ListUserUsecase } from '../../domain/input-ports/use-cases/list-user.usecase';
-import { UpdateUserUsecase } from '../../domain/input-ports/use-cases/update-user.usecase';
-import { DeleteUserUsecase } from '../../domain/input-ports/use-cases/delete-user.usecase';
-import { ToogleUserUsecase } from '../../domain/input-ports/use-cases/toogle-user.usecase';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Create_userUsecase } from '../../domain/input-ports/use-cases/create_user.usecase';
+import { List_userUsecase } from '../../domain/input-ports/use-cases/list_user.usecase';
+import { Update_userUsecase } from '../../domain/input-ports/use-cases/update_user.usecase';
+import { Delete_userUsecase } from '../../domain/input-ports/use-cases/delete_user.usecase';
+import { Toogle_userUsecase } from '../../domain/input-ports/use-cases/toogle_user.usecase';
+import { Update_userDto } from './dto/update_user.dto';
 
 @Controller('admins')
 export class SystemUserController {
   constructor(
-    @Inject(CreateUserUsecase)
-    private readonly createUserUsecase: CreateUserUsecase,
-    @Inject(ListUserUsecase)
-    private readonly listUsersUsecase: ListUserUsecase,
-    @Inject(UpdateUserUsecase)
-    private readonly updateUserUsecase: UpdateUserUsecase,
-    @Inject(DeleteUserUsecase)
-    private readonly deleteUserUsecase: DeleteUserUsecase,
-    @Inject(ToogleUserUsecase)
-    private readonly toggleUserStatusUsecase: ToogleUserUsecase,
+    @Inject(Create_userUsecase)
+    private readonly createUserUsecase: Create_userUsecase,
+    @Inject(List_userUsecase)
+    private readonly listUsersUsecase: List_userUsecase,
+    @Inject(Update_userUsecase)
+    private readonly updateUserUsecase: Update_userUsecase,
+    @Inject(Delete_userUsecase)
+    private readonly deleteUserUsecase: Delete_userUsecase,
+    @Inject(Toogle_userUsecase)
+    private readonly toggleUserStatusUsecase: Toogle_userUsecase,
   ) {}
 
   @Post('create')
   @UseGuards(AuthGuard('jwt'))
   public async create(
-    @Body() systemUserDto: CreateUserDto,
+    @Body() systemUserDto: Create_userDto,
   ): Promise<{ data: { type: string; id: string } }> {
     try {
       const user = await this.createUserUsecase.handler(systemUserDto);
@@ -84,7 +84,7 @@ export class SystemUserController {
   @UseGuards(AuthGuard('jwt'))
   public async updateUser(
     @Param('id') id: number,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: Update_userDto,
   ) {
     return await this.updateUserUsecase.handler(id, updateUserDto);
   }

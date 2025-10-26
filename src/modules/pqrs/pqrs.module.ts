@@ -5,47 +5,47 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PqrsController } from './adapter/input/pqrs.controller';
 
 //Entity
-import { PqrsTypeEntity } from '../../common/entities/pqrs-type.entity';
-import { ApplicationStatusEntity } from '../../common/entities/application-status.entity';
+import { Pqrs_typeEntity } from '../../common/entities/pqrs_type.entity';
+import { Application_statusEntity } from '../../common/entities/application_status.entity';
 import { DepartmentEntity } from '../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../common/entities/municipality.entity';
 import { PqrsEntity } from '../../common/entities/pqrs.entity';
-import { ReasonPqrsEntity } from '../../common/entities/reason-pqrs.entity';
+import { Reason_pqrsEntity } from '../../common/entities/reason_pqrs.entity';
 import { UserEntity } from '../../common/entities/user.entity';
 import { EpsEntity } from '../../common/entities/eps.entity';
-import { PqrsNotificationEntity } from '../../common/entities/pqrs-notification.entity';
+import { Pqrs_notificationEntity } from '../../common/entities/pqrs_notification.entity';
 
 //Use case
-import { CreatePqrsUsecase } from './domain/input-ports/usecase/create-pqrs.usecase';
-import { GetPqrsBydocumentUsecase } from './domain/input-ports/usecase/get-pqrs-bydocument.usecase';
-import { UpdatePqrsUsecase } from './domain/input-ports/usecase/update-pqrs.usecase';
-import { ValidateAndAssignRelationsUsecase } from './domain/input-ports/usecase/validate-and-assign-relations.usecase';
-import { GetPqrsUsecase } from './domain/input-ports/usecase/get-pqrs.usecase';
-import { DeletePqrsUsecase } from './domain/input-ports/usecase/delete-pqrs.usecase';
+import { Create_pqrsUsecase } from './domain/input-ports/usecase/create_pqrs.usecase';
+import { Get_pqrs_by_documentUsecase } from './domain/input-ports/usecase/get_pqrs_by_document.usecase';
+import { Update_pqrsUsecase } from './domain/input-ports/usecase/update_pqrs.usecase';
+import { Validate_and_assign_relationsUsecase } from './domain/input-ports/usecase/validate_and_assign_relations.usecase';
+import { Get_pqrsUsecase } from './domain/input-ports/usecase/get_pqrs.usecase';
+import { Delete_pqrsUsecase } from './domain/input-ports/usecase/delete_pqrs.usecase';
 
 //Interface
 import { IPqrsRepository } from './domain/output-ports/pqrs.repository';
-import { IPqrsTypeRepository } from '../common/domain/output-ports/pqrs-type.repository';
-import { IApplicationStatusRepository } from '../common/domain/output-ports/application-status.repository';
+import { IPqrsTypeRepository } from '../common/domain/output-ports/pqrs_type.repository';
+import { IApplicationStatusRepository } from '../common/domain/output-ports/application_status.repository';
 import { IDepartmentRepository } from '../department-municipality/domain/output-ports/department.repository';
 import { IMunicipalityRepository } from '../department-municipality/domain/output-ports/municipality.repository';
-import { IReasonPqrsRepository } from '../common/domain/output-ports/reason-pqrs.repository';
+import { IReasonPqrsRepository } from '../common/domain/output-ports/reason_pqrs.repository';
 import { IUserRepository } from '../users/domain/output-ports/user.repository';
 import { IEpsRepository } from '../common/domain/output-ports/eps.repository';
-import { INotificationPrqsRepository } from './domain/output-ports/notification-prqs.repository';
+import { INotificationPrqsRepository } from './domain/output-ports/notification_prqs.repository';
 import { IFileSigningPortRepository } from './domain/output-ports/s3/file-signing.port.repository';
 
 //Repository
-import { PqrsMysqlRepository } from './domain/output-ports/mysql/pqrs-mysql.repository';
-import { PqrsTypeMysqlRepository } from '../common/domain/output-ports/mysql/pqrs-type-mysql.repository';
-import { ApplicationStatusMysqlRepository } from '../common/domain/output-ports/mysql/application-status-mysql.repository';
-import { DepartmentMysqlRepository } from '../department-municipality/domain/output-ports/mysql/department-mysql.repository';
-import { MunicipalityMysqlRepository } from '../department-municipality/domain/output-ports/mysql/municipality-mysql.repository';
-import { ReasonPqrsMysqlRepository } from '../common/domain/output-ports/mysql/reason-pqrs-mysql.repository';
-import { UserMysqlRepository } from '../users/domain/output-ports/mysql/user-mysql.repository';
-import { EpsMysqlRepository } from '../common/domain/output-ports/mysql/eps-mysql.repository';
-import { CreateNotificationPqrsUsecase } from './domain/input-ports/usecase/create-notification-pqrs.usecase';
-import { NotificationPrqsMysqlRepository } from './domain/output-ports/mysql/notification-prqs-mysql.repository';
+import { Pqrs_mysqlRepository } from './domain/output-ports/mysql/pqrs_mysql.repository';
+import { Pqrs_type_mysqlRepository } from '../common/domain/output-ports/mysql/pqrs_type_mysql.repository';
+import { Application_status_mysqlRepository } from '../common/domain/output-ports/mysql/application_status_mysql.repository';
+import { Department_mysqlRepository } from '../department-municipality/domain/output-ports/mysql/department_mysql.repository';
+import { Municipality_mysqlRepository } from '../department-municipality/domain/output-ports/mysql/municipality_mysql.repository';
+import { Reason_pqrs_mysqlRepository } from '../common/domain/output-ports/mysql/reason_pqrs_mysql.repository';
+import { User_mysqlRepository } from '../users/domain/output-ports/mysql/user_mysql.repository';
+import { Eps_mysqlRepository } from '../common/domain/output-ports/mysql/eps_mysql.repository';
+import { Create_notification_pqrsUsecase } from './domain/input-ports/usecase/create_notification_pqrs.usecase';
+import { Notification_prqs_mysqlRepository } from './domain/output-ports/mysql/notification_prqs_mysql.repository';
 import { GetPqrsDetailByIdUsecase } from './domain/input-ports/usecase/get-pqrs-detail-by-id.usecase';
 
 //Adapter
@@ -55,61 +55,61 @@ import { S3FileStorageAdapter } from './adapter/output/s3/s3-file-storage.adapte
   imports: [
     TypeOrmModule.forFeature([
       PqrsEntity,
-      PqrsTypeEntity,
-      ApplicationStatusEntity,
+      Pqrs_typeEntity,
+      Application_statusEntity,
       DepartmentEntity,
       MunicipalityEntity,
-      ReasonPqrsEntity,
+      Reason_pqrsEntity,
       UserEntity,
       EpsEntity,
-      PqrsNotificationEntity,
+      Pqrs_notificationEntity,
     ]),
   ],
   controllers: [PqrsController],
   providers: [
-    CreatePqrsUsecase,
+    Create_pqrsUsecase,
     GetPqrsDetailByIdUsecase,
-    GetPqrsUsecase,
-    GetPqrsBydocumentUsecase,
-    UpdatePqrsUsecase,
-    ValidateAndAssignRelationsUsecase,
-    CreateNotificationPqrsUsecase,
-    DeletePqrsUsecase,
+    Get_pqrsUsecase,
+    Get_pqrs_by_documentUsecase,
+    Update_pqrsUsecase,
+    Validate_and_assign_relationsUsecase,
+    Create_notification_pqrsUsecase,
+    Delete_pqrsUsecase,
     {
       provide: IPqrsRepository,
-      useClass: PqrsMysqlRepository,
+      useClass: Pqrs_mysqlRepository,
     },
     {
       provide: IPqrsTypeRepository,
-      useClass: PqrsTypeMysqlRepository,
+      useClass: Pqrs_type_mysqlRepository,
     },
     {
       provide: IApplicationStatusRepository,
-      useClass: ApplicationStatusMysqlRepository,
+      useClass: Application_status_mysqlRepository,
     },
     {
       provide: IDepartmentRepository,
-      useClass: DepartmentMysqlRepository,
+      useClass: Department_mysqlRepository,
     },
     {
       provide: IMunicipalityRepository,
-      useClass: MunicipalityMysqlRepository,
+      useClass: Municipality_mysqlRepository,
     },
     {
       provide: IReasonPqrsRepository,
-      useClass: ReasonPqrsMysqlRepository,
+      useClass: Reason_pqrs_mysqlRepository,
     },
     {
       provide: IEpsRepository,
-      useClass: EpsMysqlRepository,
+      useClass: Eps_mysqlRepository,
     },
     {
       provide: IUserRepository,
-      useClass: UserMysqlRepository,
+      useClass: User_mysqlRepository,
     },
     {
       provide: INotificationPrqsRepository,
-      useClass: NotificationPrqsMysqlRepository,
+      useClass: Notification_prqs_mysqlRepository,
     },
     {
       provide: IFileSigningPortRepository,

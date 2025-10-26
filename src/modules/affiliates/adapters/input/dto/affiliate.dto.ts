@@ -1,67 +1,117 @@
 import {
-  IsNumber,
   IsOptional,
   IsString,
   IsDateString,
   IsNotEmpty,
+  IsInt,
+  Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class AffiliateDto {
-  //Si el usuario ya existe, se envía solo el userId
+  // Usuario
   @IsNotEmpty()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
   userId: number;
 
-  //Datos de afiliación (obligatorios)
+  // Regimen - requerido (entity: nullable: false)
   @IsNotEmpty()
-  @IsNumber()
-  populationTypeId: number;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  regimeId: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  epsId: number;
+  //EPS
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  epsId?: number;
 
+  // IPS primaria - requerido (entity: nullable: false)
   @IsNotEmpty()
-  @IsNumber()
-  stateId: number;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  ipsPrimaryId: number;
 
+  // IPS dental - requerido (entity: nullable: false)
   @IsNotEmpty()
-  @IsNumber()
-  affiliateTypeId: number;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  ipsDentalId: number;
 
+  //
   @IsNotEmpty()
-  @IsNumber()
-  methodologyId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  levelId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  membershipClassId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  ethnicityId: number;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  populationTypeId?: number;
 
   @IsOptional()
-  @IsNumber()
-  communityId: number | null;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  stateId?: number;
 
   @IsOptional()
-  @IsNumber()
-  groupSubgroupId: number | null;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  affiliateTypeId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  methodologyId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  levelId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  membershipClassId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  ethnicityId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  communityId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  groupSubgroupId?: number;
+
+  // -------- Opcionales (entity: nullable: true) --------
+  @IsOptional()
+  @IsString()
+  sisbenNumber?: string;
 
   @IsOptional()
   @IsString()
-  sisbenNumber: string | null;
+  formNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  observations?: string;
 
   @IsOptional()
   @IsDateString()
-  dateOfAffiliated: string | null;
-
-  @IsOptional()
-  @IsString()
-  observations: string | null;
+  dateOfAffiliated?: string;
 }

@@ -5,7 +5,7 @@ import { AuthController } from './adapters/input/auth.controller';
 import { AuthService } from './domain/input-ports/auth.service';
 import { JwtStrategy } from './adapters/input/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SystemUsersEntity } from '../../common/entities/system-users.entity';
+import { System_usersEntity } from '../../common/entities/system_users.entity';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { SystemUsersEntity } from '../../common/entities/system-users.entity';
       secret: 'PALABRA_SECRETA_123',
       signOptions: { expiresIn: '2h' },
     }),
-    TypeOrmModule.forFeature([SystemUsersEntity]),
+    TypeOrmModule.forFeature([System_usersEntity]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

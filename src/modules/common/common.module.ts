@@ -2,87 +2,103 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // Entities
-import { AffiliateTypeEntity } from '../../common/entities/affiliate-type.entity';
+import { Affiliate_typeEntity } from '../../common/entities/affiliate_type.entity';
 import { AreaEntity } from '../../common/entities/area.entity';
 import { CommunityEntity } from '../../common/entities/community.entity';
-import { DisabilityTypeEntity } from '../../common/entities/disability-type.entity';
+import { Disability_typeEntity } from '../../common/entities/disability_type.entity';
 import { EpsEntity } from '../../common/entities/eps.entity';
 import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
+import { SexEntity } from '../../common/entities/sex.entity';
 import { GenderEntity } from '../../common/entities/gender.entity';
-import { IdentificationTypeEntity } from '../../common/entities/identification-type.entity';
+import { Identification_typeEntity } from '../../common/entities/identification_type.entity';
 import { LevelEntity } from '../../common/entities/level.entity';
-import { MembershipClassEntity } from '../../common/entities/membership-class.entity';
+import { Membership_classEntity } from '../../common/entities/membership_class.entity';
 import { MethodologyEntity } from '../../common/entities/methodology.entity';
-import { PopulationTypeEntity } from '../../common/entities/population-type.entity';
-import { ReasonPqrsEntity } from '../../common/entities/reason-pqrs.entity';
-import { GroupSubgroupEntity } from '../../common/entities/group-subgroup.entity';
-import { PqrsTypeEntity } from '../../common/entities/pqrs-type.entity';
-import { ApplicationStatusEntity } from '../../common/entities/application-status.entity';
-import { AffiliatedStateEntity } from '../../common/entities/affiliated-state.entity';
-import { CountryEntity } from "../../common/entities/country.entity";
+import { Population_typeEntity } from '../../common/entities/population_type.entity';
+import { Reason_pqrsEntity } from '../../common/entities/reason_pqrs.entity';
+import { Group_subgroupEntity } from '../../common/entities/group_subgroup.entity';
+import { Pqrs_typeEntity } from '../../common/entities/pqrs_type.entity';
+import { Application_statusEntity } from '../../common/entities/application_status.entity';
+import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.entity';
+import { CountryEntity } from '../../common/entities/country.entity';
+import { Ips_primaryEntity } from '../../common/entities/ips_primary.entity';
+import { Ips_dentalEntity } from '../../common/entities/ips_dental.entity';
+import { RegimeEntity } from '../../common/entities/regime.entity';
 
 // Controllers
-import { AffiliateTypeController } from './adapters/input/affiliate-type.controller';
+import { Affiliate_typeController } from './adapters/input/affiliate_type.controller';
 import { AreaController } from './adapters/input/area.controller';
 import { CommunityController } from './adapters/input/community.controller';
-import { DisabilityTypeController } from './adapters/input/disability-type.controller';
+import { Disability_typeController } from './adapters/input/disability_type.controller';
 import { EpsController } from './adapters/input/eps.controller';
 import { EthnicityController } from './adapters/input/ethnicity.controller';
+import { SexController } from './adapters/input/sex.controller';
 import { GenderController } from './adapters/input/gender.controller';
-import { IdentificationTypeController } from './adapters/input/identification-type.controller';
+import { Identification_typeController } from './adapters/input/identification_type.controller';
 import { LevelController } from './adapters/input/level.controller';
-import { MembershipClassController } from './adapters/input/membership-class.controller';
+import { Membership_classController } from './adapters/input/membership_class.controller';
 import { MethodologyController } from './adapters/input/methodology.controller';
-import { PopulationTypeController } from './adapters/input/population-type.controller';
-import { ReasonPqrsController } from './adapters/input/reason-pqrs.controller';
-import { PqrsTypeController } from './adapters/input/pqrs-type.controller';
-import { ApplicationStatusController } from './adapters/input/application-status.controller';
-import { GroupSubgroupController } from './adapters/input/group-subgroup.controller';
-import { AffiliatedStateController } from './adapters/input/affiliated-state.controller';
-import { CountryController } from "./adapters/input/country.controller";
+import { Population_typeController } from './adapters/input/population_type.controller';
+import { Reason_pqrsController } from './adapters/input/reason_pqrs.controller';
+import { Pqrs_typeController } from './adapters/input/pqrs_type.controller';
+import { Application_statusController } from './adapters/input/application_status.controller';
+import { Group_subgroupController } from './adapters/input/group_subgroup.controller';
+import { Affiliated_stateController } from './adapters/input/affiliated_state.controller';
+import { CountryController } from './adapters/input/country.controller';
+import { Ips_primaryController } from './adapters/input/ips_primary.controller';
+import { Ips_dentalController } from './adapters/input/ips_dental.controller';
+import { RegimeController } from './adapters/input/regime.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      AffiliateTypeEntity,
+      RegimeEntity,
+      Affiliate_typeEntity,
       AreaEntity,
       CommunityEntity,
-      DisabilityTypeEntity,
+      Disability_typeEntity,
       EpsEntity,
       EthnicityEntity,
       GenderEntity,
-      GroupSubgroupEntity,
-      IdentificationTypeEntity,
+      SexEntity,
+      Group_subgroupEntity,
+      Identification_typeEntity,
       LevelEntity,
-      MembershipClassEntity,
+      Membership_classEntity,
       MethodologyEntity,
-      PopulationTypeEntity,
-      PqrsTypeEntity,
-      ApplicationStatusEntity,
-      ReasonPqrsEntity,
-      AffiliatedStateEntity,
+      Population_typeEntity,
+      Pqrs_typeEntity,
+      Application_statusEntity,
+      Reason_pqrsEntity,
+      Affiliated_stateEntity,
       CountryEntity,
+      Ips_primaryEntity,
+      Ips_dentalEntity,
     ]),
   ],
   controllers: [
-    AffiliateTypeController,
+    RegimeController,
+    Affiliate_typeController,
     AreaController,
     CommunityController,
-    DisabilityTypeController,
+    Disability_typeController,
     EpsController,
     EthnicityController,
     GenderController,
-    GroupSubgroupController,
-    IdentificationTypeController,
+    SexController,
+    Group_subgroupController,
+    Identification_typeController,
     LevelController,
-    MembershipClassController,
+    Membership_classController,
     MethodologyController,
-    PopulationTypeController,
-    PqrsTypeController,
-    ApplicationStatusController,
-    ReasonPqrsController,
-    AffiliatedStateController,
+    Population_typeController,
+    Pqrs_typeController,
+    Application_statusController,
+    Reason_pqrsController,
+    Affiliated_stateController,
     CountryController,
+    Ips_primaryController,
+    Ips_dentalController,
   ],
   providers: [],
   exports: [CommonModule],

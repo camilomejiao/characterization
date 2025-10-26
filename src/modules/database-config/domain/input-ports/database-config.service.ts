@@ -4,31 +4,37 @@ import { ConfigService } from '@nestjs/config';
 
 //Entity
 import { RoleEntity } from '../../../../common/entities/role.entity';
-import { SystemUsersEntity } from '../../../../common/entities/system-users.entity';
+import { System_usersEntity } from '../../../../common/entities/system_users.entity';
 import { DepartmentEntity } from '../../../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../../../common/entities/municipality.entity';
-import { IdentificationTypeEntity } from '../../../../common/entities/identification-type.entity';
+import { Identification_typeEntity } from '../../../../common/entities/identification_type.entity';
 import { EpsEntity } from '../../../../common/entities/eps.entity';
 import { GenderEntity } from '../../../../common/entities/gender.entity';
 import { AreaEntity } from '../../../../common/entities/area.entity';
-import { AffiliateTypeEntity } from '../../../../common/entities/affiliate-type.entity';
-import { DisabilityTypeEntity } from '../../../../common/entities/disability-type.entity';
+import { Affiliate_typeEntity } from '../../../../common/entities/affiliate_type.entity';
+import { Disability_typeEntity } from '../../../../common/entities/disability_type.entity';
 import { MethodologyEntity } from '../../../../common/entities/methodology.entity';
 import { LevelEntity } from '../../../../common/entities/level.entity';
-import { GroupSubgroupEntity } from '../../../../common/entities/group-subgroup.entity';
-import { MembershipClassEntity } from '../../../../common/entities/membership-class.entity';
-import { PopulationTypeEntity } from '../../../../common/entities/population-type.entity';
+import { Group_subgroupEntity } from '../../../../common/entities/group_subgroup.entity';
+import { Membership_classEntity } from '../../../../common/entities/membership_class.entity';
+import { Population_typeEntity } from '../../../../common/entities/population_type.entity';
 import { EthnicityEntity } from '../../../../common/entities/ethnicity.entity';
 import { CommunityEntity } from '../../../../common/entities/community.entity';
 import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
-import { ApplicationStatusEntity } from '../../../../common/entities/application-status.entity';
-import { PqrsTypeEntity } from '../../../../common/entities/pqrs-type.entity';
+import { Application_statusEntity } from '../../../../common/entities/application_status.entity';
+import { Pqrs_typeEntity } from '../../../../common/entities/pqrs_type.entity';
 import { PqrsEntity } from '../../../../common/entities/pqrs.entity';
-import { ReasonPqrsEntity } from '../../../../common/entities/reason-pqrs.entity';
+import { Reason_pqrsEntity } from '../../../../common/entities/reason_pqrs.entity';
 import { UserEntity } from '../../../../common/entities/user.entity';
-import { PqrsNotificationEntity } from '../../../../common/entities/pqrs-notification.entity';
-import { AffiliatedStateEntity } from '../../../../common/entities/affiliated-state.entity';
-import { CountryEntity } from "../../../../common/entities/country.entity";
+import { Pqrs_notificationEntity } from '../../../../common/entities/pqrs_notification.entity';
+import { Affiliated_stateEntity } from '../../../../common/entities/affiliated_state.entity';
+import { CountryEntity } from '../../../../common/entities/country.entity';
+import { SexEntity } from '../../../../common/entities/sex.entity';
+import { Ips_primaryEntity } from '../../../../common/entities/ips_primary.entity';
+import { Ips_dentalEntity } from '../../../../common/entities/ips_dental.entity';
+import { RegimeEntity } from '../../../../common/entities/regime.entity';
+import { LMAEntity } from '../../../../common/entities/lma.entity';
+import { Affiliate_historyEntity } from '../../../../common/entities/affiliate_history.entity';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -53,32 +59,38 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       username,
       password,
       entities: [
-        SystemUsersEntity,
+        System_usersEntity,
         RoleEntity,
+        RegimeEntity,
         DepartmentEntity,
         MunicipalityEntity,
-        IdentificationTypeEntity,
+        Identification_typeEntity,
         EpsEntity,
+        SexEntity,
         GenderEntity,
         AreaEntity,
-        AffiliateTypeEntity,
-        DisabilityTypeEntity,
+        Affiliate_typeEntity,
+        Disability_typeEntity,
         MethodologyEntity,
         LevelEntity,
-        GroupSubgroupEntity,
-        MembershipClassEntity,
-        PopulationTypeEntity,
+        Group_subgroupEntity,
+        Membership_classEntity,
+        Population_typeEntity,
         EthnicityEntity,
         CommunityEntity,
-        ApplicationStatusEntity,
-        PqrsTypeEntity,
-        ReasonPqrsEntity,
+        Application_statusEntity,
+        Pqrs_typeEntity,
+        Reason_pqrsEntity,
         UserEntity,
         AffiliatesEntity,
         PqrsEntity,
-        PqrsNotificationEntity,
-        AffiliatedStateEntity,
+        Pqrs_notificationEntity,
+        Affiliated_stateEntity,
         CountryEntity,
+        Ips_primaryEntity,
+        Ips_dentalEntity,
+        LMAEntity,
+        Affiliate_historyEntity,
       ],
       synchronize: false,
       //logging: true,

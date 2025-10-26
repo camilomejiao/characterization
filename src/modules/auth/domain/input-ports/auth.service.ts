@@ -3,14 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SystemUsersEntity } from '../../../../common/entities/system-users.entity';
+import { System_usersEntity } from '../../../../common/entities/system_users.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(SystemUsersEntity)
-    private userRepository: Repository<SystemUsersEntity>,
+    @InjectRepository(System_usersEntity)
+    private userRepository: Repository<System_usersEntity>,
   ) {}
 
   async signIn(email: string, password: string): Promise<any> {
@@ -28,7 +28,7 @@ export class AuthService {
   private async validateCredentials(
     email: string,
     password: string,
-  ): Promise<SystemUsersEntity> {
+  ): Promise<System_usersEntity> {
     const user = await this.userRepository.findOne({
       where: { email },
       relations: ['role', 'department', 'municipality'],
@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   // Método auxiliar para generar el token JWT
-  private generateJwtToken(user: SystemUsersEntity): string {
+  private generateJwtToken(user: System_usersEntity): string {
     const payload = {
       id: user.id,
       name: user.name,
@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   // Método auxiliar para construir la respuesta
-  private buildResponse(user: SystemUsersEntity, token: string): any {
+  private buildResponse(user: System_usersEntity, token: string): any {
     return {
       accessToken: token,
       user: {

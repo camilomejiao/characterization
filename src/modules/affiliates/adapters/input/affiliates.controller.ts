@@ -16,32 +16,32 @@ import { AuthGuard } from '@nestjs/passport';
 import { AffiliateDto } from './dto/affiliate.dto';
 
 //Use case
-import { CreateAffiliateUsecase } from '../../domain/input-ports/use-cases/create-affiliate.usecase';
-import { GetAffiliateByIdentifiactionUsecase } from '../../domain/input-ports/use-cases/get-affiliate-by-identifiaction.usecase';
-import { UpdateAffiliateUsecase } from '../../domain/input-ports/use-cases/update-affiliate.usecase';
-import { BulkAffiliateUsecase } from '../../domain/input-ports/use-cases/bulk-affiliate.usecase';
+import { Create_affiliateUsecase } from '../../domain/input-ports/use-cases/create_affiliate.usecase';
+import { Get_affiliate_by_identifiactionUsecase } from '../../domain/input-ports/use-cases/get_affiliate_by_identifiaction.usecase';
+import { Update_affiliateUsecase } from '../../domain/input-ports/use-cases/update_affiliate.usecase';
+import { Bulk_affiliateUsecase } from '../../domain/input-ports/use-cases/bulk_affiliate.usecase';
 import { GetAffiliateListUsecase } from '../../domain/input-ports/use-cases/get-affiliate-list.usecase';
 
 //Entity
 import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
-import { GetAffilateByIdUsecase } from '../../domain/input-ports/use-cases/get-affilate-by-id.usecase';
+import { Get_affilate_by_idUsecase } from '../../domain/input-ports/use-cases/get_affilate_by_id.usecase';
 import { Data } from './dto/dataBulk.dto';
 
 @Controller('affiliates')
 export class AffiliatesController {
   constructor(
-    @Inject(CreateAffiliateUsecase)
-    private createAffiliatesUseCase: CreateAffiliateUsecase,
-    @Inject(GetAffilateByIdUsecase)
-    private getAffilateByIdUseCase: GetAffilateByIdUsecase,
+    @Inject(Create_affiliateUsecase)
+    private createAffiliatesUseCase: Create_affiliateUsecase,
+    @Inject(Get_affilate_by_idUsecase)
+    private getAffilateByIdUseCase: Get_affilate_by_idUsecase,
     @Inject(GetAffiliateListUsecase)
     private getAffiliateListUseCase: GetAffiliateListUsecase,
-    @Inject(GetAffiliateByIdentifiactionUsecase)
-    private getAffiliateUseCase: GetAffiliateByIdentifiactionUsecase,
-    @Inject(UpdateAffiliateUsecase)
-    private updateAffiliateUseCase: UpdateAffiliateUsecase,
-    @Inject(BulkAffiliateUsecase)
-    private bulkAffiliateUsecase: BulkAffiliateUsecase,
+    @Inject(Get_affiliate_by_identifiactionUsecase)
+    private getAffiliateUseCase: Get_affiliate_by_identifiactionUsecase,
+    @Inject(Update_affiliateUsecase)
+    private updateAffiliateUseCase: Update_affiliateUsecase,
+    @Inject(Bulk_affiliateUsecase)
+    private bulkAffiliateUsecase: Bulk_affiliateUsecase,
   ) {}
 
   @Post('create')

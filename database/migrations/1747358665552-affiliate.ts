@@ -20,12 +20,27 @@ export class Affiliate1747358665552 implements MigrationInterface {
             isUnique: true,
           },
           {
+            name: 'regime_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'population_type_id',
             type: 'int',
             isNullable: true,
           },
           {
             name: 'eps_id',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'ips_primary_id',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'ips_dental_id',
             type: 'int',
             isNullable: true,
           },
@@ -70,17 +85,13 @@ export class Affiliate1747358665552 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'department_survival_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'municipality_survival_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
             name: 'sisben_number',
+            type: 'varchar',
+            length: '25',
+            isNullable: true,
+          },
+          {
+            name: 'form_number',
             type: 'varchar',
             length: '25',
             isNullable: true,
@@ -121,6 +132,12 @@ export class Affiliate1747358665552 implements MigrationInterface {
             onDelete: 'CASCADE',
           },
           {
+            columnNames: ['regime_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'regime',
+            onDelete: 'RESTRICT',
+          },
+          {
             columnNames: ['population_type_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'population_type',
@@ -130,6 +147,18 @@ export class Affiliate1747358665552 implements MigrationInterface {
             columnNames: ['eps_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'eps',
+            onDelete: 'SET NULL',
+          },
+          {
+            columnNames: ['ips_primary_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'ips_primary',
+            onDelete: 'SET NULL',
+          },
+          {
+            columnNames: ['ips_dental_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'ips_dental',
             onDelete: 'SET NULL',
           },
           {
@@ -178,18 +207,6 @@ export class Affiliate1747358665552 implements MigrationInterface {
             columnNames: ['group_subgroup_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'group_subgroup',
-            onDelete: 'SET NULL',
-          },
-          {
-            columnNames: ['department_survival_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'departments',
-            onDelete: 'SET NULL',
-          },
-          {
-            columnNames: ['municipality_survival_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'municipalities',
             onDelete: 'SET NULL',
           },
         ],

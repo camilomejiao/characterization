@@ -30,12 +30,12 @@ import {
 } from './dto/pqrs.dto';
 
 //Use Case
-import { CreatePqrsUsecase } from '../../domain/input-ports/usecase/create-pqrs.usecase';
-import { GetPqrsBydocumentUsecase } from '../../domain/input-ports/usecase/get-pqrs-bydocument.usecase';
-import { UpdatePqrsUsecase } from '../../domain/input-ports/usecase/update-pqrs.usecase';
-import { GetPqrsUsecase } from '../../domain/input-ports/usecase/get-pqrs.usecase';
-import { CreateNotificationPqrsUsecase } from '../../domain/input-ports/usecase/create-notification-pqrs.usecase';
-import { DeletePqrsUsecase } from '../../domain/input-ports/usecase/delete-pqrs.usecase';
+import { Create_pqrsUsecase } from '../../domain/input-ports/usecase/create_pqrs.usecase';
+import { Get_pqrs_by_documentUsecase } from '../../domain/input-ports/usecase/get_pqrs_by_document.usecase';
+import { Update_pqrsUsecase } from '../../domain/input-ports/usecase/update_pqrs.usecase';
+import { Get_pqrsUsecase } from '../../domain/input-ports/usecase/get_pqrs.usecase';
+import { Create_notification_pqrsUsecase } from '../../domain/input-ports/usecase/create_notification_pqrs.usecase';
+import { Delete_pqrsUsecase } from '../../domain/input-ports/usecase/delete_pqrs.usecase';
 import { GetPqrsDetailByIdUsecase } from '../../domain/input-ports/usecase/get-pqrs-detail-by-id.usecase';
 
 //Entity
@@ -60,20 +60,20 @@ export interface RequestWithUser extends Request {
 @Controller('pqrs')
 export class PqrsController {
   constructor(
-    @Inject(CreatePqrsUsecase)
-    private readonly createPQRS: CreatePqrsUsecase,
+    @Inject(Create_pqrsUsecase)
+    private readonly createPQRS: Create_pqrsUsecase,
     @Inject(GetPqrsDetailByIdUsecase)
     private readonly getPqrsDetailByIdUsecase: GetPqrsDetailByIdUsecase,
-    @Inject(GetPqrsBydocumentUsecase)
-    private readonly getPqrsByDocument: GetPqrsBydocumentUsecase,
-    @Inject(UpdatePqrsUsecase)
-    private readonly updatePQRS: UpdatePqrsUsecase,
-    @Inject(GetPqrsUsecase)
-    private readonly getPqrsUseCase: GetPqrsUsecase,
-    @Inject(CreateNotificationPqrsUsecase)
-    private readonly createNotoficationPqrsUsecase: CreateNotificationPqrsUsecase,
-    @Inject(DeletePqrsUsecase)
-    private readonly deletePqrsUsecase: DeletePqrsUsecase,
+    @Inject(Get_pqrs_by_documentUsecase)
+    private readonly getPqrsByDocument: Get_pqrs_by_documentUsecase,
+    @Inject(Update_pqrsUsecase)
+    private readonly updatePQRS: Update_pqrsUsecase,
+    @Inject(Get_pqrsUsecase)
+    private readonly getPqrsUseCase: Get_pqrsUsecase,
+    @Inject(Create_notification_pqrsUsecase)
+    private readonly createNotoficationPqrsUsecase: Create_notification_pqrsUsecase,
+    @Inject(Delete_pqrsUsecase)
+    private readonly deletePqrsUsecase: Delete_pqrsUsecase,
   ) {}
 
   @Post('create')

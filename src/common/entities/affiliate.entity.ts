@@ -1,44 +1,61 @@
 import { Entity, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { UserEntity } from './user.entity';
-import { PopulationTypeEntity } from './population-type.entity';
+import { Population_typeEntity } from './population_type.entity';
 import { EpsEntity } from './eps.entity';
-import { AffiliateTypeEntity } from './affiliate-type.entity';
+import { Affiliate_typeEntity } from './affiliate_type.entity';
 import { MethodologyEntity } from './methodology.entity';
 import { LevelEntity } from './level.entity';
-import { MembershipClassEntity } from './membership-class.entity';
+import { Membership_classEntity } from './membership_class.entity';
 import { EthnicityEntity } from './ethnicity.entity';
 import { CommunityEntity } from './community.entity';
-import { GroupSubgroupEntity } from './group-subgroup.entity';
-import { AffiliatedStateEntity } from './affiliated-state.entity';
-import { DepartmentEntity } from './department.entity';
-import { MunicipalityEntity } from './municipality.entity';
+import { Group_subgroupEntity } from './group_subgroup.entity';
+import { Affiliated_stateEntity } from './affiliated_state.entity';
+import { RegimeEntity } from './regime.entity';
+import { Ips_dentalEntity } from './ips_dental.entity';
+import { Ips_primaryEntity } from './ips_primary.entity';
 
 @Entity('affiliates')
 export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
+  //user
   @OneToOne(() => UserEntity, (user) => user.affiliate, { nullable: false })
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
+  //Regimen
+  @ManyToOne(() => RegimeEntity, { nullable: false })
+  @JoinColumn({ name: 'regime_id' })
+  regime: RegimeEntity;
+
   //Tipo de población
-  @ManyToOne(() => PopulationTypeEntity, { nullable: true })
+  @ManyToOne(() => Population_typeEntity, { nullable: true })
   @JoinColumn({ name: 'population_type_id' })
-  populationType: PopulationTypeEntity;
+  populationType: Population_typeEntity;
 
   //Eps
   @ManyToOne(() => EpsEntity, { nullable: true })
   @JoinColumn({ name: 'eps_id' })
   eps: EpsEntity;
 
+  //ips primaria
+  @ManyToOne(() => Ips_primaryEntity, { nullable: false })
+  @JoinColumn({ name: 'ips_primary_id' })
+  ipsPrimary: Ips_primaryEntity;
+
+  //ips odontologica
+  @ManyToOne(() => Ips_dentalEntity, { nullable: false })
+  @JoinColumn({ name: 'ips_dental_id' })
+  ipsDental: Ips_dentalEntity;
+
   //State
-  @ManyToOne(() => AffiliatedStateEntity, { nullable: true })
+  @ManyToOne(() => Affiliated_stateEntity, { nullable: true })
   @JoinColumn({ name: 'state_id' })
-  state: AffiliatedStateEntity;
+  state: Affiliated_stateEntity;
 
   //Tipo de afiliciación
-  @ManyToOne(() => AffiliateTypeEntity, { nullable: true })
+  @ManyToOne(() => Affiliate_typeEntity, { nullable: true })
   @JoinColumn({ name: 'affiliate_type_id' })
-  affiliateType: AffiliateTypeEntity;
+  affiliateType: Affiliate_typeEntity;
 
   //Metodologia
   @ManyToOne(() => MethodologyEntity, { nullable: true })
@@ -51,9 +68,9 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
   level: LevelEntity;
 
   //Tipo de afiliación
-  @ManyToOne(() => MembershipClassEntity, { nullable: true })
+  @ManyToOne(() => Membership_classEntity, { nullable: true })
   @JoinColumn({ name: 'membership_class_id' })
-  membershipClass: MembershipClassEntity;
+  membershipClass: Membership_classEntity;
 
   //Etnia
   @ManyToOne(() => EthnicityEntity, { nullable: true })
@@ -66,17 +83,9 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
   community: CommunityEntity;
 
   //Grupo y Subgrupo de sisben
-  @ManyToOne(() => GroupSubgroupEntity, { nullable: true })
+  @ManyToOne(() => Group_subgroupEntity, { nullable: true })
   @JoinColumn({ name: 'group_subgroup_id' })
-  groupSubgroup: GroupSubgroupEntity;
-
-  @ManyToOne(() => DepartmentEntity)
-  @JoinColumn({ name: 'department_survival_id' })
-  department: DepartmentEntity;
-
-  @ManyToOne(() => MunicipalityEntity)
-  @JoinColumn({ name: 'municipality_survival_id' })
-  municipality: MunicipalityEntity;
+  groupSubgroup: Group_subgroupEntity;
 
   @Column({
     name: 'sisben_number',
@@ -85,6 +94,14 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
     nullable: true,
   })
   sisbenNumber: string;
+
+  @Column({
+    name: 'form_number',
+    type: 'varchar',
+    length: 25,
+    nullable: true,
+  })
+  formNumber: string;
 
   @Column({
     name: 'observations',

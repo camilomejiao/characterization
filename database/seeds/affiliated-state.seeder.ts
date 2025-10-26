@@ -1,10 +1,10 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { AffiliatedStateEntity } from '../../src/common/entities/affiliated-state.entity';
+import { Affiliated_stateEntity } from '../../src/common/entities/affiliated_state.entity';
 
 export class AffiliatedStateSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
-    const repository = dataSource.getRepository(AffiliatedStateEntity);
+    const repository = dataSource.getRepository(Affiliated_stateEntity);
 
     const regs = [
       { id: 1, cod: 'AC', description: 'ACTIVO' },

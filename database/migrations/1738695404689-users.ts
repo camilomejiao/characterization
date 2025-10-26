@@ -40,6 +40,11 @@ export class Users1738695404689 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'sex_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'gender_id',
             type: 'int',
             isNullable: false,
@@ -148,6 +153,12 @@ export class Users1738695404689 implements MigrationInterface {
             referencedColumnNames: ['id'],
             referencedTableName: 'disability_type',
             onDelete: 'SET NULL',
+          },
+          {
+            columnNames: ['sex_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'sex',
+            onDelete: 'CASCADE',
           },
           {
             columnNames: ['gender_id'],

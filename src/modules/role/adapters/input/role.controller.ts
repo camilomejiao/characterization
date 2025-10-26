@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleDto } from './dto/role.dto';
-import { CreateRoleUseCase } from '../../domain/input-ports/use-cases/create-role.usecase';
+import { Create_roleUsecase } from '../../domain/input-ports/use-cases/create_role.usecase';
 import { RoleEntity } from '../../../../common/entities/role.entity';
 import { excludeMethod, JsonApi, JsonBaseController } from 'json-api-nestjs';
 import { IRoleRepository } from '../../domain/output-ports/role.repository';
@@ -25,8 +25,8 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('roles')
 export class RoleController extends JsonBaseController<RoleEntity> {
   constructor(
-    @Inject(CreateRoleUseCase)
-    private readonly createRoleUseCase: CreateRoleUseCase,
+    @Inject(Create_roleUsecase)
+    private readonly createRoleUseCase: Create_roleUsecase,
     @Inject(IRoleRepository)
     private readonly roleRepository: IRoleRepository,
   ) {

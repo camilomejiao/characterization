@@ -12,9 +12,9 @@ import { MunicipalityController } from './adapters/input/municipality.controller
 
 //Repository
 import { IDepartmentRepository } from './domain/output-ports/department.repository';
-import { DepartmentMysqlRepository } from './domain/output-ports/mysql/department-mysql.repository';
+import { Department_mysqlRepository } from './domain/output-ports/mysql/department_mysql.repository';
 import { IMunicipalityRepository } from './domain/output-ports/municipality.repository';
-import { MunicipalityMysqlRepository } from './domain/output-ports/mysql/municipality-mysql.repository';
+import { Municipality_mysqlRepository } from './domain/output-ports/mysql/municipality_mysql.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([DepartmentEntity, MunicipalityEntity])],
@@ -22,11 +22,11 @@ import { MunicipalityMysqlRepository } from './domain/output-ports/mysql/municip
   providers: [
     {
       provide: IDepartmentRepository,
-      useClass: DepartmentMysqlRepository,
+      useClass: Department_mysqlRepository,
     },
     {
       provide: IMunicipalityRepository,
-      useClass: MunicipalityMysqlRepository,
+      useClass: Municipality_mysqlRepository,
     },
   ],
   exports: [DepartmentMunicipalityModule],

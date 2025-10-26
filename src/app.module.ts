@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import environment from './config/environment';
 import { RoleModule } from './modules/role/role.module';
 import { DepartmentMunicipalityModule } from './modules/department-municipality/department-municipality.module';
-import { SystemUserModule } from './modules/sysyem-user/system-user.module';
+import { System_userModule } from './modules/sysyem-user/system_user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
 import { PqrsModule } from './modules/pqrs/pqrs.module';
@@ -20,7 +20,7 @@ import { AffiliatesModule } from './modules/affiliates/affiliates.module';
     RoleModule,
     DepartmentMunicipalityModule,
     CommonModule,
-    SystemUserModule,
+    System_userModule,
     UsersModule,
     AffiliatesModule,
     PqrsModule,

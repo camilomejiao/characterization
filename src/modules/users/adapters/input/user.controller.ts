@@ -15,31 +15,31 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 //Dto
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Create_userDto } from './dto/create_user.dto';
+import { Update_userDto } from './dto/update_user.dto';
 
 //Use Case
-import { CreateUserUsecase } from '../../domain/input-ports/use-cases/create-user.usecase';
-import { UpdateUserUsecase } from '../../domain/input-ports/use-cases/update-user.usecase';
-import { GetUserUsecase } from '../../domain/input-ports/use-cases/get-user.usecase';
-import { DeleteUserUsecase } from '../../domain/input-ports/use-cases/delete-user.usecase';
+import { Create_userUsecase } from '../../domain/input-ports/use-cases/create_user.usecase';
+import { Update_userUsecase } from '../../domain/input-ports/use-cases/update_user.usecase';
+import { Get_userUsecase } from '../../domain/input-ports/use-cases/get_user.usecase';
+import { Delete_userUsecase } from '../../domain/input-ports/use-cases/delete_user.usecase';
 
 @Controller('users')
 export class UserController {
   constructor(
-    @Inject(CreateUserUsecase)
-    private readonly createUserUsecase: CreateUserUsecase,
-    @Inject(UpdateUserUsecase)
-    private readonly updateUserUsecase: UpdateUserUsecase,
-    @Inject(GetUserUsecase)
-    private readonly getUserUsecase: GetUserUsecase,
-    @Inject(DeleteUserUsecase)
-    private readonly deleteUserUsecase: DeleteUserUsecase,
+    @Inject(Create_userUsecase)
+    private readonly createUserUsecase: Create_userUsecase,
+    @Inject(Update_userUsecase)
+    private readonly updateUserUsecase: Update_userUsecase,
+    @Inject(Get_userUsecase)
+    private readonly getUserUsecase: Get_userUsecase,
+    @Inject(Delete_userUsecase)
+    private readonly deleteUserUsecase: Delete_userUsecase,
   ) {}
 
   @Post('create')
   @UseGuards(AuthGuard('jwt'))
-  public async create(@Body() userDto: CreateUserDto) {
+  public async create(@Body() userDto: Create_userDto) {
     const user = await this.createUserUsecase.handler(userDto);
     if (user) {
       return { data: { type: 'users', id: `${user.id}` } };
@@ -53,20 +53,18 @@ export class UserController {
     return await this.getUserUsecase.handler(id);
   }
 
-  @Get('identification/:identificationType/:identificationNumber')
+  @Get('identification/:identificationNumber')
   @UseGuards(AuthGuard('jwt'))
   public async getUserByIdentification(
-    @Param('identificationType') identificationType: number,
     @Param('identificationNumber') identificationNumber: number,
   ) {
-    const typeId = identificationType;
     const number = identificationNumber;
 
-    if (isNaN(typeId) || isNaN(number)) {
+    if (isNaN(number)) {
       throw new BadRequestException('Parámetros inválidos');
     }
 
-    return await this.getUserUsecase.userIdentification(typeId, number);
+    return await this.getUserUsecase.userIdentification(number);
   }
 
   @Get()
@@ -77,7 +75,10 @@ export class UserController {
 
   @Put(':id')
   @UseGuards(AuthGuard('jwt'))
-  public async update(@Param('id') id: number, @Body() userDto: UpdateUserDto) {
+  public async update(
+    @Param('id') id: number,
+    @Body() userDto: Update_userDto,
+  ) {
     return await this.updateUserUsecase.handler(id, userDto);
   }
 

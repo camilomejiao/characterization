@@ -1,14 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
-import { PqrsTypeEntity } from './pqrs-type.entity';
-import { ApplicationStatusEntity } from './application-status.entity';
+import { Pqrs_typeEntity } from './pqrs_type.entity';
+import { Application_statusEntity } from './application_status.entity';
 import { DepartmentEntity } from './department.entity';
 import { MunicipalityEntity } from './municipality.entity';
 import { UserEntity } from './user.entity';
-import { ReasonPqrsEntity } from './reason-pqrs.entity';
-import { PqrsNotificationEntity } from './pqrs-notification.entity';
+import { Reason_pqrsEntity } from './reason_pqrs.entity';
+import { Pqrs_notificationEntity } from './pqrs_notification.entity';
 import { EpsEntity } from './eps.entity';
-import { SystemUsersEntity } from './system-users.entity';
+import { System_usersEntity } from './system_users.entity';
 
 @Entity('pqrs')
 export class PqrsEntity extends AbstractEntity<PqrsEntity> {
@@ -16,13 +16,13 @@ export class PqrsEntity extends AbstractEntity<PqrsEntity> {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @ManyToOne(() => PqrsTypeEntity)
+  @ManyToOne(() => Pqrs_typeEntity)
   @JoinColumn({ name: 'pqrs_type_id' })
-  pqrsType: PqrsTypeEntity;
+  pqrsType: Pqrs_typeEntity;
 
-  @ManyToOne(() => ApplicationStatusEntity)
+  @ManyToOne(() => Application_statusEntity)
   @JoinColumn({ name: 'application_status_id' })
-  applicationStatus: ApplicationStatusEntity;
+  applicationStatus: Application_statusEntity;
 
   @ManyToOne(() => DepartmentEntity)
   @JoinColumn({ name: 'department_id' })
@@ -32,9 +32,9 @@ export class PqrsEntity extends AbstractEntity<PqrsEntity> {
   @JoinColumn({ name: 'municipality_id' })
   municipality: MunicipalityEntity;
 
-  @ManyToOne(() => ReasonPqrsEntity)
+  @ManyToOne(() => Reason_pqrsEntity)
   @JoinColumn({ name: 'reason_id' })
-  reason: ReasonPqrsEntity;
+  reason: Reason_pqrsEntity;
 
   @ManyToOne(() => EpsEntity)
   @JoinColumn({ name: 'eps_id' })
@@ -52,17 +52,17 @@ export class PqrsEntity extends AbstractEntity<PqrsEntity> {
   @Column({ type: 'varchar', length: 255, nullable: true })
   files: string;
 
-  @ManyToOne(() => SystemUsersEntity)
+  @ManyToOne(() => System_usersEntity)
   @JoinColumn({ name: 'user_system_id' })
-  userSystem: SystemUsersEntity;
+  userSystem: System_usersEntity;
 
   @OneToMany(
-    () => PqrsNotificationEntity,
+    () => Pqrs_notificationEntity,
     (notification) => notification.pqrs,
     {
       cascade: true,
       onDelete: 'CASCADE',
     },
   )
-  notifications: PqrsNotificationEntity[];
+  notifications: Pqrs_notificationEntity[];
 }

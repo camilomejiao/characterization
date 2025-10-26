@@ -9,8 +9,9 @@ import {
 import { AbstractEntity } from './abstract.entity';
 import { DepartmentEntity } from './department.entity';
 import { MunicipalityEntity } from './municipality.entity';
-import { IdentificationTypeEntity } from './identification-type.entity';
-import { DisabilityTypeEntity } from './disability-type.entity';
+import { Identification_typeEntity } from './identification_type.entity';
+import { Disability_typeEntity } from './disability_type.entity';
+import { SexEntity } from './sex.entity';
 import { GenderEntity } from './gender.entity';
 import { AreaEntity } from './area.entity';
 import { PqrsEntity } from './pqrs.entity';
@@ -27,16 +28,20 @@ export class UserEntity extends AbstractEntity<UserEntity> {
   @JoinColumn({ name: 'municipality_id' })
   municipality: MunicipalityEntity;
 
-  @ManyToOne(() => IdentificationTypeEntity)
+  @ManyToOne(() => Identification_typeEntity)
   @JoinColumn({ name: 'identification_type_id' })
-  identificationType: IdentificationTypeEntity;
+  identificationType: Identification_typeEntity;
 
   @Column({ name: 'identification_number', unique: true })
   identificationNumber: number;
 
-  @ManyToOne(() => DisabilityTypeEntity, { nullable: true })
+  @ManyToOne(() => Disability_typeEntity, { nullable: true })
   @JoinColumn({ name: 'disability_type_id' })
-  disabilityType: DisabilityTypeEntity;
+  disabilityType: Disability_typeEntity;
+
+  @ManyToOne(() => SexEntity)
+  @JoinColumn({ name: 'sex_id' })
+  sex: SexEntity;
 
   @ManyToOne(() => GenderEntity)
   @JoinColumn({ name: 'gender_id' })

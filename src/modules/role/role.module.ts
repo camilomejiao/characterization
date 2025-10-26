@@ -5,13 +5,13 @@ import { JsonApiModule } from 'json-api-nestjs';
 import { RoleEntity } from '../../common/entities/role.entity';
 
 //Use Case
-import { CreateRoleUseCase } from './domain/input-ports/use-cases/create-role.usecase';
+import { Create_roleUsecase } from './domain/input-ports/use-cases/create_role.usecase';
 
 //Interface
 import { IRoleRepository } from './domain/output-ports/role.repository';
 
 //Repo
-import { RoleMysqlRepository } from './domain/output-ports/mysql/role-mysql.repository';
+import { Role_mysqlRepository } from './domain/output-ports/mysql/role_mysql.repository';
 import { RoleController } from './adapters/input/role.controller';
 
 @Module({
@@ -19,10 +19,10 @@ import { RoleController } from './adapters/input/role.controller';
     JsonApiModule.forRoot({
       entities: [RoleEntity],
       providers: [
-        CreateRoleUseCase,
+        Create_roleUsecase,
         {
           provide: IRoleRepository,
-          useClass: RoleMysqlRepository,
+          useClass: Role_mysqlRepository,
         },
       ],
       controllers: [RoleController],
