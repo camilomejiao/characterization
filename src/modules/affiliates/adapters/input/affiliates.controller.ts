@@ -37,7 +37,7 @@ export class AffiliatesController {
     @Inject(GetAffiliateListUsecase)
     private getAffiliateListUseCase: GetAffiliateListUsecase,
     @Inject(Get_affiliate_by_identifiactionUsecase)
-    private getAffiliateUseCase: Get_affiliate_by_identifiactionUsecase,
+    private getAffiliateByIdentificationUseCase: Get_affiliate_by_identifiactionUsecase,
     @Inject(Update_affiliateUsecase)
     private updateAffiliateUseCase: Update_affiliateUsecase,
     @Inject(Bulk_affiliateUsecase)
@@ -90,16 +90,19 @@ export class AffiliatesController {
     }
 
     const affiliate =
-      await this.getAffiliateUseCase.handler(identificationNumber);
+      await this.getAffiliateByIdentificationUseCase.handler(
+        identificationNumber,
+      );
 
     return { data: affiliate };
   }
 
   @Put('update/:id')
+  @UseGuards(AuthGuard('jwt'))
   public async updateUser(
     @Param('id') id: number,
     @Body() updateAffiliateDto: AffiliateDto,
-  ) {
+  ): Promise<{ data: AffiliatesEntity }> {
     const updatedAffiliate = await this.updateAffiliateUseCase.handler(
       id,
       updateAffiliateDto,

@@ -35,6 +35,7 @@ import { Ips_dentalEntity } from '../../../../common/entities/ips_dental.entity'
 import { RegimeEntity } from '../../../../common/entities/regime.entity';
 import { LMAEntity } from '../../../../common/entities/lma.entity';
 import { Affiliate_historyEntity } from '../../../../common/entities/affiliate_history.entity';
+import { SpecialPopulationEntity } from '../../../../common/entities/special_population.entity';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -91,6 +92,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         Ips_dentalEntity,
         LMAEntity,
         Affiliate_historyEntity,
+        SpecialPopulationEntity,
       ],
       synchronize: false,
       //logging: true,

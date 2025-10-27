@@ -17,6 +17,7 @@ import { AreaEntity } from './area.entity';
 import { PqrsEntity } from './pqrs.entity';
 import { AffiliatesEntity } from './affiliate.entity';
 import { CountryEntity } from './country.entity';
+import { SpecialPopulationEntity } from './special_population.entity';
 
 @Entity('users')
 export class UserEntity extends AbstractEntity<UserEntity> {
@@ -99,4 +100,13 @@ export class UserEntity extends AbstractEntity<UserEntity> {
   @ManyToOne(() => CountryEntity)
   @JoinColumn({ name: 'country_id' })
   country: CountryEntity;
+
+  @OneToOne(
+    () => SpecialPopulationEntity,
+    (specialPopulation) => specialPopulation.user,
+    {
+      nullable: true,
+    },
+  )
+  specialPopulation: SpecialPopulationEntity;
 }

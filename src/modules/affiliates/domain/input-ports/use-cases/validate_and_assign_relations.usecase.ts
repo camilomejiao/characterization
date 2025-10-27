@@ -126,19 +126,19 @@ export class Validate_and_assign_relationsUsecase {
     );
   }
 
-  private async getCommunity(communityId: number) {
-    return this.validateEntity(
-      this.communityRepository,
-      communityId,
-      'Community',
-    );
-  }
-
   private async getEthnicity(ethnicityId: number) {
     return this.validateEntity(
       this.ethnicityRepository,
       ethnicityId,
       'Ethnicity',
+    );
+  }
+
+  private async getCommunity(communityId: number) {
+    return this.validateEntity(
+      this.communityRepository,
+      communityId,
+      'Community',
     );
   }
 

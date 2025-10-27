@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+//
+import { UsersModule } from '../users/users.module';
+
 //Entity
 import { UserEntity } from '../../common/entities/user.entity';
 import { AffiliatesEntity } from '../../common/entities/affiliate.entity';
@@ -60,7 +63,6 @@ import { Level_mysqlRepository } from '../common/domain/output-ports/mysql/level
 import { Membership_class_mysqlRepository } from '../common/domain/output-ports/mysql/membership_class_mysql.repository';
 import { Methodology_mysqlRepository } from '../common/domain/output-ports/mysql/methodology_mysql.repository';
 import { Group_subgroup_mysqlRespository } from '../common/domain/output-ports/mysql/group_subgroup_mysql.respository';
-import { UsersModule } from '../users/users.module';
 import { User_mysqlRepository } from '../users/domain/output-ports/mysql/user_mysql.repository';
 import { Department_mysqlRepository } from '../department-municipality/domain/output-ports/mysql/department_mysql.repository';
 import { Municipality_mysqlRepository } from '../department-municipality/domain/output-ports/mysql/municipality_mysql.repository';
@@ -79,8 +81,8 @@ import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ip
       EpsEntity,
       Ips_primaryEntity,
       Ips_dentalEntity,
-      CommunityEntity,
       EthnicityEntity,
+      CommunityEntity,
       LevelEntity,
       Membership_classEntity,
       MethodologyEntity,
@@ -132,12 +134,12 @@ import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ip
       useClass: IpsDentalMysqlRepository,
     },
     {
-      provide: ICommunityRepository,
-      useClass: Community_mysqlRepository,
-    },
-    {
       provide: IEthnicityRepository,
       useClass: Ethnicity_mysqlRepository,
+    },
+    {
+      provide: ICommunityRepository,
+      useClass: Community_mysqlRepository,
     },
     {
       provide: ILevelRepository,

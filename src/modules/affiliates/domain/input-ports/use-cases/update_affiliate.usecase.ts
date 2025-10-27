@@ -34,7 +34,7 @@ export class Update_affiliateUsecase {
         );
       }
 
-      //Actualizar afiliado sin sobrescribir valores previos
+      //Actualizar sin sobrescribir valores previos
       const updateAffiliateData: Partial<AffiliatesEntity> = {};
 
       if (updateAffiliateDto.formNumber !== undefined)

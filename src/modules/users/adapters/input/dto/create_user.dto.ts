@@ -56,6 +56,10 @@ export class Create_userDto {
 
   @IsNotEmpty()
   @IsNumber()
+  country_id?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   department_id: number;
 
   @IsNotEmpty()
@@ -77,8 +81,4 @@ export class Create_userDto {
   @IsOptional()
   @IsNumber()
   area_id?: number;
-
-  @IsOptional()
-  @IsNumber()
-  country_id?: number;
 }
