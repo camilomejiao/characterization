@@ -1,12 +1,14 @@
 import { UserEntity } from '../../../../common/entities/user.entity';
+import { FindOptionsWhere, FindOptionsRelations } from 'typeorm';
 
+type RelationsInput<T> = FindOptionsRelations<T> | string[];
 export interface IUserRepository {
   create(entity: UserEntity): Promise<UserEntity>;
 
   findOne(options: {
-    where: Partial<UserEntity>;
-    relations?: string[];
-  }): Promise<UserEntity>;
+    where: FindOptionsWhere<UserEntity>;
+    relations?: RelationsInput<UserEntity>;
+  }): Promise<UserEntity | null>;
 
   findOneBy(condition: Partial<UserEntity>): Promise<UserEntity>;
 

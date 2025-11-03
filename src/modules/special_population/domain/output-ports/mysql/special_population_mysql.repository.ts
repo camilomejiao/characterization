@@ -22,14 +22,26 @@ export class SpecialPopulationMysqlRepository
 
   async findAll(): Promise<SpecialPopulationEntity[]> {
     return await this.repository.find({
-      relations: ['user', 'populationType', 'eps', 'ethnicity', 'community'],
+      relations: {
+        user: true,
+        populationType: true,
+        eps: true,
+        ethnicity: true,
+        community: true,
+      },
     });
   }
 
   async findById(id): Promise<SpecialPopulationEntity> {
     return await this.repository.findOne({
       where: { id },
-      relations: ['user', 'populationType', 'eps', 'ethnicity', 'community'],
+      relations: {
+        user: true,
+        populationType: true,
+        eps: true,
+        ethnicity: true,
+        community: true,
+      },
     });
   }
 

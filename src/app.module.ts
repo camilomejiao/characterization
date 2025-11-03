@@ -7,8 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 //
 import environment from './config/environment';
 //
-import { RoleModule } from './modules/role/role.module';
 import { DepartmentMunicipalityModule } from './modules/department-municipality/department-municipality.module';
+import { OrganizationModule } from './modules/organization/organization.module';
+import { RoleModule } from './modules/role/role.module';
 import { System_userModule } from './modules/sysyem-user/system_user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
@@ -21,10 +22,11 @@ import { SpecialPopulationModule } from './modules/special_population/special_po
   imports: [
     DatabaseModule,
     AuthModule,
-    RoleModule,
     DepartmentMunicipalityModule,
-    CommonModule,
+    RoleModule,
+    OrganizationModule,
     System_userModule,
+    CommonModule,
     UsersModule,
     AffiliatesModule,
     PqrsModule,

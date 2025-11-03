@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 //Dto
@@ -11,15 +6,13 @@ import { Update_userDto } from '../../../adapters/input/dto/update_user.dto';
 
 //Entity
 import { System_usersEntity } from '../../../../../common/entities/system_users.entity';
-import { DepartmentEntity } from '../../../../../common/entities/department.entity';
-import { MunicipalityEntity } from '../../../../../common/entities/municipality.entity';
 import { RoleEntity } from '../../../../../common/entities/role.entity';
+import { OrganizationEntity } from '../../../../../common/entities/organization.entity';
 
 //Repository
 import { ISystemUserRepository } from '../../output-ports/system_user.repository';
-import { IDepartmentRepository } from '../../../../department-municipality/domain/output-ports/department.repository';
-import { IMunicipalityRepository } from '../../../../department-municipality/domain/output-ports/municipality.repository';
 import { IRoleRepository } from '../../../../role/domain/output-ports/role.repository';
+import { IOrganizationRepository } from '../../../../organization/domain/output-ports/organization.repository';
 
 export class Update_userUsecase {
   constructor(
@@ -27,35 +20,38 @@ export class Update_userUsecase {
     private systemUserRepository: ISystemUserRepository,
     @Inject(IRoleRepository)
     private roleRepository: IRoleRepository,
-    @Inject(IDepartmentRepository)
-    private departmentRepository: IDepartmentRepository,
-    @Inject(IMunicipalityRepository)
-    private municipalityRepository: IMunicipalityRepository,
+    @Inject(IOrganizationRepository)
+    private organizationRepository: IOrganizationRepository,
   ) {}
 
   public async handler(
     id: number,
     updateUserDto: Update_userDto,
   ): Promise<System_usersEntity> {
-    const user = await this.systemUserRepository.getUser({ id });
+    try {
+      const user = await this.systemUserRepository.getUser({ id });
 
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      //Validar relaciones
+      user.role = await this.getRole(updateUserDto.role_id);
+
+      user.organization = await this.getOrganization(
+        updateUserDto.organization_id,
+      );
+
+      user.password = await bcrypt.hash(updateUserDto.password, 10);
+
+      const updatedUser: System_usersEntity = {
+        ...updateUserDto,
+        ...user,
+      };
+      return await this.systemUserRepository.update(updatedUser);
+    } catch (error) {
+      console.log(error);
     }
-
-    //Validar relaciones
-    user.role = await this.getRole(updateUserDto.role_id);
-    user.department = await this.getDepartment(updateUserDto.department_id);
-    user.municipality = await this.getMunicipality(
-      updateUserDto.municipality_id,
-    );
-    user.password = await bcrypt.hash(updateUserDto.password, 10);
-
-    const updatedUser: System_usersEntity = {
-      ...updateUserDto,
-      ...user,
-    };
-    return await this.systemUserRepository.update(updatedUser);
   }
 
   private async getRole(roleId: number): Promise<RoleEntity> {
@@ -64,29 +60,17 @@ export class Update_userUsecase {
     return role;
   }
 
-  private async getDepartment(departmentId: number): Promise<DepartmentEntity> {
-    const department = await this.departmentRepository.findOneBy({
-      id: departmentId,
+  private async getOrganization(
+    organizationId: number,
+  ): Promise<OrganizationEntity> {
+    const organization = await this.organizationRepository.findOneBy({
+      id: organizationId,
     });
-    if (!department) {
-      throw new NotFoundException(
-        `Department with ID ${departmentId} not found`,
-      );
-    }
-    return department;
-  }
 
-  private async getMunicipality(
-    municipalityId: number,
-  ): Promise<MunicipalityEntity> {
-    const municipality = await this.municipalityRepository.findOneBy({
-      id: municipalityId,
-    });
-    if (!municipality) {
-      throw new NotFoundException(
-        `Municipality with ID ${municipalityId} not found`,
-      );
+    if (!organization) {
+      throw new HttpException('Organization not found', HttpStatus.NOT_FOUND);
     }
-    return municipality;
+
+    return organization;
   }
 }

@@ -1,4 +1,10 @@
-import { Inject, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Inject,
+  HttpException,
+  HttpStatus,
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 //Entity
 import { AffiliatesEntity } from '../../../../../common/entities/affiliate.entity';
@@ -9,6 +15,7 @@ import { Validate_and_assign_relationsUsecase } from './validate_and_assign_rela
 //Repository
 import { IAffiliateRepository } from '../../output-ports/affiliate.repository';
 import { IUserRepository } from '../../../../users/domain/output-ports/user.repository';
+import { QueryFailedError } from 'typeorm';
 
 export class Update_affiliateUsecase {
   constructor(
@@ -63,7 +70,7 @@ export class Update_affiliateUsecase {
 
       return affiliate;
     } catch (error) {
-      console.log(error);
+      console.log('error: ', error);
     }
   }
 }

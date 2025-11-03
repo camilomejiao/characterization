@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { runSeeders, Seeder } from 'typeorm-extension';
+
 import { RolesSeeder } from './role.seeder';
 import { DepartmentSeeder } from './department.seeder';
 import { MunicipalitySeeder } from './municipality.seeder';
@@ -25,6 +26,7 @@ import { RegimeSeeder } from './regime.seeder';
 import { IpsPrimarySeeder } from './ips_primary.seeder';
 import { IpsDentalSeeder } from './ips_dental.seeder';
 import { GenderSeeder } from './gender.seeder';
+import { OrganizationSeeder } from './organization.seeder';
 
 export default class InitSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
@@ -34,6 +36,7 @@ export default class InitSeeder implements Seeder {
         RegimeSeeder,
         DepartmentSeeder,
         MunicipalitySeeder,
+        OrganizationSeeder,
         Identification_typeSeeder,
         EpsSeeder,
         SexSeeder,

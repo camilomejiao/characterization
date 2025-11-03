@@ -24,6 +24,7 @@ import { CountryEntity } from '../../common/entities/country.entity';
 import { Ips_primaryEntity } from '../../common/entities/ips_primary.entity';
 import { Ips_dentalEntity } from '../../common/entities/ips_dental.entity';
 import { RegimeEntity } from '../../common/entities/regime.entity';
+import { UploadedFilesEntity } from '../../common/entities/uploaded_files.entity';
 
 // Controllers
 import { Affiliate_typeController } from './adapters/input/affiliate_type.controller';
@@ -74,6 +75,7 @@ import { RegimeController } from './adapters/input/regime.controller';
       CountryEntity,
       Ips_primaryEntity,
       Ips_dentalEntity,
+      UploadedFilesEntity,
     ]),
   ],
   controllers: [

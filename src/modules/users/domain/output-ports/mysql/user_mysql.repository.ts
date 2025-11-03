@@ -1,8 +1,23 @@
 import { IUserRepository } from '../user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../../../../common/entities/user.entity';
-import { Repository } from 'typeorm';
+import {
+  FindOneOptions,
+  FindOptionsRelations,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
 import { Injectable } from '@nestjs/common';
+
+type RelationsInput<T> = FindOptionsRelations<T> | string[];
+
+function normalizeRelations<T>(
+  relations?: RelationsInput<T>,
+): FindOneOptions<T>['relations'] {
+  if (!relations) return undefined;
+  if (Array.isArray(relations)) return relations as any;
+  return relations as any; // objeto anidado
+}
 
 @Injectable()
 export class User_mysqlRepository implements IUserRepository {
@@ -16,58 +31,66 @@ export class User_mysqlRepository implements IUserRepository {
   }
 
   async findOne(options: {
-    where: Partial<UserEntity>;
-    relations?: string[];
-  }): Promise<UserEntity> {
+    where: FindOptionsWhere<UserEntity>;
+    relations?: RelationsInput<UserEntity>;
+  }): Promise<UserEntity | null> {
     return this.repository.findOne({
       where: options.where,
-      relations: options.relations || [],
+      relations: normalizeRelations<UserEntity>(options.relations),
     });
   }
 
-  async findOneBy(condition: Partial<UserEntity>): Promise<UserEntity> {
+  async findOneBy(
+    condition: FindOptionsWhere<UserEntity>,
+  ): Promise<UserEntity | null> {
     return this.repository.findOne({
       where: condition,
-      relations: [
-        'identificationType',
-        'disabilityType',
-        'department',
-        'municipality',
-        'sex',
-        'gender',
-        'area',
-        'country',
-      ],
+      relations: {
+        identificationType: true,
+        disabilityType: true,
+        department: true,
+        municipality: true,
+        sex: true,
+        gender: true,
+        area: true,
+        country: true,
+        organization: true,
+      },
     });
   }
 
   async findAll(): Promise<UserEntity[]> {
     return await this.repository.find({
-      relations: [
-        'department',
-        'municipality',
-        'identificationType',
-        'disabilityType',
-        'gender',
-        'area',
-        'country',
-      ],
+      relations: {
+        department: true,
+        municipality: true,
+        identificationType: true,
+        disabilityType: true,
+        gender: true,
+        area: true,
+        country: true,
+        organization: true,
+      },
     });
   }
 
-  async update(id: number, userData: Partial<UserEntity>): Promise<UserEntity> {
+  async update(
+    id: number,
+    userData: Partial<UserEntity>,
+  ): Promise<UserEntity | null> {
     await this.repository.update(id, userData);
     return this.repository.findOne({
       where: { id },
-      relations: [
-        'department',
-        'municipality',
-        'identificationType',
-        'disabilityType',
-        'gender',
-        'area',
-        'country',
-      ],
+      relations: {
+        department: true,
+        municipality: true,
+        identificationType: true,
+        disabilityType: true,
+        gender: true,
+        area: true,
+        country: true,
+        organization: true, // añade si lo necesitas en la respuesta
+      },
     });
   }
 

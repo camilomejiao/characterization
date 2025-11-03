@@ -113,6 +113,11 @@ export class Users1738695404689 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'organization_id',
+            type: 'int',
+            isNullable: true,
+          },
+          {
             name: 'created_at',
             type: 'datetime',
             default: 'CURRENT_TIMESTAMP',
@@ -170,6 +175,12 @@ export class Users1738695404689 implements MigrationInterface {
             columnNames: ['area_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'area',
+            onDelete: 'SET NULL',
+          },
+          {
+            columnNames: ['organization_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'organization',
             onDelete: 'SET NULL',
           },
         ],

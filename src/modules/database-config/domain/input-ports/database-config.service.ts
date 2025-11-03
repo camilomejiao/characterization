@@ -36,6 +36,8 @@ import { RegimeEntity } from '../../../../common/entities/regime.entity';
 import { LMAEntity } from '../../../../common/entities/lma.entity';
 import { Affiliate_historyEntity } from '../../../../common/entities/affiliate_history.entity';
 import { SpecialPopulationEntity } from '../../../../common/entities/special_population.entity';
+import { OrganizationEntity } from '../../../../common/entities/organization.entity';
+import { UploadedFilesEntity } from '../../../../common/entities/uploaded_files.entity';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
@@ -60,6 +62,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       username,
       password,
       entities: [
+        OrganizationEntity,
         System_usersEntity,
         RoleEntity,
         RegimeEntity,
@@ -93,6 +96,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         LMAEntity,
         Affiliate_historyEntity,
         SpecialPopulationEntity,
+        UploadedFilesEntity,
       ],
       synchronize: false,
       //logging: true,

@@ -18,6 +18,7 @@ import { PqrsEntity } from './pqrs.entity';
 import { AffiliatesEntity } from './affiliate.entity';
 import { CountryEntity } from './country.entity';
 import { SpecialPopulationEntity } from './special_population.entity';
+import { OrganizationEntity } from './organization.entity';
 
 @Entity('users')
 export class UserEntity extends AbstractEntity<UserEntity> {
@@ -109,4 +110,8 @@ export class UserEntity extends AbstractEntity<UserEntity> {
     },
   )
   specialPopulation: SpecialPopulationEntity;
+
+  @ManyToOne(() => OrganizationEntity, (organization) => organization.id)
+  @JoinColumn({ name: 'organization_id' })
+  organization: OrganizationEntity;
 }

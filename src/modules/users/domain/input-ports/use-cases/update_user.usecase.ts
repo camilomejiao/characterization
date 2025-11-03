@@ -1,7 +1,10 @@
 import { Inject, NotFoundException } from '@nestjs/common';
-import { Update_userDto } from '../../../adapters/input/dto/update_user.dto';
-import { IUserRepository } from '../../output-ports/user.repository';
+//
 import { UserEntity } from '../../../../../common/entities/user.entity';
+//
+import { Update_userDto } from '../../../adapters/input/dto/update_user.dto';
+//
+import { IUserRepository } from '../../output-ports/user.repository';
 import { ICountryRepository } from '../../../../common/domain/output-ports/country.repository';
 import { IDepartmentRepository } from '../../../../department-municipality/domain/output-ports/department.repository';
 import { IMunicipalityRepository } from '../../../../department-municipality/domain/output-ports/municipality.repository';
@@ -39,8 +42,6 @@ export class Update_userUsecase {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-
-    console.log('user:', user);
 
     // Validar y obtener nuevas relaciones si se envían en el DTO
     const country = userDto.country_id

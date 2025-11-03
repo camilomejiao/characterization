@@ -1,8 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { RoleEntity } from './role.entity';
-import { DepartmentEntity } from './department.entity';
-import { MunicipalityEntity } from './municipality.entity';
+import { OrganizationEntity } from './organization.entity';
 
 @Entity('system_user')
 export class System_usersEntity extends AbstractEntity<System_usersEntity> {
@@ -15,25 +14,14 @@ export class System_usersEntity extends AbstractEntity<System_usersEntity> {
   @Column()
   password: string;
 
-  @Column()
-  organizationName: string;
-
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'tinyint', default: () => '1' })
   active: number;
 
   @ManyToOne(() => RoleEntity, (role) => role.id)
   @JoinColumn({ name: 'role_id' })
   role: RoleEntity;
 
-  @ManyToOne(() => DepartmentEntity, (department) => department.id, {
-    nullable: true,
-  })
-  @JoinColumn({ name: 'department_id' })
-  department: DepartmentEntity;
-
-  @ManyToOne(() => MunicipalityEntity, (municipality) => municipality.id, {
-    nullable: true,
-  })
-  @JoinColumn({ name: 'municipality_id' })
-  municipality: MunicipalityEntity;
+  @ManyToOne(() => OrganizationEntity, (organization) => organization.id)
+  @JoinColumn({ name: 'organization_id' })
+  organization: OrganizationEntity;
 }

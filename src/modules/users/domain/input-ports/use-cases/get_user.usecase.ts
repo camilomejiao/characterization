@@ -1,8 +1,4 @@
-import {
-  Inject,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { IUserRepository } from '../../output-ports/user.repository';
 import { IIdentificationTypeRepository } from '../../../../common/domain/output-ports/identification_type.repository';
 
@@ -21,14 +17,14 @@ export class Get_userUsecase {
   public async userIdentification(identificationNumber: number) {
     const user = await this.userRepository.findOne({
       where: { identificationNumber },
-      relations: [
-        'identificationType',
-        'disabilityType',
-        'department',
-        'municipality',
-        'gender',
-        'area',
-      ],
+      relations: {
+        identificationType: true,
+        disabilityType: true,
+        department: true,
+        municipality: true,
+        gender: true,
+        area: true,
+      },
     });
 
     if (!user) {

@@ -6,7 +6,7 @@ import {
   IsInt,
   Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class AffiliateDto {
   // Usuario
@@ -112,6 +112,9 @@ export class AffiliateDto {
   observations?: string;
 
   @IsOptional()
+  @Transform(({ value }) =>
+    value === '' || value === null ? undefined : value,
+  )
   @IsDateString()
   dateOfAffiliated?: string;
 }

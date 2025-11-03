@@ -1,4 +1,10 @@
-import { Inject, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Inject,
+  HttpException,
+  HttpStatus,
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 //Dto
 import { AffiliateDto } from '../../../adapters/input/dto/affiliate.dto';
@@ -35,6 +41,13 @@ export class Create_affiliateUsecase {
         );
       }
 
+      const existing = await this.affiliateRepository.findById(
+        affiliateDto.userId,
+      );
+      if (existing) {
+        throw new ConflictException('Ya existe un afiliado para este usuario.');
+      }
+
       //Crear afiliado y enlazarlo con el usuario existente
       const affiliate = new AffiliatesEntity({
         user,
@@ -50,7 +63,13 @@ export class Create_affiliateUsecase {
       //Guardar afiliado en la base de datos
       return await this.affiliateRepository.create(affiliate);
     } catch (error) {
-      console.log(error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        error.message || 'Error al crear el afiliado.',
+      );
     }
   }
 }

@@ -30,29 +30,20 @@ export class SystemUsers1735155096824 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'organizationName',
-            type: 'varchar',
+            name: 'organization_id',
+            type: 'int',
             isNullable: true,
           },
           {
             name: 'active',
-            type: 'int',
+            type: 'tinyint',
             isNullable: false,
+            default: 1,
           },
           {
             name: 'role_id',
             type: 'int',
             isNullable: false,
-          },
-          {
-            name: 'department_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'municipality_id',
-            type: 'int',
-            isNullable: true,
           },
           {
             name: 'created_at',
@@ -79,16 +70,10 @@ export class SystemUsers1735155096824 implements MigrationInterface {
             onDelete: 'CASCADE',
           },
           {
-            columnNames: ['department_id'],
-            referencedTableName: 'departments',
+            columnNames: ['organization_id'],
+            referencedTableName: 'organization',
             referencedColumnNames: ['id'],
-            onDelete: 'SET NULL',
-          },
-          {
-            columnNames: ['municipality_id'],
-            referencedTableName: 'municipalities',
-            referencedColumnNames: ['id'],
-            onDelete: 'SET NULL',
+            onDelete: 'CASCADE',
           },
         ],
         indices: [
@@ -105,6 +90,6 @@ export class SystemUsers1735155096824 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('system-users');
+    await queryRunner.dropTable('system_user');
   }
 }

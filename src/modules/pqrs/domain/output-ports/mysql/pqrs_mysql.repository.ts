@@ -18,39 +18,42 @@ export class Pqrs_mysqlRepository implements IPqrsRepository {
 
   async findAll(): Promise<PqrsEntity[]> {
     return await this.repository.find({
-      relations: [
-        'pqrsType',
-        'department',
-        'municipality',
-        'applicationStatus',
-        'reason',
-        'eps',
-        'user',
-      ],
+      relations: {
+        pqrsType: true,
+        department: true,
+        municipality: true,
+        applicationStatus: true,
+        reason: true,
+        eps: true,
+        user: true,
+      },
     });
   }
 
   async findOneBy(condition: Partial<PqrsEntity>): Promise<PqrsEntity> {
     return await this.repository.findOne({
       where: condition,
-      relations: [
-        'pqrsType',
-        'applicationStatus',
-        'department',
-        'municipality',
-        'reason',
-        'eps',
-        'userSystem',
-        'user',
-        'user.identificationType',
-        'user.department',
-        'user.municipality',
-        'user.gender',
-        'user.area',
-        'user.disabilityType',
-        'notifications',
-        'notifications.status',
-      ],
+      relations: {
+        pqrsType: true,
+        applicationStatus: true,
+        department: true,
+        municipality: true,
+        reason: true,
+        eps: true,
+        userSystem: true,
+        user: {
+          identificationType: true,
+          department: true,
+          municipality: true,
+          gender: true,
+          area: true,
+          disabilityType: true,
+          organization: true,
+        },
+        notifications: {
+          status: true,
+        },
+      },
     });
   }
 

@@ -1,14 +1,19 @@
 import { Inject, NotFoundException } from '@nestjs/common';
-import { Create_userDto } from '../../../adapters/input/dto/create_user.dto';
-import { IUserRepository } from '../../output-ports/user.repository';
+
+//
 import { UserEntity } from '../../../../../common/entities/user.entity';
+import { DepartmentEntity } from '../../../../../common/entities/department.entity';
+import { MunicipalityEntity } from '../../../../../common/entities/municipality.entity';
+import { OrganizationEntity } from '../../../../../common/entities/organization.entity';
+//
+import { Create_userDto } from '../../../adapters/input/dto/create_user.dto';
+//
+import { IUserRepository } from '../../output-ports/user.repository';
 import { IDepartmentRepository } from '../../../../department-municipality/domain/output-ports/department.repository';
 import { IMunicipalityRepository } from '../../../../department-municipality/domain/output-ports/municipality.repository';
 import { IDisabilityTypeRepository } from '../../../../common/domain/output-ports/disability_type.repository';
 import { IGenderRepository } from '../../../../common/domain/output-ports/gender.repository';
 import { IAreaRepository } from '../../../../common/domain/output-ports/area.repository';
-import { DepartmentEntity } from '../../../../../common/entities/department.entity';
-import { MunicipalityEntity } from '../../../../../common/entities/municipality.entity';
 import { IIdentificationTypeRepository } from '../../../../common/domain/output-ports/identification_type.repository';
 import { ICountryRepository } from '../../../../common/domain/output-ports/country.repository';
 import { ISexRepository } from '../../../../common/domain/output-ports/sex.repository';
@@ -35,7 +40,10 @@ export class Create_userUsecase {
     private areaRepository: IAreaRepository,
   ) {}
 
-  public async handler(userDto: Create_userDto): Promise<UserEntity> {
+  public async handler(
+    userDto: Create_userDto,
+    userId?: number,
+  ): Promise<UserEntity> {
     try {
       const country = await this.getCountry(userDto.country_id);
       const department = await this.getDepartment(userDto.department_id);
@@ -70,6 +78,9 @@ export class Create_userUsecase {
         gender,
         area,
       });
+
+      //Asignar la organización del token
+      user.organization = { id: userId } as OrganizationEntity;
 
       return await this.userRepository.create(user);
     } catch (error) {

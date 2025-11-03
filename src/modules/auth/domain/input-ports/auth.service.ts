@@ -16,10 +16,8 @@ export class AuthService {
   async signIn(email: string, password: string): Promise<any> {
     // Validar las credenciales del usuario
     const user = await this.validateCredentials(email, password);
-
     // Generar el token JWT
     const token = this.generateJwtToken(user);
-
     // Construir la respuesta
     return this.buildResponse(user, token);
   }
@@ -31,7 +29,13 @@ export class AuthService {
   ): Promise<System_usersEntity> {
     const user = await this.userRepository.findOne({
       where: { email },
-      relations: ['role', 'department', 'municipality'],
+      relations: {
+        role: true,
+        organization: {
+          department: true,
+          municipality: true,
+        },
+      },
     });
 
     if (!user) {
@@ -53,8 +57,8 @@ export class AuthService {
       name: user.name,
       email: user.email,
       role: user.role,
-      department: user.department,
-      municipality: user.municipality,
+      organization: user.organization.id,
+      organization_info: user.organization,
     };
     return this.jwtService.sign(payload);
   }
@@ -68,8 +72,8 @@ export class AuthService {
         name: user.name,
         email: user.email,
         role: user.role,
-        department: user.department,
-        municipality: user.municipality,
+        organization: user.organization.id,
+        organization_info: user.organization,
       },
     };
   }

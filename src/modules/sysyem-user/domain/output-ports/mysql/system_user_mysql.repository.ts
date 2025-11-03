@@ -27,7 +27,7 @@ export class System_user_mysqlRepository implements ISystemUserRepository {
   ): Promise<System_usersEntity | null> {
     return this.repository.findOne({
       where: condition,
-      relations: ['role', 'department', 'municipality'],
+      relations: { role: true, organization: true },
     });
   }
 
@@ -39,7 +39,7 @@ export class System_user_mysqlRepository implements ISystemUserRepository {
     const updatedUser = await this.repository.save(entity);
     return this.repository.findOne({
       where: { id: updatedUser.id },
-      relations: ['role', 'department', 'municipality'], //Recargar relaciones
+      relations: { role: true, organization: true }, //Recargar relaciones
     });
   }
 

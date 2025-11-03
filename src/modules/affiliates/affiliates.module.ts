@@ -21,6 +21,9 @@ import { Group_subgroupEntity } from '../../common/entities/group_subgroup.entit
 import { RegimeEntity } from '../../common/entities/regime.entity';
 import { DepartmentEntity } from '../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../common/entities/municipality.entity';
+import { LMAEntity } from '../../common/entities/lma.entity';
+import { Affiliate_historyEntity } from '../../common/entities/affiliate_history.entity';
+import { UploadedFilesEntity } from '../../common/entities/uploaded_files.entity';
 
 //Controller
 import { AffiliatesController } from './adapters/input/affiliates.controller';
@@ -30,9 +33,8 @@ import { Create_affiliateUsecase } from './domain/input-ports/use-cases/create_a
 import { GetAffiliateListUsecase } from './domain/input-ports/use-cases/get-affiliate-list.usecase';
 import { Get_affilate_by_idUsecase } from './domain/input-ports/use-cases/get_affilate_by_id.usecase';
 import { Update_affiliateUsecase } from './domain/input-ports/use-cases/update_affiliate.usecase';
-import { Get_affiliate_by_identifiactionUsecase } from './domain/input-ports/use-cases/get_affiliate_by_identifiaction.usecase';
 import { Validate_and_assign_relationsUsecase } from './domain/input-ports/use-cases/validate_and_assign_relations.usecase';
-import { Bulk_affiliateUsecase } from './domain/input-ports/use-cases/bulk_affiliate.usecase';
+import { BulkAffiliateUsecase } from './domain/input-ports/use-cases/bulk/bulk_affiliate_usecase';
 
 //Repository
 import { IAffiliateRepository } from './domain/output-ports/affiliate.repository';
@@ -69,6 +71,14 @@ import { Municipality_mysqlRepository } from '../department-municipality/domain/
 import { RegimeMysqlRepository } from '../common/domain/output-ports/mysql/regime_mysql.repository';
 import { IpsPrimaryMysqlRepository } from '../common/domain/output-ports/mysql/ips_primary_mysql.repository';
 import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ips_dental_mysql.repository';
+import { ValidateFileNameUsecase } from './domain/input-ports/use-cases/bulk/validate_file_name.usecase';
+import { ValidateMonthlyUploadsUsecase } from './domain/input-ports/use-cases/bulk/validate_monthly_uploads.usecase';
+import { ValidateColumnsForRegimeUsecase } from './domain/input-ports/use-cases/bulk/validate_columns_for_regime.usecase';
+import { ValidateDiffUserUsecase } from './domain/input-ports/use-cases/bulk/validate_diff_user.usecase';
+import { ValidateDiffAffiliateUsecase } from './domain/input-ports/use-cases/bulk/validate_diff_affiliate.usecase';
+import { LmaUsecase } from './domain/input-ports/use-cases/bulk/lma.usecase';
+import { AffiliateHistoryUsecase } from './domain/input-ports/use-cases/bulk/affiliate_history.usecase';
+import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/upsert_upload_file.usecase';
 
 @Module({
   imports: [
@@ -89,6 +99,9 @@ import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ip
       Group_subgroupEntity,
       DepartmentEntity,
       MunicipalityEntity,
+      LMAEntity,
+      Affiliate_historyEntity,
+      UploadedFilesEntity,
     ]),
     UsersModule,
   ],
@@ -97,10 +110,17 @@ import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ip
     Create_affiliateUsecase,
     GetAffiliateListUsecase,
     Get_affilate_by_idUsecase,
-    Get_affiliate_by_identifiactionUsecase,
     Update_affiliateUsecase,
     Validate_and_assign_relationsUsecase,
-    Bulk_affiliateUsecase,
+    BulkAffiliateUsecase,
+    ValidateFileNameUsecase,
+    ValidateMonthlyUploadsUsecase,
+    ValidateColumnsForRegimeUsecase,
+    ValidateDiffUserUsecase,
+    ValidateDiffAffiliateUsecase,
+    LmaUsecase,
+    AffiliateHistoryUsecase,
+    UpsertUploadFileUsecase,
     {
       provide: IAffiliateRepository,
       useClass: Affiliate_mysqlRepository,

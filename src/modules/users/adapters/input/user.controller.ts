@@ -10,9 +10,11 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 //Dto
 import { Create_userDto } from './dto/create_user.dto';
@@ -23,6 +25,19 @@ import { Create_userUsecase } from '../../domain/input-ports/use-cases/create_us
 import { Update_userUsecase } from '../../domain/input-ports/use-cases/update_user.usecase';
 import { Get_userUsecase } from '../../domain/input-ports/use-cases/get_user.usecase';
 import { Delete_userUsecase } from '../../domain/input-ports/use-cases/delete_user.usecase';
+import { RoleEntity } from '../../../../common/entities/role.entity';
+
+export interface RequestWithUser extends Request {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: RoleEntity;
+    organization: number;
+    iat?: number;
+    exp?: number;
+  };
+}
 
 @Controller('users')
 export class UserController {
@@ -39,8 +54,13 @@ export class UserController {
 
   @Post('create')
   @UseGuards(AuthGuard('jwt'))
-  public async create(@Body() userDto: Create_userDto) {
-    const user = await this.createUserUsecase.handler(userDto);
+  public async create(
+    @Body() userDto: Create_userDto,
+    @Req() req: RequestWithUser,
+  ) {
+    const userId = req.user?.organization;
+
+    const user = await this.createUserUsecase.handler(userDto, userId);
     if (user) {
       return { data: { type: 'users', id: `${user.id}` } };
     }
