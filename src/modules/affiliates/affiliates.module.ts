@@ -35,6 +35,13 @@ import { Get_affilate_by_idUsecase } from './domain/input-ports/use-cases/get_af
 import { Update_affiliateUsecase } from './domain/input-ports/use-cases/update_affiliate.usecase';
 import { Validate_and_assign_relationsUsecase } from './domain/input-ports/use-cases/validate_and_assign_relations.usecase';
 import { BulkAffiliateUsecase } from './domain/input-ports/use-cases/bulk/bulk_affiliate_usecase';
+import { ValidateFileNameUsecase } from './domain/input-ports/use-cases/bulk/validate_file_name.usecase';
+import { ValidateMonthlyUploadsUsecase } from './domain/input-ports/use-cases/bulk/validate_monthly_uploads.usecase';
+import { ValidateDiffUserUsecase } from './domain/input-ports/use-cases/bulk/validate_diff_user.usecase';
+import { ValidateDiffAffiliateUsecase } from './domain/input-ports/use-cases/bulk/validate_diff_affiliate.usecase';
+import { LmaUsecase } from './domain/input-ports/use-cases/bulk/lma.usecase';
+import { AffiliateHistoryUsecase } from './domain/input-ports/use-cases/bulk/affiliate_history.usecase';
+import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/upsert_upload_file.usecase';
 
 //Repository
 import { IAffiliateRepository } from './domain/output-ports/affiliate.repository';
@@ -53,6 +60,10 @@ import { IMunicipalityRepository } from '../department-municipality/domain/outpu
 import { IRegimeRepository } from '../common/domain/output-ports/regime.repository';
 import { IIps_primaryRepository } from '../common/domain/output-ports/ips_primary.repository';
 import { IIps_dentalRepository } from '../common/domain/output-ports/ips_dental.repository';
+import { ICountryRepository } from '../common/domain/output-ports/country.repository';
+import { IAreaRepository } from '../common/domain/output-ports/area.repository';
+import { ISexRepository } from '../common/domain/output-ports/sex.repository';
+import { IAffiliatedStateRepository } from '../common/domain/output-ports/affiliated_state.repository';
 
 //Mysql
 import { Affiliate_mysqlRepository } from './domain/output-ports/mysql/affiliate_mysql.repository';
@@ -71,14 +82,14 @@ import { Municipality_mysqlRepository } from '../department-municipality/domain/
 import { RegimeMysqlRepository } from '../common/domain/output-ports/mysql/regime_mysql.repository';
 import { IpsPrimaryMysqlRepository } from '../common/domain/output-ports/mysql/ips_primary_mysql.repository';
 import { IpsDentalMysqlRepository } from '../common/domain/output-ports/mysql/ips_dental_mysql.repository';
-import { ValidateFileNameUsecase } from './domain/input-ports/use-cases/bulk/validate_file_name.usecase';
-import { ValidateMonthlyUploadsUsecase } from './domain/input-ports/use-cases/bulk/validate_monthly_uploads.usecase';
-import { ValidateColumnsForRegimeUsecase } from './domain/input-ports/use-cases/bulk/validate_columns_for_regime.usecase';
-import { ValidateDiffUserUsecase } from './domain/input-ports/use-cases/bulk/validate_diff_user.usecase';
-import { ValidateDiffAffiliateUsecase } from './domain/input-ports/use-cases/bulk/validate_diff_affiliate.usecase';
-import { LmaUsecase } from './domain/input-ports/use-cases/bulk/lma.usecase';
-import { AffiliateHistoryUsecase } from './domain/input-ports/use-cases/bulk/affiliate_history.usecase';
-import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/upsert_upload_file.usecase';
+import { Country_mysqlRepository } from '../common/domain/output-ports/mysql/country_mysql.repository';
+import { Area_mysqlRepository } from '../common/domain/output-ports/mysql/area_mysql.repository';
+import { Sex_mysqlRepository } from '../common/domain/output-ports/mysql/sex_mysql.repository';
+import { AffiliatedStateMysqlRepository } from '../common/domain/output-ports/mysql/affiliated_state_mysql.repository';
+import { CountryEntity } from '../../common/entities/country.entity';
+import { AreaEntity } from '../../common/entities/area.entity';
+import { SexEntity } from '../../common/entities/sex.entity';
+import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.entity';
 
 @Module({
   imports: [
@@ -102,6 +113,10 @@ import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/ups
       LMAEntity,
       Affiliate_historyEntity,
       UploadedFilesEntity,
+      CountryEntity,
+      AreaEntity,
+      SexEntity,
+      Affiliated_stateEntity,
     ]),
     UsersModule,
   ],
@@ -115,7 +130,6 @@ import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/ups
     BulkAffiliateUsecase,
     ValidateFileNameUsecase,
     ValidateMonthlyUploadsUsecase,
-    ValidateColumnsForRegimeUsecase,
     ValidateDiffUserUsecase,
     ValidateDiffAffiliateUsecase,
     LmaUsecase,
@@ -184,6 +198,22 @@ import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/ups
     {
       provide: IMunicipalityRepository,
       useClass: Municipality_mysqlRepository,
+    },
+    {
+      provide: ICountryRepository,
+      useClass: Country_mysqlRepository,
+    },
+    {
+      provide: IAreaRepository,
+      useClass: Area_mysqlRepository,
+    },
+    {
+      provide: ISexRepository,
+      useClass: Sex_mysqlRepository,
+    },
+    {
+      provide: IAffiliatedStateRepository,
+      useClass: AffiliatedStateMysqlRepository,
     },
   ],
   exports: [AffiliatesModule],

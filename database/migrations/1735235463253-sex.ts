@@ -16,8 +16,14 @@ export class Sex1735235463483 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            length: '255',
+            length: '25',
             isNullable: false,
+          },
+          {
+            name: 'code',
+            type: 'varchar',
+            length: '5',
+            isNullable: true,
           },
         ],
         foreignKeys: [],

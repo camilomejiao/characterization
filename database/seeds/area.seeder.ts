@@ -7,8 +7,8 @@ export class AreaSeeder implements Seeder {
     const repository = dataSource.getRepository(AreaEntity);
 
     const regs = [
-      { id: 1, name: 'Urbano' },
-      { id: 2, name: 'Rural' },
+      { id: 1, name: 'Urbano', code: 'U' },
+      { id: 2, name: 'Rural', code: 'R' },
     ];
 
     for (const data of regs) {

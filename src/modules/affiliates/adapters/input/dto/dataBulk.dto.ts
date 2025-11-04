@@ -1,60 +1,58 @@
-import { IsArray, IsIn, IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+  IsArray,
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class BulkAffiliateRowDto {
   // columnas comunes
-  identificationTypeId: number;
+  identificationType: string; // ej. "CC"
   identificationNumber: number;
+  birthdate: string; // 'YYYY-MM-DD'
   firstName?: string;
   middleName?: string;
   firstLastName?: string;
   middleLastName?: string;
-  birthdate?: string; // 'YYYY-MM-DD'
-  email?: string;
-  phoneNumber?: string;
+  sex?: string; // "F" | "M"
+  countryCod: string; // "CO"
+  departmentCode?: number; // 25
+  municipalityCode?: number; // 25572
+  area?: string; // "U" | "R"
   neighborhood?: string;
   address?: string;
-  departmentId?: number;
-  municipalityId?: number;
-  countryId?: number;
-  areaId?: number;
-  genderId?: number;
-  disabilityTypeId?: number;
+  email?: string;
+  phoneNumber?: string;
 
-  // affiliate fields
-  populationTypeId?: number;
-  epsId?: number;
-  ipsPrimaryId: number;
-  ipsDentalId: number;
-  stateId?: number;
-  affiliateTypeId?: number;
-  methodologyId?: number;
-  levelId?: number;
-  membershipClassId?: number;
-  ethnicityId?: number;
-  communityId?: number;
-  groupSubgroupId?: number;
+  eps?: string;
+  populationTypeId?: number; // si acá sí usas ID, ok
+  state?: string;
+  level?: number;
+  groupSubgroup?: string;
   dateOfAffiliated?: string; // 'YYYY-MM-DD'
   sisbenNumber?: string;
-  formNumber?: string;
 
-  // LMA
-  valorLMA: number; // requerido
+  valorLMA: number;
 }
 
 export class BulkAffiliateDto {
   @IsNotEmpty()
+  @IsNumber()
   organizationId: number;
 
-  @IsString()
   @IsNotEmpty()
+  @IsNumber()
   userId: number;
 
   @IsString()
   @Matches(/^(MS(CM)?|MC(CM)?)\d{6}$/) // nombre de archivo sin extensión
   fileName: string;
 
-  @IsIn(['S', 'C'])
-  regime: 'S' | 'C'; // S=subsidiado, C=contributivo
+  @IsIn([1, 2])
+  @IsNumber()
+  regime: 1 | 2; // 1=subsidiado, 2=contributivo
 
   @IsString()
   @Matches(/^\d{6}$/) // AAAAMM

@@ -1,74 +1,134 @@
+import { Inject } from '@nestjs/common';
+
+//Entity
 import { AffiliatesEntity } from '../../../../../../common/entities/affiliate.entity';
+//Dto
 import { BulkAffiliateRowDto } from '../../../../adapters/input/dto/dataBulk.dto';
+//Interfaces
+import { IPopulationTypeRepository } from '../../../../../common/domain/output-ports/population_type.repository';
+import { IEpsRepository } from '../../../../../common/domain/output-ports/eps.repository';
+import { ILevelRepository } from '../../../../../common/domain/output-ports/level.repository';
+import { IGroupSubgroupRespository } from '../../../../../common/domain/output-ports/group_subgroup.respository';
+import { IAffiliatedStateRepository } from '../../../../../common/domain/output-ports/affiliated_state.repository';
 
 export class ValidateDiffAffiliateUsecase {
-  constructor() {}
+  constructor(
+    @Inject(IPopulationTypeRepository)
+    private readonly populationTypeRepository: IPopulationTypeRepository,
+    @Inject(IEpsRepository)
+    private readonly epsRepository: IEpsRepository,
+    @Inject(IAffiliatedStateRepository)
+    private readonly affiliatedStateRepository: IAffiliatedStateRepository,
+    @Inject(ILevelRepository)
+    private readonly levelRepository: ILevelRepository,
+    @Inject(IGroupSubgroupRespository)
+    private readonly groupSubgroupRespository: IGroupSubgroupRespository,
+  ) {}
 
   public async handler(
     current: AffiliatesEntity,
     row: BulkAffiliateRowDto,
-    regimeId: number,
   ): Promise<Partial<AffiliatesEntity>> {
-    const patch: Partial<AffiliatesEntity> = {};
-    const notEmpty = (v: any) => !this.isEmpty(v);
+    try {
+      const patch: Partial<AffiliatesEntity> = {};
 
-    if (regimeId && current.regime?.id !== regimeId)
-      patch.regime = { id: regimeId } as any;
-    if (
-      row.populationTypeId &&
-      current.populationType?.id !== row.populationTypeId
-    )
-      patch.populationType = { id: row.populationTypeId } as any;
-    if (row.epsId && current.eps?.id !== row.epsId)
-      patch.eps = { id: row.epsId } as any;
-    if (row.ipsPrimaryId && current.ipsPrimary?.id !== row.ipsPrimaryId)
-      patch.ipsPrimary = { id: row.ipsPrimaryId } as any;
-    if (row.ipsDentalId && current.ipsDental?.id !== row.ipsDentalId)
-      patch.ipsDental = { id: row.ipsDentalId } as any;
-    if (row.stateId && current.state?.id !== row.stateId)
-      patch.state = { id: row.stateId } as any;
-    if (
-      row.affiliateTypeId &&
-      current.affiliateType?.id !== row.affiliateTypeId
-    )
-      patch.affiliateType = { id: row.affiliateTypeId } as any;
-    if (row.methodologyId && current.methodology?.id !== row.methodologyId)
-      patch.methodology = { id: row.methodologyId } as any;
-    if (row.levelId && current.level?.id !== row.levelId)
-      patch.level = { id: row.levelId } as any;
-    if (
-      row.membershipClassId &&
-      current.membershipClass?.id !== row.membershipClassId
-    )
-      patch.membershipClass = { id: row.membershipClassId } as any;
-    if (row.ethnicityId && current.ethnicity?.id !== row.ethnicityId)
-      patch.ethnicity = { id: row.ethnicityId } as any;
-    if (row.communityId && current.community?.id !== row.communityId)
-      patch.community = { id: row.communityId } as any;
-    if (
-      row.groupSubgroupId &&
-      current.groupSubgroup?.id !== row.groupSubgroupId
-    )
-      patch.groupSubgroup = { id: row.groupSubgroupId } as any;
+      if (
+        this.notEmpty(row.sisbenNumber) &&
+        row.sisbenNumber !== current.sisbenNumber
+      ) {
+        patch.sisbenNumber = row.sisbenNumber!;
+      }
+      if (
+        this.notEmpty(row.dateOfAffiliated) &&
+        row.dateOfAffiliated !== current.dateOfAffiliated
+      ) {
+        patch.dateOfAffiliated = row.dateOfAffiliated!;
+      }
 
-    if (notEmpty(row.sisbenNumber) && row.sisbenNumber !== current.sisbenNumber)
-      patch.sisbenNumber = row.sisbenNumber!;
-    if (notEmpty(row.formNumber) && row.formNumber !== current.formNumber)
-      patch.formNumber = row.formNumber!;
-    if (
-      notEmpty(row.dateOfAffiliated) &&
-      row.dateOfAffiliated !== current.dateOfAffiliated
-    )
-      patch.dateOfAffiliated = row.dateOfAffiliated!;
+      // --- Relaciones (por ID o por código) ---
+      //Population Type -> ID (9,5,16)
+      if (
+        row.populationTypeId &&
+        current.populationType?.id !== row.populationTypeId
+      ) {
+        patch.populationType = await this.validateFieldOrIdEntity(
+          row.populationTypeId,
+          this.populationTypeRepository,
+          'id',
+          'Population_type',
+        );
+      }
 
-    return patch;
+      if (row.eps && current.eps?.cod !== row.eps) {
+        patch.eps = await this.validateFieldOrIdEntity(
+          row.eps,
+          this.epsRepository,
+          'cod',
+          'Eps',
+        );
+      }
+      if (row.state && current.state?.cod !== row.state) {
+        patch.state = await this.validateFieldOrIdEntity(
+          row.state,
+          this.affiliatedStateRepository,
+          'cod',
+          'AffiliatedState',
+        );
+      }
+
+      if (row.level && current.level?.id !== row.level) {
+        patch.level = await this.validateFieldOrIdEntity(
+          row.level,
+          this.levelRepository,
+          'id',
+          'Level',
+        );
+      }
+
+      if (
+        row.groupSubgroup &&
+        current.groupSubgroup?.subgroup !== row.groupSubgroup
+      )
+        patch.groupSubgroup = await this.validateFieldOrIdEntity(
+          row.groupSubgroup,
+          this.groupSubgroupRespository,
+          'subgroup',
+          'GroupSubgroup',
+        );
+
+      return patch ?? {};
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  private isEmpty(v: any) {
-    return (
-      v === undefined ||
-      v === null ||
-      (typeof v === 'string' && v.trim() === '')
-    );
+  private notEmpty = (v: any) =>
+    v !== undefined &&
+    v !== null &&
+    !(typeof v === 'string' && v.trim() === '');
+
+  /**
+   * Busca una entidad ya sea por ID o por otro campo único.
+   * Si no existe, lanza error. Si existe, retorna { id: entity.id }.
+   */
+  private async validateFieldOrIdEntity(
+    value: string | number,
+    repository: any,
+    field: string,
+    entityName: string,
+  ): Promise<any> {
+    let entity = null;
+
+    if (typeof value === 'number' || /^\d+$/.test(String(value))) {
+      entity = await repository.findOneBy({ id: Number(value) });
+    } else {
+      entity = await repository.findOneBy({ [field]: value });
+    }
+
+    if (!entity) {
+      throw new Error(`${entityName} with ${field} "${value}" not found`);
+    }
+
+    return { id: entity.id };
   }
 }

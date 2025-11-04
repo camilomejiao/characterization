@@ -98,6 +98,7 @@ export class AffiliatesController {
   @Post('bulk')
   @UseGuards(AuthGuard('jwt'))
   public async bulk(@Body() dataBulkDto: BulkAffiliateDto) {
+    console.log(dataBulkDto);
     const summary = await this.bulkAffiliateUsecase.handler(dataBulkDto);
     return { data: summary };
   }

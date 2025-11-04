@@ -7,10 +7,10 @@ export class LevelSeeder implements Seeder {
     const repository = dataSource.getRepository(LevelEntity);
 
     const regs = [
-      { id: 1, name: 'Afiliado sin encuesta SISBEN' },
-      { id: 2, name: 'Afiliado con contribución solidaria' },
-      { id: 3, name: 'Nivel I' },
-      { id: 4, name: 'Nivel II' },
+      { id: 1, name: 'Nivel 1' },
+      { id: 2, name: 'Nivel 2' },
+      { id: 3, name: 'D - Afiliado con contribución solidaria' },
+      { id: 4, name: 'N' },
     ];
 
     for (const data of regs) {

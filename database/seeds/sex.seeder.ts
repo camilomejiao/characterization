@@ -7,8 +7,8 @@ export class SexSeeder implements Seeder {
     const repository = dataSource.getRepository(SexEntity);
 
     const regs = [
-      { id: 1, name: 'Femenino' },
-      { id: 2, name: 'Masculino' },
+      { id: 1, name: 'Femenino', code: 'F' },
+      { id: 2, name: 'Masculino', code: 'M' },
     ];
 
     for (const data of regs) {

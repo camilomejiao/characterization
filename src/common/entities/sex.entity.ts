@@ -7,4 +7,7 @@ export class SexEntity {
 
   @Column()
   name: string;
+
+  @Column()
+  code: string;
 }

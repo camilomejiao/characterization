@@ -7,4 +7,7 @@ export class AreaEntity {
 
   @Column()
   name: string;
+
+  @Column()
+  code: string;
 }
