@@ -45,7 +45,7 @@ export class Affiliate1747358665552 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'state_id',
+            name: 'affiliated_state_id',
             type: 'int',
             isNullable: true,
           },
@@ -71,11 +71,6 @@ export class Affiliate1747358665552 implements MigrationInterface {
           },
           {
             name: 'ethnicity_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
-            name: 'community_id',
             type: 'int',
             isNullable: true,
           },
@@ -162,7 +157,7 @@ export class Affiliate1747358665552 implements MigrationInterface {
             onDelete: 'SET NULL',
           },
           {
-            columnNames: ['state_id'],
+            columnNames: ['affiliated_state_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'affiliated_state',
             onDelete: 'SET NULL',
@@ -195,12 +190,6 @@ export class Affiliate1747358665552 implements MigrationInterface {
             columnNames: ['ethnicity_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'ethnicity',
-            onDelete: 'SET NULL',
-          },
-          {
-            columnNames: ['community_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'community',
             onDelete: 'SET NULL',
           },
           {

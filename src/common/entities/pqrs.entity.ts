@@ -9,7 +9,6 @@ import { Reason_pqrsEntity } from './reason_pqrs.entity';
 import { Pqrs_notificationEntity } from './pqrs_notification.entity';
 import { EpsEntity } from './eps.entity';
 import { System_usersEntity } from './system_users.entity';
-import { OrganizationEntity } from './organization.entity';
 
 @Entity('pqrs')
 export class PqrsEntity extends AbstractEntity<PqrsEntity> {

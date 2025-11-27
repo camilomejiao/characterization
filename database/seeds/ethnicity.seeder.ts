@@ -7,16 +7,15 @@ export class EthnicitySeeder implements Seeder {
     const repository = dataSource.getRepository(EthnicityEntity);
 
     const regs = [
-      { id: 1, name: 'Indigena' },
-      { id: 2, name: 'ROM(Gitano)' },
-      { id: 3, name: 'Raizal(Archipielago San Andrés y Providencia)' },
-      { id: 4, name: 'Palenquero de SanBasilio' },
+      { id: 1, name: 'Ninguna' },
+      { id: 2, name: 'Indigena' },
+      { id: 3, name: 'ROM(Gitano)' },
+      { id: 4, name: 'Raizal(Archipielago San Andrés y Providencia)' },
+      { id: 5, name: 'Palenquero de SanBasilio' },
       {
-        id: 5,
+        id: 6,
         name: 'Negro(a) o mulato(a) o afrocolombiano(a) o afrodescendiente',
       },
-      { id: 6, name: 'Otras etnias' },
-      { id: 7, name: 'Ninguna' },
     ];
 
     for (const data of regs) {

@@ -9,9 +9,9 @@ import { ICountryRepository } from '../../../../common/domain/output-ports/count
 import { IDepartmentRepository } from '../../../../department-municipality/domain/output-ports/department.repository';
 import { IMunicipalityRepository } from '../../../../department-municipality/domain/output-ports/municipality.repository';
 import { IDisabilityTypeRepository } from '../../../../common/domain/output-ports/disability_type.repository';
-import { IGenderRepository } from '../../../../common/domain/output-ports/gender.repository';
 import { IAreaRepository } from '../../../../common/domain/output-ports/area.repository';
 import { IIdentificationTypeRepository } from '../../../../common/domain/output-ports/identification_type.repository';
+import { ISexRepository } from '../../../../common/domain/output-ports/sex.repository';
 
 export class Update_userUsecase {
   constructor(
@@ -27,8 +27,8 @@ export class Update_userUsecase {
     private identificationTypeRepository: IIdentificationTypeRepository,
     @Inject(IDisabilityTypeRepository)
     private disabilityTypeRepository: IDisabilityTypeRepository,
-    @Inject(IGenderRepository)
-    private genderRepository: IGenderRepository,
+    @Inject(ISexRepository)
+    private sexRepository: ISexRepository,
     @Inject(IAreaRepository)
     private areaRepository: IAreaRepository,
   ) {}
@@ -59,9 +59,7 @@ export class Update_userUsecase {
     const disabilityType = userDto.disability_type_id
       ? await this.getDisabilityType(userDto.disability_type_id)
       : user.disabilityType;
-    const gender = userDto.gender_id
-      ? await this.getGender(userDto.gender_id)
-      : user.gender;
+    const sex = userDto.sex_id ? await this.getSex(userDto.sex_id) : user.sex;
     const area = userDto.area_id
       ? await this.getArea(userDto.area_id)
       : user.area;
@@ -85,7 +83,7 @@ export class Update_userUsecase {
       municipality,
       identificationType,
       disabilityType,
-      gender,
+      sex,
       area,
     });
 
@@ -137,15 +135,14 @@ export class Update_userUsecase {
     return disabilityType;
   }
 
-  private async getGender(genderId: number) {
-    const gender = await this.genderRepository.findOneBy({ id: genderId });
-    if (!gender)
-      throw new NotFoundException(`Gender with ID ${genderId} not found`);
-    return gender;
-  }
-
   private async getArea(areaId: number) {
     const area = await this.areaRepository.findOneBy({ id: areaId });
+    if (!area) throw new NotFoundException(`Area with ID ${areaId} not found`);
+    return area;
+  }
+
+  private async getSex(areaId: number) {
+    const area = await this.sexRepository.findOneBy({ id: areaId });
     if (!area) throw new NotFoundException(`Area with ID ${areaId} not found`);
     return area;
   }

@@ -1,4 +1,11 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { UserEntity } from './user.entity';
 import { Population_typeEntity } from './population_type.entity';
@@ -8,12 +15,13 @@ import { MethodologyEntity } from './methodology.entity';
 import { LevelEntity } from './level.entity';
 import { Membership_classEntity } from './membership_class.entity';
 import { EthnicityEntity } from './ethnicity.entity';
-import { CommunityEntity } from './community.entity';
 import { Group_subgroupEntity } from './group_subgroup.entity';
 import { Affiliated_stateEntity } from './affiliated_state.entity';
 import { RegimeEntity } from './regime.entity';
 import { Ips_dentalEntity } from './ips_dental.entity';
 import { Ips_primaryEntity } from './ips_primary.entity';
+import { LMAEntity } from './lma.entity';
+import { Affiliate_historyEntity } from './affiliate_history.entity';
 
 @Entity('affiliates')
 export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
@@ -49,8 +57,8 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
 
   //State
   @ManyToOne(() => Affiliated_stateEntity, { nullable: true })
-  @JoinColumn({ name: 'state_id' })
-  state: Affiliated_stateEntity;
+  @JoinColumn({ name: 'affiliated_state_id' })
+  affiliatedState: Affiliated_stateEntity;
 
   //Tipo de afiliciación
   @ManyToOne(() => Affiliate_typeEntity, { nullable: true })
@@ -76,11 +84,6 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
   @ManyToOne(() => EthnicityEntity, { nullable: true })
   @JoinColumn({ name: 'ethnicity_id' })
   ethnicity: EthnicityEntity;
-
-  //Comunidad
-  @ManyToOne(() => CommunityEntity, { nullable: true })
-  @JoinColumn({ name: 'community_id' })
-  community: CommunityEntity;
 
   //Grupo y Subgrupo de sisben
   @ManyToOne(() => Group_subgroupEntity, { nullable: true })
@@ -113,4 +116,10 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
 
   @Column({ name: 'date_of_affiliated', type: 'date', nullable: true })
   dateOfAffiliated: string;
+
+  @OneToMany(() => LMAEntity, (lma) => lma.affiliate)
+  LMAUser: LMAEntity[];
+
+  @OneToMany(() => Affiliate_historyEntity, (history) => history.affiliate)
+  historyUser: Affiliate_historyEntity[];
 }

@@ -12,11 +12,10 @@ export interface IAffiliateRepository {
 
   update(entity: AffiliatesEntity): Promise<AffiliatesEntity>;
 
-  // 🔹 1 usuario por número (LEFT JOIN para detectar usuario sin affiliate)
+  //
   findUserAndAffiliateByIdNumber(
-    organizationId: number,
     identificationNumber: number,
-  ): Promise<{ user: UserEntity | null; affiliate: AffiliatesEntity | null }>;
+  ): Promise<UserEntity>;
 
   // 🔹 Bulk por muchos números (una sola consulta)
   findUsersAndAffiliatesByIdNumbers(

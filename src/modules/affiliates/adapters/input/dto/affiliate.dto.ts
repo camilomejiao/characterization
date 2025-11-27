@@ -54,7 +54,7 @@ export class AffiliateDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  stateId?: number;
+  affiliatedStateId?: number;
 
   @IsOptional()
   @Type(() => Number)

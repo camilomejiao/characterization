@@ -30,12 +30,12 @@ export class SpecialPopulation1761514443046 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'community_id',
+            name: 'eps_id',
             type: 'int',
             isNullable: true,
           },
           {
-            name: 'eps_id',
+            name: 'affiliated_state_id',
             type: 'int',
             isNullable: true,
           },
@@ -88,15 +88,15 @@ export class SpecialPopulation1761514443046 implements MigrationInterface {
             onDelete: 'SET NULL',
           },
           {
-            columnNames: ['community_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'community',
-            onDelete: 'SET NULL',
-          },
-          {
             columnNames: ['eps_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'eps',
+            onDelete: 'SET NULL',
+          },
+          {
+            columnNames: ['affiliated_state_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'affiliated_state',
             onDelete: 'SET NULL',
           },
         ],

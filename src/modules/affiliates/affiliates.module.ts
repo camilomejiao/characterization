@@ -12,7 +12,6 @@ import { Population_typeEntity } from '../../common/entities/population_type.ent
 import { EpsEntity } from '../../common/entities/eps.entity';
 import { Ips_primaryEntity } from '../../common/entities/ips_primary.entity';
 import { Ips_dentalEntity } from '../../common/entities/ips_dental.entity';
-import { CommunityEntity } from '../../common/entities/community.entity';
 import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
 import { LevelEntity } from '../../common/entities/level.entity';
 import { Membership_classEntity } from '../../common/entities/membership_class.entity';
@@ -24,6 +23,11 @@ import { MunicipalityEntity } from '../../common/entities/municipality.entity';
 import { LMAEntity } from '../../common/entities/lma.entity';
 import { Affiliate_historyEntity } from '../../common/entities/affiliate_history.entity';
 import { UploadedFilesEntity } from '../../common/entities/uploaded_files.entity';
+import { CountryEntity } from '../../common/entities/country.entity';
+import { AreaEntity } from '../../common/entities/area.entity';
+import { SexEntity } from '../../common/entities/sex.entity';
+import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.entity';
+import { Application_statusEntity } from '../../common/entities/application_status.entity';
 
 //Controller
 import { AffiliatesController } from './adapters/input/affiliates.controller';
@@ -34,6 +38,7 @@ import { GetAffiliateListUsecase } from './domain/input-ports/use-cases/get-affi
 import { Get_affilate_by_idUsecase } from './domain/input-ports/use-cases/get_affilate_by_id.usecase';
 import { Update_affiliateUsecase } from './domain/input-ports/use-cases/update_affiliate.usecase';
 import { Validate_and_assign_relationsUsecase } from './domain/input-ports/use-cases/validate_and_assign_relations.usecase';
+import { GetAffiliateInformationUsecase } from './domain/input-ports/use-cases/get_affiliate_information.usecase';
 import { BulkAffiliateUsecase } from './domain/input-ports/use-cases/bulk/bulk_affiliate_usecase';
 import { ValidateFileNameUsecase } from './domain/input-ports/use-cases/bulk/validate_file_name.usecase';
 import { ValidateMonthlyUploadsUsecase } from './domain/input-ports/use-cases/bulk/validate_monthly_uploads.usecase';
@@ -48,7 +53,6 @@ import { IAffiliateRepository } from './domain/output-ports/affiliate.repository
 import { IAffiliateTypeRepository } from '../common/domain/output-ports/affiliate_type.repository';
 import { IPopulationTypeRepository } from '../common/domain/output-ports/population_type.repository';
 import { IEpsRepository } from '../common/domain/output-ports/eps.repository';
-import { ICommunityRepository } from '../common/domain/output-ports/community.repository';
 import { IEthnicityRepository } from '../common/domain/output-ports/ethnicity.repository';
 import { ILevelRepository } from '../common/domain/output-ports/level.repository';
 import { IMembershipClassRepository } from '../common/domain/output-ports/membership_class.repository';
@@ -64,13 +68,13 @@ import { ICountryRepository } from '../common/domain/output-ports/country.reposi
 import { IAreaRepository } from '../common/domain/output-ports/area.repository';
 import { ISexRepository } from '../common/domain/output-ports/sex.repository';
 import { IAffiliatedStateRepository } from '../common/domain/output-ports/affiliated_state.repository';
+import { IApplicationStatusRepository } from '../common/domain/output-ports/application_status.repository';
 
 //Mysql
 import { Affiliate_mysqlRepository } from './domain/output-ports/mysql/affiliate_mysql.repository';
 import { Affiliate_type_mysqlRepository } from '../common/domain/output-ports/mysql/affiliate_type_mysql.repository';
 import { Population_type_mysqlRepository } from '../common/domain/output-ports/mysql/population_type_mysql.repository';
 import { Eps_mysqlRepository } from '../common/domain/output-ports/mysql/eps_mysql.repository';
-import { Community_mysqlRepository } from '../common/domain/output-ports/mysql/community_mysql.repository';
 import { Ethnicity_mysqlRepository } from '../common/domain/output-ports/mysql/ethnicity_mysql.repository';
 import { Level_mysqlRepository } from '../common/domain/output-ports/mysql/level_mysql.repository';
 import { Membership_class_mysqlRepository } from '../common/domain/output-ports/mysql/membership_class_mysql.repository';
@@ -86,10 +90,7 @@ import { Country_mysqlRepository } from '../common/domain/output-ports/mysql/cou
 import { Area_mysqlRepository } from '../common/domain/output-ports/mysql/area_mysql.repository';
 import { Sex_mysqlRepository } from '../common/domain/output-ports/mysql/sex_mysql.repository';
 import { AffiliatedStateMysqlRepository } from '../common/domain/output-ports/mysql/affiliated_state_mysql.repository';
-import { CountryEntity } from '../../common/entities/country.entity';
-import { AreaEntity } from '../../common/entities/area.entity';
-import { SexEntity } from '../../common/entities/sex.entity';
-import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.entity';
+import { Application_status_mysqlRepository } from '../common/domain/output-ports/mysql/application_status_mysql.repository';
 
 @Module({
   imports: [
@@ -103,7 +104,6 @@ import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.e
       Ips_primaryEntity,
       Ips_dentalEntity,
       EthnicityEntity,
-      CommunityEntity,
       LevelEntity,
       Membership_classEntity,
       MethodologyEntity,
@@ -117,6 +117,7 @@ import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.e
       AreaEntity,
       SexEntity,
       Affiliated_stateEntity,
+      Application_statusEntity,
     ]),
     UsersModule,
   ],
@@ -127,6 +128,7 @@ import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.e
     Get_affilate_by_idUsecase,
     Update_affiliateUsecase,
     Validate_and_assign_relationsUsecase,
+    GetAffiliateInformationUsecase,
     BulkAffiliateUsecase,
     ValidateFileNameUsecase,
     ValidateMonthlyUploadsUsecase,
@@ -172,10 +174,6 @@ import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.e
       useClass: Ethnicity_mysqlRepository,
     },
     {
-      provide: ICommunityRepository,
-      useClass: Community_mysqlRepository,
-    },
-    {
       provide: ILevelRepository,
       useClass: Level_mysqlRepository,
     },
@@ -214,6 +212,10 @@ import { Affiliated_stateEntity } from '../../common/entities/affiliated_state.e
     {
       provide: IAffiliatedStateRepository,
       useClass: AffiliatedStateMysqlRepository,
+    },
+    {
+      provide: IApplicationStatusRepository,
+      useClass: Application_status_mysqlRepository,
     },
   ],
   exports: [AffiliatesModule],

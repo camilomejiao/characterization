@@ -22,7 +22,7 @@ export class Get_userUsecase {
         disabilityType: true,
         department: true,
         municipality: true,
-        gender: true,
+        sex: true,
         area: true,
       },
     });
@@ -36,18 +36,5 @@ export class Get_userUsecase {
 
   public async listAll() {
     return await this.userRepository.findAll();
-  }
-
-  //
-  async getIdentificationType(identificationTypeId) {
-    const identificationType =
-      await this.identificationTypeRepository.findOneBy({
-        id: identificationTypeId,
-      });
-    if (!identificationType)
-      throw new NotFoundException(
-        `Identification Type with ID ${identificationTypeId} not found`,
-      );
-    return identificationType;
   }
 }

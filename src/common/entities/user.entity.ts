@@ -12,7 +12,6 @@ import { MunicipalityEntity } from './municipality.entity';
 import { Identification_typeEntity } from './identification_type.entity';
 import { Disability_typeEntity } from './disability_type.entity';
 import { SexEntity } from './sex.entity';
-import { GenderEntity } from './gender.entity';
 import { AreaEntity } from './area.entity';
 import { PqrsEntity } from './pqrs.entity';
 import { AffiliatesEntity } from './affiliate.entity';
@@ -41,17 +40,13 @@ export class UserEntity extends AbstractEntity<UserEntity> {
   @JoinColumn({ name: 'disability_type_id' })
   disabilityType: Disability_typeEntity;
 
-  @ManyToOne(() => SexEntity)
-  @JoinColumn({ name: 'sex_id' })
-  sex: SexEntity;
-
-  @ManyToOne(() => GenderEntity)
-  @JoinColumn({ name: 'gender_id' })
-  gender: GenderEntity;
-
   @ManyToOne(() => AreaEntity, { nullable: true })
   @JoinColumn({ name: 'area_id' })
   area: AreaEntity;
+
+  @ManyToOne(() => SexEntity)
+  @JoinColumn({ name: 'sex_id' })
+  sex: SexEntity;
 
   @Column({ name: 'first_name', type: 'varchar', length: 100 })
   firstName: string;

@@ -20,7 +20,7 @@ import { UserEntity } from '../../common/entities/user.entity';
 import { Population_typeEntity } from '../../common/entities/population_type.entity';
 import { EpsEntity } from '../../common/entities/eps.entity';
 import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
-import { CommunityEntity } from '../../common/entities/community.entity';
+import { Application_statusEntity } from '../../common/entities/application_status.entity';
 
 //Interface
 import { ISpecialPopulationRepository } from './domain/output-ports/special_population.repository';
@@ -28,7 +28,7 @@ import { IUserRepository } from '../users/domain/output-ports/user.repository';
 import { IPopulationTypeRepository } from '../common/domain/output-ports/population_type.repository';
 import { IEpsRepository } from '../common/domain/output-ports/eps.repository';
 import { IEthnicityRepository } from '../common/domain/output-ports/ethnicity.repository';
-import { ICommunityRepository } from '../common/domain/output-ports/community.repository';
+import { IApplicationStatusRepository } from '../common/domain/output-ports/application_status.repository';
 
 //Repository
 import { SpecialPopulationMysqlRepository } from './domain/output-ports/mysql/special_population_mysql.repository';
@@ -36,7 +36,7 @@ import { User_mysqlRepository } from '../users/domain/output-ports/mysql/user_my
 import { Population_type_mysqlRepository } from '../common/domain/output-ports/mysql/population_type_mysql.repository';
 import { Eps_mysqlRepository } from '../common/domain/output-ports/mysql/eps_mysql.repository';
 import { Ethnicity_mysqlRepository } from '../common/domain/output-ports/mysql/ethnicity_mysql.repository';
-import { Community_mysqlRepository } from '../common/domain/output-ports/mysql/community_mysql.repository';
+import { Application_status_mysqlRepository } from '../common/domain/output-ports/mysql/application_status_mysql.repository';
 
 @Module({
   imports: [
@@ -46,7 +46,7 @@ import { Community_mysqlRepository } from '../common/domain/output-ports/mysql/c
       Population_typeEntity,
       EpsEntity,
       EthnicityEntity,
-      CommunityEntity,
+      Application_statusEntity,
     ]),
     UsersModule,
   ],
@@ -78,8 +78,8 @@ import { Community_mysqlRepository } from '../common/domain/output-ports/mysql/c
       useClass: Ethnicity_mysqlRepository,
     },
     {
-      provide: ICommunityRepository,
-      useClass: Community_mysqlRepository,
+      provide: IApplicationStatusRepository,
+      useClass: Application_status_mysqlRepository,
     },
   ],
   exports: [SpecialPopulationModule],

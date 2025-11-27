@@ -9,7 +9,6 @@ import { DepartmentEntity } from '../../../../common/entities/department.entity'
 import { MunicipalityEntity } from '../../../../common/entities/municipality.entity';
 import { Identification_typeEntity } from '../../../../common/entities/identification_type.entity';
 import { EpsEntity } from '../../../../common/entities/eps.entity';
-import { GenderEntity } from '../../../../common/entities/gender.entity';
 import { AreaEntity } from '../../../../common/entities/area.entity';
 import { Affiliate_typeEntity } from '../../../../common/entities/affiliate_type.entity';
 import { Disability_typeEntity } from '../../../../common/entities/disability_type.entity';
@@ -19,7 +18,6 @@ import { Group_subgroupEntity } from '../../../../common/entities/group_subgroup
 import { Membership_classEntity } from '../../../../common/entities/membership_class.entity';
 import { Population_typeEntity } from '../../../../common/entities/population_type.entity';
 import { EthnicityEntity } from '../../../../common/entities/ethnicity.entity';
-import { CommunityEntity } from '../../../../common/entities/community.entity';
 import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
 import { Application_statusEntity } from '../../../../common/entities/application_status.entity';
 import { Pqrs_typeEntity } from '../../../../common/entities/pqrs_type.entity';
@@ -71,7 +69,6 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         Identification_typeEntity,
         EpsEntity,
         SexEntity,
-        GenderEntity,
         AreaEntity,
         Affiliate_typeEntity,
         Disability_typeEntity,
@@ -81,7 +78,6 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         Membership_classEntity,
         Population_typeEntity,
         EthnicityEntity,
-        CommunityEntity,
         Application_statusEntity,
         Pqrs_typeEntity,
         Reason_pqrsEntity,

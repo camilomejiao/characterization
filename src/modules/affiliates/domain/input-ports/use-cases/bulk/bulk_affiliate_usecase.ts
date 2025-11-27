@@ -35,7 +35,10 @@ export class BulkAffiliateUsecase {
         dto.regime,
         dto.period,
       );
-      if (!dto.rows?.length) throw new BadRequestException('Archivo vacío');
+
+      if (!dto.rows?.length) {
+        throw new BadRequestException('Archivo vacío');
+      }
 
       await this.validateMonthlyUploadsUsecase.handler(
         dto.organizationId,
@@ -53,10 +56,15 @@ export class BulkAffiliateUsecase {
         skippedLmaWithoutAffiliate: [] as Array<{
           identificationNumber: number;
         }>,
-        rowErrors: [] as Array<{ index: number; message: string }>,
+        rowErrors: [] as Array<{
+          index: number;
+          identificationNumber?: number;
+          message: string;
+        }>,
       };
 
       const BATCH = 500;
+
       for (let i = 0; i < dto.rows.length; i += BATCH) {
         const chunk = dto.rows.slice(i, i + BATCH);
         const chunkNumbers = Array.from(
@@ -75,10 +83,13 @@ export class BulkAffiliateUsecase {
         try {
           for (let k = 0; k < chunk.length; k++) {
             const row = chunk[k];
-            const entry = map.get(row.identificationNumber)!;
+            const globalIndex = i + k;
+
             this.logger.debug(
-              `➡️ Procesando fila ${i + k} (${row.identificationNumber})`,
+              `➡️ Procesando fila ${globalIndex} (${row.identificationNumber})`,
             );
+
+            const entry = map.get(row.identificationNumber)!;
 
             if (!entry?.user) {
               summary.notFoundUsers.push({
@@ -86,6 +97,7 @@ export class BulkAffiliateUsecase {
               });
               continue;
             }
+
             if (!entry.affiliate) {
               summary.usersWithoutAffiliate.push({
                 identificationNumber: row.identificationNumber,
@@ -93,90 +105,112 @@ export class BulkAffiliateUsecase {
               continue;
             }
 
-            // User diff
-            const userPatch = await this.validateDiffUserUsecase.handler(
-              entry.user,
-              row,
-            );
-            this.logger.debug(
-              `✅ DiffUser ${row.identificationNumber}: ${JSON.stringify(userPatch)}`,
-            );
+            try {
+              // ====== USER DIFF ======
+              const userPatch = await this.validateDiffUserUsecase.handler(
+                entry.user,
+                row,
+              );
 
-            if (Object.keys(userPatch).length) {
-              await qr.manager.update(
-                UserEntity,
-                { id: entry.user.id },
-                userPatch,
+              this.logger.debug(
+                `✅ DiffUser ${row.identificationNumber}: ${JSON.stringify(
+                  userPatch,
+                )}`,
               );
-              summary.userUpdated++;
-              await this.affiliateHistoryUsecase.handler(
-                qr.manager,
-                entry.affiliate.id,
-                this.describeDiff('USER', userPatch),
-              );
-            }
 
-            // Affiliate diff
-            const affPatch = await this.validateDiffAffiliateUsecase.handler(
-              entry.affiliate,
-              row,
-            );
-            this.logger.debug(
-              `✅ DiffAffiliate ${row.identificationNumber}: ${JSON.stringify(affPatch)}`,
-            );
+              if (userPatch && Object.keys(userPatch).length) {
+                await qr.manager.update(
+                  UserEntity,
+                  { id: entry.user.id },
+                  userPatch,
+                );
+                summary.userUpdated++;
 
-            if (Object.keys(affPatch).length) {
-              await qr.manager.update(
-                AffiliatesEntity,
-                { id: entry.affiliate.id },
-                affPatch,
-              );
-              summary.affiliateUpdated++;
-              await this.affiliateHistoryUsecase.handler(
-                qr.manager,
-                entry.affiliate.id,
-                this.describeDiff('AFFILIATE', affPatch),
-              );
-            }
+                await this.affiliateHistoryUsecase.handler(
+                  qr.manager,
+                  entry.affiliate.id,
+                  this.describeDiff('USER', userPatch, entry.user),
+                );
+              }
 
-            // LMA
-            if (
-              entry.affiliate?.id &&
-              row.valorLMA !== undefined &&
-              row.valorLMA !== null
-            ) {
-              await this.lmaUsecase.handler(
-                qr.manager,
-                entry.affiliate.id,
-                dto.period,
-                row.valorLMA,
+              // ====== AFFILIATE DIFF ======
+              const affPatch = await this.validateDiffAffiliateUsecase.handler(
+                entry.affiliate,
+                row,
               );
-              summary.lmaInserted++;
-            } else {
-              summary.skippedLmaWithoutAffiliate.push({
+
+              this.logger.debug(
+                `✅ DiffAffiliate ${row.identificationNumber}: ${JSON.stringify(
+                  affPatch,
+                )}`,
+              );
+
+              if (affPatch && Object.keys(affPatch).length) {
+                await qr.manager.update(
+                  AffiliatesEntity,
+                  { id: entry.affiliate.id },
+                  affPatch,
+                );
+                summary.affiliateUpdated++;
+
+                await this.affiliateHistoryUsecase.handler(
+                  qr.manager,
+                  entry.affiliate.id,
+                  this.describeDiff('AFFILIATE', affPatch, entry.affiliate),
+                );
+              }
+
+              // ====== LMA ======
+              if (
+                entry.affiliate?.id &&
+                row.valorLMA !== undefined &&
+                row.valorLMA !== null
+              ) {
+                await this.lmaUsecase.handler(
+                  qr.manager,
+                  entry.affiliate.id,
+                  dto.period,
+                  row.valorLMA,
+                );
+                summary.lmaInserted++;
+              } else {
+                summary.skippedLmaWithoutAffiliate.push({
+                  identificationNumber: row.identificationNumber,
+                });
+              }
+
+              summary.success++;
+            } catch (e: any) {
+              // ⛔️ Error específico en ESTA fila → detenemos todo
+              this.logger.error(
+                `❌ Error procesando fila ${globalIndex} (${row.identificationNumber}): ${e?.message}`,
+                e?.stack,
+              );
+
+              summary.rowErrors.push({
+                index: globalIndex,
                 identificationNumber: row.identificationNumber,
+                message: e?.message ?? 'Error de proceso',
+              });
+
+              // rollback del chunk completo
+              await qr.rollbackTransaction();
+
+              // lanzamos 400 hacia el controller con el summary actualizado
+              throw new BadRequestException({
+                message: `Error al procesar la fila ${globalIndex} (id=${row.identificationNumber})`,
+                summary,
               });
             }
-
-            summary.success++;
           }
 
           await qr.commitTransaction();
-        } catch (e: any) {
-          await qr.rollbackTransaction();
-          this.logger.error(
-            `❌ Error en fila ${i} (chunk): ${e.message}`,
-            e.stack,
-          );
-          summary.rowErrors.push({
-            index: i,
-            message: e?.message ?? 'Error de proceso',
-          });
         } finally {
           await qr.release();
         }
       }
 
+      // Si llegó aquí, no hubo errores de filas
       await this.upsertUploadFileUsecase.handler(
         this.dataSource,
         dto.organizationId,
@@ -186,23 +220,60 @@ export class BulkAffiliateUsecase {
       );
 
       return summary;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `💥 [BulkAffiliateUsecase.handler] Error inesperado: ${error.name} - ${error.message}`,
         error.stack,
       );
+
+      // Si ya es BadRequestException (con summary y todo) la dejamos igual
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      // Cualquier otra cosa la envolvemos genéricamente
       throw new BadRequestException(
         `Error interno en carga masiva: ${error.message}`,
       );
     }
   }
 
+  /**
+   * Construye un texto de trazabilidad:
+   * USER/AFFILIATE: campoX: antes=... → ahora=...
+   */
   private describeDiff(
     scope: 'USER' | 'AFFILIATE',
     patch: Record<string, any>,
+    original: Record<string, any>,
   ): string {
     const fields = Object.keys(patch);
     if (!fields.length) return `${scope}: sin cambios`;
-    return `${scope}: ${fields.join(', ')} actualizado(s)`;
+
+    const changes: string[] = [];
+
+    for (const field of fields) {
+      const newValue = patch[field];
+      const oldValue = original[field];
+
+      // Relaciones tipo { id: X }
+      if (newValue && typeof newValue === 'object') {
+        const newId = newValue?.id ?? JSON.stringify(newValue);
+        const oldId =
+          oldValue && typeof oldValue === 'object'
+            ? (oldValue?.id ?? JSON.stringify(oldValue))
+            : oldValue;
+
+        changes.push(
+          `${field}: antes=${oldId ?? '(sin valor)'} → ahora=${newId}`,
+        );
+      } else {
+        changes.push(
+          `${field}: antes=${oldValue ?? '(sin valor)'} → ahora=${newValue}`,
+        );
+      }
+    }
+
+    return `${scope}: ${changes.join(' | ')}`;
   }
 }

@@ -7,13 +7,13 @@ export class Disability_typeSeeder implements Seeder {
     const repository = dataSource.getRepository(Disability_typeEntity);
 
     const regs = [
-      { id: 1, name: 'Discapacidad fisica permanente' },
-      { id: 2, name: 'Discapacidad fisica temporal' },
-      { id: 3, name: 'Discapacidad mental permanente' },
-      { id: 4, name: 'Discapacidad mental temporal' },
-      { id: 5, name: 'Discapacidad neuro-sensorial permanente' },
-      { id: 6, name: 'Discapacidad neuro-sensorial temporal' },
-      { id: 7, name: 'Ninguna' },
+      { id: 1, name: 'Ninguna' },
+      { id: 2, name: 'Discapacidad fisica permanente' },
+      { id: 3, name: 'Discapacidad fisica temporal' },
+      { id: 4, name: 'Discapacidad mental permanente' },
+      { id: 5, name: 'Discapacidad mental temporal' },
+      { id: 6, name: 'Discapacidad neuro-sensorial permanente' },
+      { id: 7, name: 'Discapacidad neuro-sensorial temporal' },
     ];
 
     for (const data of regs) {

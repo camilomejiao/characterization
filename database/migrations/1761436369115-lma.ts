@@ -26,8 +26,20 @@ export class Lma1761436369115 implements MigrationInterface {
           },
           {
             name: 'paid',
-            type: 'varchar',
-            length: '20',
+            type: 'int',
+            length: '10',
+            isNullable: false,
+          },
+          {
+            name: 'month',
+            type: 'int',
+            length: '3',
+            isNullable: false,
+          },
+          {
+            name: 'year',
+            type: 'int',
+            length: '5',
             isNullable: false,
           },
           {

@@ -34,7 +34,7 @@ export class PopulationTypeSeeder implements Seeder {
       { id: 15, name: 'Población rural no migratoria' },
       { id: 16, name: 'Adulto mayor en centros de protección' },
       { id: 17, name: 'Comunidades indígenas' },
-      { id: 18, name: 'Rrom (Gitano)' },
+      //{ id: 18, name: 'Rrom (Gitano)' },
       { id: 22, name: 'Personas en prisión domiciliaria a cargo del INPEC' },
       { id: 23, name: 'Personas que dejan de ser madres comunitarias' },
       {

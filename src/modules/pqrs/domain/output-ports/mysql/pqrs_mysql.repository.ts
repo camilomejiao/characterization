@@ -45,7 +45,7 @@ export class Pqrs_mysqlRepository implements IPqrsRepository {
           identificationType: true,
           department: true,
           municipality: true,
-          gender: true,
+          sex: true,
           area: true,
           disabilityType: true,
           organization: true,

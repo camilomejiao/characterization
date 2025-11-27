@@ -45,11 +45,6 @@ export class Users1738695404689 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'gender_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
             name: 'area_id',
             type: 'int',
             isNullable: true,
@@ -136,6 +131,12 @@ export class Users1738695404689 implements MigrationInterface {
         ],
         foreignKeys: [
           {
+            columnNames: ['country_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'countries',
+            onDelete: 'SET NULL',
+          },
+          {
             columnNames: ['department_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'departments',
@@ -163,12 +164,6 @@ export class Users1738695404689 implements MigrationInterface {
             columnNames: ['sex_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'sex',
-            onDelete: 'CASCADE',
-          },
-          {
-            columnNames: ['gender_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'gender',
             onDelete: 'CASCADE',
           },
           {

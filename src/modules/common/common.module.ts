@@ -4,12 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // Entities
 import { Affiliate_typeEntity } from '../../common/entities/affiliate_type.entity';
 import { AreaEntity } from '../../common/entities/area.entity';
-import { CommunityEntity } from '../../common/entities/community.entity';
 import { Disability_typeEntity } from '../../common/entities/disability_type.entity';
 import { EpsEntity } from '../../common/entities/eps.entity';
 import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
 import { SexEntity } from '../../common/entities/sex.entity';
-import { GenderEntity } from '../../common/entities/gender.entity';
 import { Identification_typeEntity } from '../../common/entities/identification_type.entity';
 import { LevelEntity } from '../../common/entities/level.entity';
 import { Membership_classEntity } from '../../common/entities/membership_class.entity';
@@ -29,12 +27,10 @@ import { UploadedFilesEntity } from '../../common/entities/uploaded_files.entity
 // Controllers
 import { Affiliate_typeController } from './adapters/input/affiliate_type.controller';
 import { AreaController } from './adapters/input/area.controller';
-import { CommunityController } from './adapters/input/community.controller';
 import { Disability_typeController } from './adapters/input/disability_type.controller';
 import { EpsController } from './adapters/input/eps.controller';
 import { EthnicityController } from './adapters/input/ethnicity.controller';
 import { SexController } from './adapters/input/sex.controller';
-import { GenderController } from './adapters/input/gender.controller';
 import { Identification_typeController } from './adapters/input/identification_type.controller';
 import { LevelController } from './adapters/input/level.controller';
 import { Membership_classController } from './adapters/input/membership_class.controller';
@@ -56,11 +52,9 @@ import { RegimeController } from './adapters/input/regime.controller';
       RegimeEntity,
       Affiliate_typeEntity,
       AreaEntity,
-      CommunityEntity,
       Disability_typeEntity,
       EpsEntity,
       EthnicityEntity,
-      GenderEntity,
       SexEntity,
       Group_subgroupEntity,
       Identification_typeEntity,
@@ -82,11 +76,9 @@ import { RegimeController } from './adapters/input/regime.controller';
     RegimeController,
     Affiliate_typeController,
     AreaController,
-    CommunityController,
     Disability_typeController,
     EpsController,
     EthnicityController,
-    GenderController,
     SexController,
     Group_subgroupController,
     Identification_typeController,

@@ -23,7 +23,7 @@ export class Pqrs_typeSeeder implements Seeder {
         description: 'Solicitud de corrección por una acción u omisión',
       },
       {
-        id: 3,
+        id: 4,
         name: 'SUGERENCIA',
         description: 'Solicitud de corrección por una acción u omisión',
       },

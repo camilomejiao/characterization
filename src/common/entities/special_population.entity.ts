@@ -4,7 +4,7 @@ import { UserEntity } from './user.entity';
 import { EpsEntity } from './eps.entity';
 import { Population_typeEntity } from './population_type.entity';
 import { EthnicityEntity } from './ethnicity.entity';
-import { CommunityEntity } from './community.entity';
+import { Affiliated_stateEntity } from './affiliated_state.entity';
 
 @Entity('special_population')
 export class SpecialPopulationEntity extends AbstractEntity<SpecialPopulationEntity> {
@@ -25,15 +25,15 @@ export class SpecialPopulationEntity extends AbstractEntity<SpecialPopulationEnt
   @JoinColumn({ name: 'ethnicity_id' })
   ethnicity: EthnicityEntity;
 
-  //Comunidad
-  @ManyToOne(() => CommunityEntity, { nullable: true })
-  @JoinColumn({ name: 'community_id' })
-  community: CommunityEntity;
-
   //Eps
   @ManyToOne(() => EpsEntity, { nullable: true })
   @JoinColumn({ name: 'eps_id' })
   eps: EpsEntity;
+
+  //State
+  @ManyToOne(() => Affiliated_stateEntity, { nullable: true })
+  @JoinColumn({ name: 'affiliated_state_id' })
+  affiliatedState: Affiliated_stateEntity;
 
   //
   @Column({

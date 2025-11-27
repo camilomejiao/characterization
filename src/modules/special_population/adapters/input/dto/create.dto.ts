@@ -14,34 +14,33 @@ export class CreateDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  populationTypeId?: number;
+  populationTypeId: number;
 
   //EPS
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  epsId?: number | null;
+  epsId: number | null;
+
+  //State
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  affiliatedStateId: number | null;
 
   //Etnia
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  ethnicityId?: number;
-
-  //Comunidad
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  communityId?: number;
+  ethnicityId: number;
 
   //Tiene eps?
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(0)
-  hasEpsAffiliate?: number;
+  hasEpsAffiliate: number;
 
   //
   @IsOptional()

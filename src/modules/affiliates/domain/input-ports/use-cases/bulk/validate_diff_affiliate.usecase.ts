@@ -38,6 +38,7 @@ export class ValidateDiffAffiliateUsecase {
       ) {
         patch.sisbenNumber = row.sisbenNumber!;
       }
+
       if (
         this.notEmpty(row.dateOfAffiliated) &&
         row.dateOfAffiliated !== current.dateOfAffiliated
@@ -45,8 +46,7 @@ export class ValidateDiffAffiliateUsecase {
         patch.dateOfAffiliated = row.dateOfAffiliated!;
       }
 
-      // --- Relaciones (por ID o por código) ---
-      //Population Type -> ID (9,5,16)
+      // Population Type -> ID (9,5,16)
       if (
         row.populationTypeId &&
         current.populationType?.id !== row.populationTypeId
@@ -55,7 +55,7 @@ export class ValidateDiffAffiliateUsecase {
           row.populationTypeId,
           this.populationTypeRepository,
           'id',
-          'Population_type',
+          'Tipo de población',
         );
       }
 
@@ -64,15 +64,16 @@ export class ValidateDiffAffiliateUsecase {
           row.eps,
           this.epsRepository,
           'cod',
-          'Eps',
+          'EPS',
         );
       }
-      if (row.state && current.state?.cod !== row.state) {
-        patch.state = await this.validateFieldOrIdEntity(
+
+      if (row.state && current.affiliatedState?.cod !== row.state) {
+        patch.affiliatedState = await this.validateFieldOrIdEntity(
           row.state,
           this.affiliatedStateRepository,
           'cod',
-          'AffiliatedState',
+          'Estado de afiliación',
         );
       }
 
@@ -81,24 +82,26 @@ export class ValidateDiffAffiliateUsecase {
           row.level,
           this.levelRepository,
           'id',
-          'Level',
+          'Nivel del sisben',
         );
       }
 
       if (
         row.groupSubgroup &&
         current.groupSubgroup?.subgroup !== row.groupSubgroup
-      )
+      ) {
         patch.groupSubgroup = await this.validateFieldOrIdEntity(
           row.groupSubgroup,
           this.groupSubgroupRespository,
           'subgroup',
-          'GroupSubgroup',
+          'Grupo y Subgrupo',
         );
+      }
 
-      return patch ?? {};
+      return patch;
     } catch (error) {
       console.log(error);
+      throw error; // 👈 clave para que el BulkAffiliateUsecase lo capture
     }
   }
 
@@ -107,10 +110,6 @@ export class ValidateDiffAffiliateUsecase {
     v !== null &&
     !(typeof v === 'string' && v.trim() === '');
 
-  /**
-   * Busca una entidad ya sea por ID o por otro campo único.
-   * Si no existe, lanza error. Si existe, retorna { id: entity.id }.
-   */
   private async validateFieldOrIdEntity(
     value: string | number,
     repository: any,

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -25,6 +26,7 @@ import { GetAffiliateListUsecase } from '../../domain/input-ports/use-cases/get-
 //Entity
 import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
 import { Get_affilate_by_idUsecase } from '../../domain/input-ports/use-cases/get_affilate_by_id.usecase';
+import { GetAffiliateInformationUsecase } from '../../domain/input-ports/use-cases/get_affiliate_information.usecase';
 
 @Controller('affiliates')
 export class AffiliatesController {
@@ -37,6 +39,8 @@ export class AffiliatesController {
     private getAffiliateListUseCase: GetAffiliateListUsecase,
     @Inject(Update_affiliateUsecase)
     private updateAffiliateUseCase: Update_affiliateUsecase,
+    @Inject(GetAffiliateInformationUsecase)
+    private getAffiliateInformationUsecase: GetAffiliateInformationUsecase,
     @Inject(BulkAffiliateUsecase)
     private bulkAffiliateUsecase: BulkAffiliateUsecase,
   ) {}
@@ -93,6 +97,20 @@ export class AffiliatesController {
     }
 
     return { data: updatedAffiliate };
+  }
+
+  @Get('identification/:identificationNumber')
+  @UseGuards(AuthGuard('jwt'))
+  public async getUserByIdentification(
+    @Param('identificationNumber') identificationNumber: number,
+  ) {
+    const number = identificationNumber;
+
+    if (isNaN(number)) {
+      throw new BadRequestException('Parámetros inválidos');
+    }
+
+    return await this.getAffiliateInformationUsecase.handler(number);
   }
 
   @Post('bulk')

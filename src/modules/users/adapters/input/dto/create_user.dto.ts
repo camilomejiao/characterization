@@ -74,10 +74,6 @@ export class Create_userDto {
   @IsNumber()
   sex_id: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  gender_id: number;
-
   @IsOptional()
   @IsNumber()
   area_id?: number;

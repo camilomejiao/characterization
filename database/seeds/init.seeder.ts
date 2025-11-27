@@ -25,7 +25,6 @@ import { CountrySeeder } from './country.seeder';
 import { RegimeSeeder } from './regime.seeder';
 import { IpsPrimarySeeder } from './ips_primary.seeder';
 import { IpsDentalSeeder } from './ips_dental.seeder';
-import { GenderSeeder } from './gender.seeder';
 import { OrganizationSeeder } from './organization.seeder';
 
 export default class InitSeeder implements Seeder {
@@ -40,7 +39,6 @@ export default class InitSeeder implements Seeder {
         Identification_typeSeeder,
         EpsSeeder,
         SexSeeder,
-        GenderSeeder,
         IpsPrimarySeeder,
         IpsDentalSeeder,
         AreaSeeder,

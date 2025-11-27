@@ -11,11 +11,11 @@ import { IMethodologyRepository } from '../../../../common/domain/output-ports/m
 import { ILevelRepository } from '../../../../common/domain/output-ports/level.repository';
 import { IMembershipClassRepository } from '../../../../common/domain/output-ports/membership_class.repository';
 import { IEthnicityRepository } from '../../../../common/domain/output-ports/ethnicity.repository';
-import { ICommunityRepository } from '../../../../common/domain/output-ports/community.repository';
 import { IGroupSubgroupRespository } from '../../../../common/domain/output-ports/group_subgroup.respository';
 import { IIps_primaryRepository } from '../../../../common/domain/output-ports/ips_primary.repository';
 import { IIps_dentalRepository } from '../../../../common/domain/output-ports/ips_dental.repository';
 import { IRegimeRepository } from '../../../../common/domain/output-ports/regime.repository';
+import { IApplicationStatusRepository } from '../../../../common/domain/output-ports/application_status.repository';
 
 export class Validate_and_assign_relationsUsecase {
   constructor(
@@ -39,10 +39,10 @@ export class Validate_and_assign_relationsUsecase {
     private readonly membershipClassRepository: IMembershipClassRepository,
     @Inject(IEthnicityRepository)
     private readonly ethnicityRepository: IEthnicityRepository,
-    @Inject(ICommunityRepository)
-    private readonly communityRepository: ICommunityRepository,
     @Inject(IGroupSubgroupRespository)
     private readonly groupSubgroupRepository: IGroupSubgroupRespository,
+    @Inject(IApplicationStatusRepository)
+    private readonly applicationStatusRepository: IApplicationStatusRepository,
   ) {}
 
   public async handler(
@@ -66,9 +66,6 @@ export class Validate_and_assign_relationsUsecase {
     affiliate.affiliateType = dto.affiliateTypeId
       ? await this.getAffiliateType(dto.affiliateTypeId)
       : affiliate.affiliateType;
-    affiliate.community = dto.communityId
-      ? await this.getCommunity(dto.communityId)
-      : affiliate.community;
     affiliate.ethnicity = dto.ethnicityId
       ? await this.getEthnicity(dto.ethnicityId)
       : affiliate.ethnicity;
@@ -84,9 +81,9 @@ export class Validate_and_assign_relationsUsecase {
     affiliate.groupSubgroup = dto.groupSubgroupId
       ? await this.getGroupSubgroup(dto.groupSubgroupId)
       : affiliate.groupSubgroup;
-    affiliate.state = dto.stateId
-      ? await this.getGroupSubgroup(dto.stateId)
-      : affiliate.state;
+    affiliate.affiliatedState = dto.affiliatedStateId
+      ? await this.applicationStatus(dto.affiliatedStateId)
+      : affiliate.affiliatedState;
 
     return affiliate;
   }
@@ -98,7 +95,7 @@ export class Validate_and_assign_relationsUsecase {
     return this.validateEntity(
       this.populationTypeRepository,
       populationTypeId,
-      'Population type',
+      'Tipo de población',
     );
   }
 
@@ -122,35 +119,23 @@ export class Validate_and_assign_relationsUsecase {
     return this.validateEntity(
       this.affiliateTypeRepository,
       affiliateTypeId,
-      'Affiliate type',
+      'Tipo de afiliación',
     );
   }
 
   private async getEthnicity(ethnicityId: number) {
-    return this.validateEntity(
-      this.ethnicityRepository,
-      ethnicityId,
-      'Ethnicity',
-    );
-  }
-
-  private async getCommunity(communityId: number) {
-    return this.validateEntity(
-      this.communityRepository,
-      communityId,
-      'Community',
-    );
+    return this.validateEntity(this.ethnicityRepository, ethnicityId, 'Etnica');
   }
 
   private async getLevel(levelId: number) {
-    return this.validateEntity(this.levelRepository, levelId, 'Level');
+    return this.validateEntity(this.levelRepository, levelId, 'Nivel');
   }
 
   private async getMembershipClass(membershipClassId: number) {
     return this.validateEntity(
       this.membershipClassRepository,
       membershipClassId,
-      'Membership class',
+      'Clase de afiliación',
     );
   }
 
@@ -158,7 +143,7 @@ export class Validate_and_assign_relationsUsecase {
     return this.validateEntity(
       this.methodologyRepository,
       methodologyId,
-      'Methodology',
+      'Metodologia',
     );
   }
 
@@ -166,7 +151,15 @@ export class Validate_and_assign_relationsUsecase {
     return this.validateEntity(
       this.groupSubgroupRepository,
       groupId,
-      'Group-Subgroup',
+      'Grupo y Subgrupo',
+    );
+  }
+
+  private async applicationStatus(groupId: number) {
+    return this.validateEntity(
+      this.applicationStatusRepository,
+      groupId,
+      'Estado de afiliación',
     );
   }
 

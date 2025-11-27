@@ -9,6 +9,8 @@ export class SexSeeder implements Seeder {
     const regs = [
       { id: 1, name: 'Femenino', code: 'F' },
       { id: 2, name: 'Masculino', code: 'M' },
+      { id: 3, name: 'No Binario', code: 'NB' },
+      { id: 4, name: 'Transgenero', code: 'T' },
     ];
 
     for (const data of regs) {

@@ -19,9 +19,19 @@ export class LMAEntity extends AbstractEntity<LMAEntity> {
 
   @Column({
     name: 'paid',
-    type: 'varchar',
-    length: 25,
     nullable: true,
   })
   paid: string;
+
+  @Column({
+    name: 'month',
+    nullable: true,
+  })
+  month: number;
+
+  @Column({
+    name: 'year',
+    nullable: true,
+  })
+  year: number;
 }

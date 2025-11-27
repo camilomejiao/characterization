@@ -5,14 +5,15 @@ import { UserEntity } from '../../../../../common/entities/user.entity';
 import { DepartmentEntity } from '../../../../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../../../../common/entities/municipality.entity';
 import { OrganizationEntity } from '../../../../../common/entities/organization.entity';
+
 //
 import { Create_userDto } from '../../../adapters/input/dto/create_user.dto';
+
 //
 import { IUserRepository } from '../../output-ports/user.repository';
 import { IDepartmentRepository } from '../../../../department-municipality/domain/output-ports/department.repository';
 import { IMunicipalityRepository } from '../../../../department-municipality/domain/output-ports/municipality.repository';
 import { IDisabilityTypeRepository } from '../../../../common/domain/output-ports/disability_type.repository';
-import { IGenderRepository } from '../../../../common/domain/output-ports/gender.repository';
 import { IAreaRepository } from '../../../../common/domain/output-ports/area.repository';
 import { IIdentificationTypeRepository } from '../../../../common/domain/output-ports/identification_type.repository';
 import { ICountryRepository } from '../../../../common/domain/output-ports/country.repository';
@@ -34,8 +35,6 @@ export class Create_userUsecase {
     private disabilityTypeRepository: IDisabilityTypeRepository,
     @Inject(ISexRepository)
     private sexRepository: ISexRepository,
-    @Inject(IGenderRepository)
-    private genderRepository: IGenderRepository,
     @Inject(IAreaRepository)
     private areaRepository: IAreaRepository,
   ) {}
@@ -55,7 +54,6 @@ export class Create_userUsecase {
         userDto.disability_type_id,
       );
       const sex = await this.getSex(userDto.sex_id);
-      const gender = await this.getGender(userDto.gender_id);
       const area = await this.getArea(userDto.area_id);
 
       const user = new UserEntity({
@@ -75,7 +73,6 @@ export class Create_userUsecase {
         identificationType,
         disabilityType,
         sex,
-        gender,
         area,
       });
 
@@ -146,14 +143,6 @@ export class Create_userUsecase {
       throw new NotFoundException(`Gender with ID ${sexId} not found`);
     }
     return sex;
-  }
-
-  private async getGender(genderId: number) {
-    const gender = await this.genderRepository.findOneBy({ id: genderId });
-    if (!gender) {
-      throw new NotFoundException(`Gender with ID ${genderId} not found`);
-    }
-    return gender;
   }
 
   private async getArea(areaId: number) {
