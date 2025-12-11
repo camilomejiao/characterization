@@ -46,7 +46,6 @@ export class ValidateDiffAffiliateUsecase {
         patch.dateOfAffiliated = row.dateOfAffiliated!;
       }
 
-      // Population Type -> ID (9,5,16)
       if (
         row.populationTypeId &&
         current.populationType?.id !== row.populationTypeId
@@ -101,7 +100,7 @@ export class ValidateDiffAffiliateUsecase {
       return patch;
     } catch (error) {
       console.log(error);
-      throw error; // 👈 clave para que el BulkAffiliateUsecase lo capture
+      throw error;
     }
   }
 
@@ -128,6 +127,6 @@ export class ValidateDiffAffiliateUsecase {
       throw new Error(`${entityName} with ${field} "${value}" not found`);
     }
 
-    return { id: entity.id };
+    return entity;
   }
 }

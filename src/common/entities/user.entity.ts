@@ -18,42 +18,53 @@ import { AffiliatesEntity } from './affiliate.entity';
 import { CountryEntity } from './country.entity';
 import { SpecialPopulationEntity } from './special_population.entity';
 import { OrganizationEntity } from './organization.entity';
+import { EthnicityEntity } from './ethnicity.entity';
 
 @Entity('users')
 export class UserEntity extends AbstractEntity<UserEntity> {
+  //
   @ManyToOne(() => DepartmentEntity)
   @JoinColumn({ name: 'department_id' })
   department: DepartmentEntity;
 
+  //
   @ManyToOne(() => MunicipalityEntity)
   @JoinColumn({ name: 'municipality_id' })
   municipality: MunicipalityEntity;
 
+  //
   @ManyToOne(() => Identification_typeEntity)
   @JoinColumn({ name: 'identification_type_id' })
   identificationType: Identification_typeEntity;
 
+  //
   @Column({ name: 'identification_number', unique: true })
   identificationNumber: number;
 
+  //
   @ManyToOne(() => Disability_typeEntity, { nullable: true })
   @JoinColumn({ name: 'disability_type_id' })
   disabilityType: Disability_typeEntity;
 
+  //
   @ManyToOne(() => AreaEntity, { nullable: true })
   @JoinColumn({ name: 'area_id' })
   area: AreaEntity;
 
+  //
   @ManyToOne(() => SexEntity)
   @JoinColumn({ name: 'sex_id' })
   sex: SexEntity;
 
+  //
   @Column({ name: 'first_name', type: 'varchar', length: 100 })
   firstName: string;
 
+  //
   @Column({ name: 'middle_name', type: 'varchar', length: 100, nullable: true })
   middleName: string;
 
+  //
   @Column({ name: 'first_last_name', type: 'varchar', length: 100 })
   firstLastName: string;
 
@@ -97,16 +108,21 @@ export class UserEntity extends AbstractEntity<UserEntity> {
   @JoinColumn({ name: 'country_id' })
   country: CountryEntity;
 
+  //
   @OneToOne(
     () => SpecialPopulationEntity,
     (specialPopulation) => specialPopulation.user,
-    {
-      nullable: true,
-    },
+    { nullable: true },
   )
   specialPopulation: SpecialPopulationEntity;
 
+  //
   @ManyToOne(() => OrganizationEntity, (organization) => organization.id)
   @JoinColumn({ name: 'organization_id' })
   organization: OrganizationEntity;
+
+  //Etnia
+  @ManyToOne(() => EthnicityEntity, { nullable: true })
+  @JoinColumn({ name: 'ethnicity_id' })
+  ethnicity: EthnicityEntity;
 }

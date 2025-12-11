@@ -7,23 +7,93 @@ export class EpsSeeder implements Seeder {
     const repository = dataSource.getRepository(EpsEntity);
 
     const regs = [
-      { id: 1, name: 'COMPENSAR EPS', nit: '860066942', cod: 'EPS008' },
-      { id: 2, name: 'FAMISANAR', nit: '830003564', cod: 'EPS017' },
+      {
+        id: 1,
+        name: 'COMPENSAR EPS',
+        nit: '860066942',
+        cod: 'EPS008',
+        active: 1,
+      },
+      { id: 2, name: 'FAMISANAR', nit: '830003564', cod: 'EPS017', active: 1 },
       {
         id: 3,
         name: 'NUEVA EPS SUBSIDIADO',
         nit: '900156264',
         cod: 'EPSS41',
+        active: 1,
       },
       {
         id: 4,
         name: 'NUEVA EPS CON MOVILIDAD',
         nit: '900156264',
         cod: 'EPS037',
+        active: 1,
       },
-      { id: 5, name: 'SALUD TOTAL', nit: '800130907', cod: 'EPSS02' },
-      { id: 6, name: 'EPS SANITAS', nit: '800251440', cod: 'EPS005' },
-      { id: 7, name: 'EPS SURA', nit: '800088702', cod: 'EPS010' },
+      {
+        id: 5,
+        name: 'SALUD TOTAL',
+        nit: '800130907',
+        cod: 'EPSS02',
+        active: 1,
+      },
+      {
+        id: 6,
+        name: 'EPS SANITAS',
+        nit: '800251440',
+        cod: 'EPS005',
+        active: 1,
+      },
+      { id: 7, name: 'EPS SURA', nit: '800088702', cod: 'EPS010', active: 1 },
+
+      {
+        id: 8,
+        name: 'CONVIDA EPS',
+        nit: '800088702',
+        cod: 'EPS022',
+        active: 1,
+      },
+      {
+        id: 9,
+        name: 'FAMISANAR CAFAM EPS ',
+        nit: '800088702',
+        cod: 'CCF018',
+        active: 1,
+      },
+      {
+        id: 10,
+        name: 'CAFESALUD EPS ',
+        nit: '800088702',
+        cod: 'EPSM03',
+        active: 1,
+      },
+      {
+        id: 11,
+        name: 'SALUD VIDA S.A EPS MOVILIDAD',
+        nit: '800088702',
+        cod: 'EPSS33',
+        active: 1,
+      },
+      {
+        id: 12,
+        name: 'NUEVA EPS',
+        nit: '800088702',
+        cod: 'EPSS37',
+        active: 1,
+      },
+      {
+        id: 13,
+        name: 'ASOCIACIÓN DE CABILDOS INDÍGENAS DEL RESGUARDO INDÍGEMA ZENÚ DE SAN ANDRES DE SOTAVENTO CÓRDOBA - SUCRE "Manexka.',
+        nit: '800088702',
+        cod: 'EPSS44',
+        active: 1,
+      },
+      {
+        id: 14,
+        name: 'ECOOPSOS EPS S.A.S.',
+        nit: '800088702',
+        cod: 'EPS091',
+        active: 1,
+      },
     ];
 
     for (const data of regs) {

@@ -13,4 +13,7 @@ export class EpsEntity {
 
   @Column()
   cod: string;
+
+  @Column()
+  active: number;
 }

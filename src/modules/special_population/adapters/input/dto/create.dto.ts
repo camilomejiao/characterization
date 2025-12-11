@@ -28,13 +28,6 @@ export class CreateDto {
   @IsInt()
   affiliatedStateId: number | null;
 
-  //Etnia
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  ethnicityId: number;
-
   //Tiene eps?
   @IsOptional()
   @Type(() => Number)

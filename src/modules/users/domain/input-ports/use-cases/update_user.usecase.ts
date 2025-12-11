@@ -1,8 +1,11 @@
 import { Inject, NotFoundException } from '@nestjs/common';
+
 //
 import { UserEntity } from '../../../../../common/entities/user.entity';
+
 //
 import { Update_userDto } from '../../../adapters/input/dto/update_user.dto';
+
 //
 import { IUserRepository } from '../../output-ports/user.repository';
 import { ICountryRepository } from '../../../../common/domain/output-ports/country.repository';
@@ -12,6 +15,7 @@ import { IDisabilityTypeRepository } from '../../../../common/domain/output-port
 import { IAreaRepository } from '../../../../common/domain/output-ports/area.repository';
 import { IIdentificationTypeRepository } from '../../../../common/domain/output-ports/identification_type.repository';
 import { ISexRepository } from '../../../../common/domain/output-ports/sex.repository';
+import { IEthnicityRepository } from '../../../../common/domain/output-ports/ethnicity.repository';
 
 export class Update_userUsecase {
   constructor(
@@ -31,6 +35,8 @@ export class Update_userUsecase {
     private sexRepository: ISexRepository,
     @Inject(IAreaRepository)
     private areaRepository: IAreaRepository,
+    @Inject(IEthnicityRepository)
+    private ethnicityRepository: IEthnicityRepository,
   ) {}
 
   public async handler(
@@ -63,6 +69,9 @@ export class Update_userUsecase {
     const area = userDto.area_id
       ? await this.getArea(userDto.area_id)
       : user.area;
+    const ethnicity = userDto.ethnicity_id
+      ? await this.getEthnicity(userDto.ethnicity_id)
+      : user.ethnicity;
 
     // Construir el nuevo objeto de usuario con solo los datos modificados
     const updatedUser = new UserEntity({
@@ -85,6 +94,7 @@ export class Update_userUsecase {
       disabilityType,
       sex,
       area,
+      ethnicity,
     });
 
     return await this.userRepository.update(id, updatedUser);
@@ -154,5 +164,14 @@ export class Update_userUsecase {
     if (!department)
       throw new NotFoundException(`Country with ID ${countryId} not found`);
     return department;
+  }
+
+  private async getEthnicity(ethnicityId: number) {
+    const etnicity = await this.ethnicityRepository.findOneBy({
+      id: ethnicityId,
+    });
+    if (!etnicity)
+      throw new NotFoundException(`Country with ID ${etnicity} not found`);
+    return etnicity;
   }
 }

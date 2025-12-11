@@ -19,7 +19,6 @@ import { SpecialPopulationEntity } from '../../common/entities/special_populatio
 import { UserEntity } from '../../common/entities/user.entity';
 import { Population_typeEntity } from '../../common/entities/population_type.entity';
 import { EpsEntity } from '../../common/entities/eps.entity';
-import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
 import { Application_statusEntity } from '../../common/entities/application_status.entity';
 
 //Interface
@@ -27,7 +26,6 @@ import { ISpecialPopulationRepository } from './domain/output-ports/special_popu
 import { IUserRepository } from '../users/domain/output-ports/user.repository';
 import { IPopulationTypeRepository } from '../common/domain/output-ports/population_type.repository';
 import { IEpsRepository } from '../common/domain/output-ports/eps.repository';
-import { IEthnicityRepository } from '../common/domain/output-ports/ethnicity.repository';
 import { IApplicationStatusRepository } from '../common/domain/output-ports/application_status.repository';
 
 //Repository
@@ -35,7 +33,6 @@ import { SpecialPopulationMysqlRepository } from './domain/output-ports/mysql/sp
 import { User_mysqlRepository } from '../users/domain/output-ports/mysql/user_mysql.repository';
 import { Population_type_mysqlRepository } from '../common/domain/output-ports/mysql/population_type_mysql.repository';
 import { Eps_mysqlRepository } from '../common/domain/output-ports/mysql/eps_mysql.repository';
-import { Ethnicity_mysqlRepository } from '../common/domain/output-ports/mysql/ethnicity_mysql.repository';
 import { Application_status_mysqlRepository } from '../common/domain/output-ports/mysql/application_status_mysql.repository';
 
 @Module({
@@ -45,7 +42,6 @@ import { Application_status_mysqlRepository } from '../common/domain/output-port
       UserEntity,
       Population_typeEntity,
       EpsEntity,
-      EthnicityEntity,
       Application_statusEntity,
     ]),
     UsersModule,
@@ -72,10 +68,6 @@ import { Application_status_mysqlRepository } from '../common/domain/output-port
     {
       provide: IEpsRepository,
       useClass: Eps_mysqlRepository,
-    },
-    {
-      provide: IEthnicityRepository,
-      useClass: Ethnicity_mysqlRepository,
     },
     {
       provide: IApplicationStatusRepository,

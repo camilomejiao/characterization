@@ -24,6 +24,19 @@ export interface IAffiliateRepository {
   ): Promise<
     Map<number, { user: UserEntity | null; affiliate: AffiliatesEntity | null }>
   >;
+
+  reportInformationGrafics(
+    month: number,
+    year: number,
+  ): Promise<{
+    totalAffiliates: number;
+    lmaAmount: number;
+    byRegime: Record<string, number>;
+    byEps: Record<string, number>;
+    byGender: Record<string, number>;
+    byAgeGroup: Record<string, number>;
+    byPopulationType: Record<string, number>;
+  }>;
 }
 
 export const IAffiliateRepository = Symbol('IAffiliateRepository');

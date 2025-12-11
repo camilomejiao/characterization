@@ -54,6 +54,7 @@ export class User_mysqlRepository implements IUserRepository {
         area: true,
         country: true,
         organization: true,
+        ethnicity: true,
       },
     });
   }
@@ -69,6 +70,7 @@ export class User_mysqlRepository implements IUserRepository {
         area: true,
         country: true,
         organization: true,
+        ethnicity: true,
       },
     });
   }
@@ -88,7 +90,8 @@ export class User_mysqlRepository implements IUserRepository {
         sex: true,
         area: true,
         country: true,
-        organization: true, // añade si lo necesitas en la respuesta
+        organization: true,
+        ethnicity: true,
       },
     });
   }

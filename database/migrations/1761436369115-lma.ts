@@ -26,7 +26,7 @@ export class Lma1761436369115 implements MigrationInterface {
           },
           {
             name: 'paid',
-            type: 'int',
+            type: 'float',
             length: '10',
             isNullable: false,
           },

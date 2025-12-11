@@ -34,7 +34,7 @@ export class PopulationTypeSeeder implements Seeder {
       { id: 15, name: 'Población rural no migratoria' },
       { id: 16, name: 'Adulto mayor en centros de protección' },
       { id: 17, name: 'Comunidades indígenas' },
-      //{ id: 18, name: 'Rrom (Gitano)' },
+      { id: 18, name: 'Rrom (Gitano)' },
       { id: 22, name: 'Personas en prisión domiciliaria a cargo del INPEC' },
       { id: 23, name: 'Personas que dejan de ser madres comunitarias' },
       {
@@ -46,8 +46,44 @@ export class PopulationTypeSeeder implements Seeder {
         name: 'Adolescentes y jóvenes a cargo del ICBF en el sistema de responsabilidad penal para adolescentes',
       },
       {
+        id: 26,
+        name: 'Miembros de los grupos armados al margen de la ley que celebran acueros de paz con el gobierno nacional. ',
+      },
+      {
         id: 27,
         name: 'Recién nacidos y menores de edad de padres no afiliados',
+      },
+      {
+        id: 28,
+        name: 'Los voluntarios acreditados y activos de la Defensa Civil Colombiana, Cruz Roja Colombiana y Cuerpos de Bomberos.',
+      },
+      {
+        id: 29,
+        name: 'Personas con discapacidad en centros de protección.',
+      },
+      {
+        id: 30,
+        name: 'Migrante venezolano con PE e hijos menores de edad con documento valido.',
+      },
+      {
+        id: 31,
+        name: 'Afiliación de oficio sin encuenta sisben y sin pertenecer a una población especial.',
+      },
+      {
+        id: 32,
+        name: 'Personas que se encuentran recluidas sin condena o cumpliendo medida de aseuramiento en centros de detección transitoria.',
+      },
+      {
+        id: 33,
+        name: 'Veteranos de la fuerza pública DECRETO 1346 DE 2020.',
+      },
+      {
+        id: 34,
+        name: 'Afiliados con contribución solidaria.',
+      },
+      {
+        id: 35,
+        name: 'Ninguna.',
       },
     ];
 

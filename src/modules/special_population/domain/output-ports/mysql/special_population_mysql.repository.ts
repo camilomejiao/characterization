@@ -26,7 +26,6 @@ export class SpecialPopulationMysqlRepository
         user: true,
         populationType: true,
         eps: true,
-        ethnicity: true,
         affiliatedState: true,
       },
     });
@@ -39,7 +38,6 @@ export class SpecialPopulationMysqlRepository
         user: true,
         populationType: true,
         eps: true,
-        ethnicity: true,
         affiliatedState: true,
       },
     });

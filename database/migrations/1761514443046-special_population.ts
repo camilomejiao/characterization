@@ -25,11 +25,6 @@ export class SpecialPopulation1761514443046 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'ethnicity_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
             name: 'eps_id',
             type: 'int',
             isNullable: true,
@@ -79,12 +74,6 @@ export class SpecialPopulation1761514443046 implements MigrationInterface {
             columnNames: ['population_type_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'population_type',
-            onDelete: 'SET NULL',
-          },
-          {
-            columnNames: ['ethnicity_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'ethnicity',
             onDelete: 'SET NULL',
           },
           {

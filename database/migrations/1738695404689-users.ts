@@ -30,7 +30,7 @@ export class Users1738695404689 implements MigrationInterface {
           },
           {
             name: 'identification_number',
-            type: 'int',
+            type: 'bigint',
             isNullable: false,
             isUnique: true,
           },
@@ -51,6 +51,11 @@ export class Users1738695404689 implements MigrationInterface {
           },
           {
             name: 'country_id',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'ethnicity_id',
             type: 'int',
             isNullable: true,
           },
@@ -176,6 +181,12 @@ export class Users1738695404689 implements MigrationInterface {
             columnNames: ['organization_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'organization',
+            onDelete: 'SET NULL',
+          },
+          {
+            columnNames: ['ethnicity_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'ethnicity',
             onDelete: 'SET NULL',
           },
         ],

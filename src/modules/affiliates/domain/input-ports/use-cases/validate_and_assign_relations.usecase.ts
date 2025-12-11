@@ -10,7 +10,6 @@ import { IAffiliateTypeRepository } from '../../../../common/domain/output-ports
 import { IMethodologyRepository } from '../../../../common/domain/output-ports/methodology.repository';
 import { ILevelRepository } from '../../../../common/domain/output-ports/level.repository';
 import { IMembershipClassRepository } from '../../../../common/domain/output-ports/membership_class.repository';
-import { IEthnicityRepository } from '../../../../common/domain/output-ports/ethnicity.repository';
 import { IGroupSubgroupRespository } from '../../../../common/domain/output-ports/group_subgroup.respository';
 import { IIps_primaryRepository } from '../../../../common/domain/output-ports/ips_primary.repository';
 import { IIps_dentalRepository } from '../../../../common/domain/output-ports/ips_dental.repository';
@@ -37,8 +36,6 @@ export class Validate_and_assign_relationsUsecase {
     private readonly levelRepository: ILevelRepository,
     @Inject(IMembershipClassRepository)
     private readonly membershipClassRepository: IMembershipClassRepository,
-    @Inject(IEthnicityRepository)
-    private readonly ethnicityRepository: IEthnicityRepository,
     @Inject(IGroupSubgroupRespository)
     private readonly groupSubgroupRepository: IGroupSubgroupRespository,
     @Inject(IApplicationStatusRepository)
@@ -66,9 +63,6 @@ export class Validate_and_assign_relationsUsecase {
     affiliate.affiliateType = dto.affiliateTypeId
       ? await this.getAffiliateType(dto.affiliateTypeId)
       : affiliate.affiliateType;
-    affiliate.ethnicity = dto.ethnicityId
-      ? await this.getEthnicity(dto.ethnicityId)
-      : affiliate.ethnicity;
     affiliate.level = dto.levelId
       ? await this.getLevel(dto.levelId)
       : affiliate.level;
@@ -121,10 +115,6 @@ export class Validate_and_assign_relationsUsecase {
       affiliateTypeId,
       'Tipo de afiliación',
     );
-  }
-
-  private async getEthnicity(ethnicityId: number) {
-    return this.validateEntity(this.ethnicityRepository, ethnicityId, 'Etnica');
   }
 
   private async getLevel(levelId: number) {

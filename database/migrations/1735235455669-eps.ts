@@ -31,6 +31,11 @@ export class Eps1735235455669 implements MigrationInterface {
             length: '25',
             isNullable: true,
           },
+          {
+            name: 'active',
+            type: 'int',
+            isNullable: true,
+          },
         ],
         foreignKeys: [],
         indices: [],

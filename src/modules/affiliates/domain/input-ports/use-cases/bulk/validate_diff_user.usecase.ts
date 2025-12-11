@@ -168,6 +168,6 @@ export class ValidateDiffUserUsecase {
       throw new Error(`${entityName} with ${field} "${value}" not found`);
     }
 
-    return { id: entity.id };
+    return entity;
   }
 }

@@ -14,7 +14,7 @@ export class LmaUsecase {
       const rec = repo.create({
         affiliate: { id: affiliateId } as any,
         description: `LMA ${period}`,
-        paid: String(valorLMA), // idealmente amount decimal
+        paid: valorLMA,
       });
       await repo.save(rec);
     } catch (error) {}

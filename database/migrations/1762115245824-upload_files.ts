@@ -22,7 +22,6 @@ export class UploadFiles1762115245824 implements MigrationInterface {
             name: 'system_user_id',
             type: 'int',
             isNullable: false,
-            isUnique: true,
           },
           {
             name: 'file_name',

@@ -12,13 +12,14 @@ import { AreaEntity } from '../../common/entities/area.entity';
 import { SexEntity } from '../../common/entities/sex.entity';
 import { Identification_typeEntity } from '../../common/entities/identification_type.entity';
 import { Disability_typeEntity } from '../../common/entities/disability_type.entity';
+import { CountryEntity } from '../../common/entities/country.entity';
+import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
 
 //Use Case
 import { Create_userUsecase } from './domain/input-ports/use-cases/create_user.usecase';
 import { Delete_userUsecase } from './domain/input-ports/use-cases/delete_user.usecase';
 import { Get_userUsecase } from './domain/input-ports/use-cases/get_user.usecase';
 import { Update_userUsecase } from './domain/input-ports/use-cases/update_user.usecase';
-import { CountryEntity } from '../../common/entities/country.entity';
 
 //Interface
 import { IUserRepository } from './domain/output-ports/user.repository';
@@ -29,6 +30,7 @@ import { IDisabilityTypeRepository } from '../common/domain/output-ports/disabil
 import { ISexRepository } from '../common/domain/output-ports/sex.repository';
 import { IAreaRepository } from '../common/domain/output-ports/area.repository';
 import { ICountryRepository } from '../common/domain/output-ports/country.repository';
+import { IEthnicityRepository } from '../common/domain/output-ports/ethnicity.repository';
 
 //Repository
 import { User_mysqlRepository } from './domain/output-ports/mysql/user_mysql.repository';
@@ -39,6 +41,7 @@ import { Disability_type_mysqlRepository } from '../common/domain/output-ports/m
 import { Sex_mysqlRepository } from '../common/domain/output-ports/mysql/sex_mysql.repository';
 import { Area_mysqlRepository } from '../common/domain/output-ports/mysql/area_mysql.repository';
 import { Country_mysqlRepository } from '../common/domain/output-ports/mysql/country_mysql.repository';
+import { Ethnicity_mysqlRepository } from '../common/domain/output-ports/mysql/ethnicity_mysql.repository';
 
 @Module({
   imports: [
@@ -51,6 +54,7 @@ import { Country_mysqlRepository } from '../common/domain/output-ports/mysql/cou
       Identification_typeEntity,
       Disability_typeEntity,
       CountryEntity,
+      EthnicityEntity,
     ]),
   ],
   controllers: [UserController],
@@ -90,6 +94,10 @@ import { Country_mysqlRepository } from '../common/domain/output-ports/mysql/cou
     {
       provide: ICountryRepository,
       useClass: Country_mysqlRepository,
+    },
+    {
+      provide: IEthnicityRepository,
+      useClass: Ethnicity_mysqlRepository,
     },
   ],
   exports: [UsersModule],

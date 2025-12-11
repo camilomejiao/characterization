@@ -12,7 +12,6 @@ import { Population_typeEntity } from '../../common/entities/population_type.ent
 import { EpsEntity } from '../../common/entities/eps.entity';
 import { Ips_primaryEntity } from '../../common/entities/ips_primary.entity';
 import { Ips_dentalEntity } from '../../common/entities/ips_dental.entity';
-import { EthnicityEntity } from '../../common/entities/ethnicity.entity';
 import { LevelEntity } from '../../common/entities/level.entity';
 import { Membership_classEntity } from '../../common/entities/membership_class.entity';
 import { MethodologyEntity } from '../../common/entities/methodology.entity';
@@ -53,7 +52,6 @@ import { IAffiliateRepository } from './domain/output-ports/affiliate.repository
 import { IAffiliateTypeRepository } from '../common/domain/output-ports/affiliate_type.repository';
 import { IPopulationTypeRepository } from '../common/domain/output-ports/population_type.repository';
 import { IEpsRepository } from '../common/domain/output-ports/eps.repository';
-import { IEthnicityRepository } from '../common/domain/output-ports/ethnicity.repository';
 import { ILevelRepository } from '../common/domain/output-ports/level.repository';
 import { IMembershipClassRepository } from '../common/domain/output-ports/membership_class.repository';
 import { IMethodologyRepository } from '../common/domain/output-ports/methodology.repository';
@@ -75,7 +73,6 @@ import { Affiliate_mysqlRepository } from './domain/output-ports/mysql/affiliate
 import { Affiliate_type_mysqlRepository } from '../common/domain/output-ports/mysql/affiliate_type_mysql.repository';
 import { Population_type_mysqlRepository } from '../common/domain/output-ports/mysql/population_type_mysql.repository';
 import { Eps_mysqlRepository } from '../common/domain/output-ports/mysql/eps_mysql.repository';
-import { Ethnicity_mysqlRepository } from '../common/domain/output-ports/mysql/ethnicity_mysql.repository';
 import { Level_mysqlRepository } from '../common/domain/output-ports/mysql/level_mysql.repository';
 import { Membership_class_mysqlRepository } from '../common/domain/output-ports/mysql/membership_class_mysql.repository';
 import { Methodology_mysqlRepository } from '../common/domain/output-ports/mysql/methodology_mysql.repository';
@@ -91,6 +88,7 @@ import { Area_mysqlRepository } from '../common/domain/output-ports/mysql/area_m
 import { Sex_mysqlRepository } from '../common/domain/output-ports/mysql/sex_mysql.repository';
 import { AffiliatedStateMysqlRepository } from '../common/domain/output-ports/mysql/affiliated_state_mysql.repository';
 import { Application_status_mysqlRepository } from '../common/domain/output-ports/mysql/application_status_mysql.repository';
+import { GetReportUsecase } from './domain/input-ports/use-cases/get_report.usecase';
 
 @Module({
   imports: [
@@ -103,7 +101,6 @@ import { Application_status_mysqlRepository } from '../common/domain/output-port
       EpsEntity,
       Ips_primaryEntity,
       Ips_dentalEntity,
-      EthnicityEntity,
       LevelEntity,
       Membership_classEntity,
       MethodologyEntity,
@@ -137,6 +134,7 @@ import { Application_status_mysqlRepository } from '../common/domain/output-port
     LmaUsecase,
     AffiliateHistoryUsecase,
     UpsertUploadFileUsecase,
+    GetReportUsecase,
     {
       provide: IAffiliateRepository,
       useClass: Affiliate_mysqlRepository,
@@ -168,10 +166,6 @@ import { Application_status_mysqlRepository } from '../common/domain/output-port
     {
       provide: IIps_dentalRepository,
       useClass: IpsDentalMysqlRepository,
-    },
-    {
-      provide: IEthnicityRepository,
-      useClass: Ethnicity_mysqlRepository,
     },
     {
       provide: ILevelRepository,

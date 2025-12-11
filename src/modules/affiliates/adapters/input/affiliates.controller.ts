@@ -27,6 +27,7 @@ import { GetAffiliateListUsecase } from '../../domain/input-ports/use-cases/get-
 import { AffiliatesEntity } from '../../../../common/entities/affiliate.entity';
 import { Get_affilate_by_idUsecase } from '../../domain/input-ports/use-cases/get_affilate_by_id.usecase';
 import { GetAffiliateInformationUsecase } from '../../domain/input-ports/use-cases/get_affiliate_information.usecase';
+import { GetReportUsecase } from '../../domain/input-ports/use-cases/get_report.usecase';
 
 @Controller('affiliates')
 export class AffiliatesController {
@@ -43,6 +44,8 @@ export class AffiliatesController {
     private getAffiliateInformationUsecase: GetAffiliateInformationUsecase,
     @Inject(BulkAffiliateUsecase)
     private bulkAffiliateUsecase: BulkAffiliateUsecase,
+    @Inject(GetReportUsecase)
+    private getReportUsecase: GetReportUsecase,
   ) {}
 
   @Post('create')
@@ -115,9 +118,41 @@ export class AffiliatesController {
 
   @Post('bulk')
   @UseGuards(AuthGuard('jwt'))
-  public async bulk(@Body() dataBulkDto: BulkAffiliateDto) {
-    console.log(dataBulkDto);
+  public async bulk(@Body() dataBulkDto: BulkAffiliateDto): Promise<{
+    data: {
+      total: number;
+      success: number;
+      userUpdated: number;
+      affiliateUpdated: number;
+      lmaInserted: number;
+      notFoundUsers: { identificationNumber: number }[];
+      usersWithoutAffiliate: { identificationNumber: number }[];
+      skippedLmaWithoutAffiliate: { identificationNumber: number }[];
+      rowErrors: {
+        index: number;
+        identificationNumber?: number;
+        message: string;
+      }[];
+    };
+  }> {
     const summary = await this.bulkAffiliateUsecase.handler(dataBulkDto);
     return { data: summary };
+  }
+
+  @Get('report-information-graphics/:month/:year')
+  @UseGuards(AuthGuard('jwt'))
+  public async getReportGraphics(
+    @Param('month') month: number,
+    @Param('year') year: number,
+  ): Promise<{
+    totalAffiliates: number;
+    lmaAmount: number;
+    byRegime: Record<string, number>;
+    byEps: Record<string, number>;
+    byGender: Record<string, number>;
+    byAgeGroup: Record<string, number>;
+    byPopulationType: Record<string, number>;
+  }> {
+    return await this.getReportUsecase.handler(month, year);
   }
 }

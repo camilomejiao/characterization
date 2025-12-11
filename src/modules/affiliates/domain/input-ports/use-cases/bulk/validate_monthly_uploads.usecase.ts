@@ -27,7 +27,9 @@ export class ValidateMonthlyUploadsUsecase {
         },
       });
 
-      if (count >= 2) {
+      console.log('count: ', count);
+
+      if (count >= 3) {
         throw new UnprocessableEntityException(
           'Superas el número de cargues en este mes',
         );

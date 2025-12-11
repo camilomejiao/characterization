@@ -18,6 +18,7 @@ import { IAreaRepository } from '../../../../common/domain/output-ports/area.rep
 import { IIdentificationTypeRepository } from '../../../../common/domain/output-ports/identification_type.repository';
 import { ICountryRepository } from '../../../../common/domain/output-ports/country.repository';
 import { ISexRepository } from '../../../../common/domain/output-ports/sex.repository';
+import { IEthnicityRepository } from '../../../../common/domain/output-ports/ethnicity.repository';
 
 export class Create_userUsecase {
   constructor(
@@ -37,6 +38,8 @@ export class Create_userUsecase {
     private sexRepository: ISexRepository,
     @Inject(IAreaRepository)
     private areaRepository: IAreaRepository,
+    @Inject(IEthnicityRepository)
+    private ethnicityRepository: IEthnicityRepository,
   ) {}
 
   public async handler(
@@ -55,6 +58,7 @@ export class Create_userUsecase {
       );
       const sex = await this.getSex(userDto.sex_id);
       const area = await this.getArea(userDto.area_id);
+      const ethnicity = await this.getEthnicity(userDto.ethnicity_id);
 
       const user = new UserEntity({
         firstName: userDto.first_name,
@@ -74,6 +78,7 @@ export class Create_userUsecase {
         disabilityType,
         sex,
         area,
+        ethnicity,
       });
 
       //Asignar la organización del token
@@ -160,5 +165,14 @@ export class Create_userUsecase {
     if (!department)
       throw new NotFoundException(`Country with ID ${countryId} not found`);
     return department;
+  }
+
+  private async getEthnicity(ethnicityId: number) {
+    const etnicity = await this.ethnicityRepository.findOneBy({
+      id: ethnicityId,
+    });
+    if (!etnicity)
+      throw new NotFoundException(`Country with ID ${etnicity} not found`);
+    return etnicity;
   }
 }

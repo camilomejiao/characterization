@@ -70,11 +70,6 @@ export class Affiliate1747358665552 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'ethnicity_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
             name: 'group_subgroup_id',
             type: 'int',
             isNullable: true,
@@ -184,12 +179,6 @@ export class Affiliate1747358665552 implements MigrationInterface {
             columnNames: ['membership_class_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'membership_class',
-            onDelete: 'SET NULL',
-          },
-          {
-            columnNames: ['ethnicity_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'ethnicity',
             onDelete: 'SET NULL',
           },
           {

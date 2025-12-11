@@ -14,7 +14,6 @@ import { Affiliate_typeEntity } from './affiliate_type.entity';
 import { MethodologyEntity } from './methodology.entity';
 import { LevelEntity } from './level.entity';
 import { Membership_classEntity } from './membership_class.entity';
-import { EthnicityEntity } from './ethnicity.entity';
 import { Group_subgroupEntity } from './group_subgroup.entity';
 import { Affiliated_stateEntity } from './affiliated_state.entity';
 import { RegimeEntity } from './regime.entity';
@@ -79,11 +78,6 @@ export class AffiliatesEntity extends AbstractEntity<AffiliatesEntity> {
   @ManyToOne(() => Membership_classEntity, { nullable: true })
   @JoinColumn({ name: 'membership_class_id' })
   membershipClass: Membership_classEntity;
-
-  //Etnia
-  @ManyToOne(() => EthnicityEntity, { nullable: true })
-  @JoinColumn({ name: 'ethnicity_id' })
-  ethnicity: EthnicityEntity;
 
   //Grupo y Subgrupo de sisben
   @ManyToOne(() => Group_subgroupEntity, { nullable: true })

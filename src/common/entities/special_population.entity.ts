@@ -20,11 +20,6 @@ export class SpecialPopulationEntity extends AbstractEntity<SpecialPopulationEnt
   @JoinColumn({ name: 'population_type_id' })
   populationType: Population_typeEntity;
 
-  //Etnia
-  @ManyToOne(() => EthnicityEntity, { nullable: true })
-  @JoinColumn({ name: 'ethnicity_id' })
-  ethnicity: EthnicityEntity;
-
   //Eps
   @ManyToOne(() => EpsEntity, { nullable: true })
   @JoinColumn({ name: 'eps_id' })

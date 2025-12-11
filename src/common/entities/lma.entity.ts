@@ -21,7 +21,7 @@ export class LMAEntity extends AbstractEntity<LMAEntity> {
     name: 'paid',
     nullable: true,
   })
-  paid: string;
+  paid: number;
 
   @Column({
     name: 'month',

@@ -9,6 +9,9 @@ export class AreaSeeder implements Seeder {
     const regs = [
       { id: 1, name: 'Urbano', code: 'U' },
       { id: 2, name: 'Rural', code: 'R' },
+      { id: 3, name: 'Rural Disperso', code: 'RD' },
+      { id: 4, name: 'Centro Poblado', code: 'CP' },
+      { id: 5, name: 'Cabecera Municipal', code: 'CM' },
     ];
 
     for (const data of regs) {

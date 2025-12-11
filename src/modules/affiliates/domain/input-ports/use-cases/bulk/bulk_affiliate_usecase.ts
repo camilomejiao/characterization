@@ -112,25 +112,30 @@ export class BulkAffiliateUsecase {
                 row,
               );
 
-              this.logger.debug(
-                `✅ DiffUser ${row.identificationNumber}: ${JSON.stringify(
-                  userPatch,
-                )}`,
-              );
-
               if (userPatch && Object.keys(userPatch).length) {
+                const updateUserPatch =
+                  this.sanitizePatchForUpdate<UserEntity>(userPatch);
+
                 await qr.manager.update(
                   UserEntity,
                   { id: entry.user.id },
-                  userPatch,
+                  updateUserPatch,
                 );
                 summary.userUpdated++;
 
-                await this.affiliateHistoryUsecase.handler(
-                  qr.manager,
-                  entry.affiliate.id,
-                  this.describeDiff('USER', userPatch, entry.user),
+                const changes = this.describeDiff(
+                  userPatch,
+                  entry.user,
+                  this.USER_FIELD_LABELS,
                 );
+
+                for (const description of changes) {
+                  await this.affiliateHistoryUsecase.handler(
+                    qr.manager,
+                    entry.affiliate.id,
+                    description,
+                  );
+                }
               }
 
               // ====== AFFILIATE DIFF ======
@@ -139,25 +144,29 @@ export class BulkAffiliateUsecase {
                 row,
               );
 
-              this.logger.debug(
-                `✅ DiffAffiliate ${row.identificationNumber}: ${JSON.stringify(
-                  affPatch,
-                )}`,
-              );
-
               if (affPatch && Object.keys(affPatch).length) {
+                const updateAffPatch =
+                  this.sanitizePatchForUpdate<AffiliatesEntity>(affPatch);
                 await qr.manager.update(
                   AffiliatesEntity,
                   { id: entry.affiliate.id },
-                  affPatch,
+                  updateAffPatch,
                 );
                 summary.affiliateUpdated++;
 
-                await this.affiliateHistoryUsecase.handler(
-                  qr.manager,
-                  entry.affiliate.id,
-                  this.describeDiff('AFFILIATE', affPatch, entry.affiliate),
+                const changesAff = this.describeDiff(
+                  affPatch,
+                  entry.affiliate,
+                  this.AFF_FIELD_LABELS,
                 );
+
+                for (const description of changesAff) {
+                  await this.affiliateHistoryUsecase.handler(
+                    qr.manager,
+                    entry.affiliate.id,
+                    description,
+                  );
+                }
               }
 
               // ====== LMA ======
@@ -238,17 +247,84 @@ export class BulkAffiliateUsecase {
     }
   }
 
-  /**
-   * Construye un texto de trazabilidad:
-   * USER/AFFILIATE: campoX: antes=... → ahora=...
+  //
+  private sanitizePatchForUpdate<T extends object>(
+    patch: Partial<T>,
+  ): Partial<T> {
+    const out: any = {};
+
+    for (const [key, value] of Object.entries(patch)) {
+      if (value && typeof value === 'object' && 'id' in value) {
+        out[key] = { id: (value as any).id };
+      } else {
+        out[key] = value;
+      }
+    }
+
+    return out;
+  }
+
+  //
+  private USER_FIELD_LABELS: Record<string, string> = {
+    firstName: 'Primer nombre',
+    middleName: 'Segundo nombre',
+    firstLastName: 'Primer apellido',
+    middleLastName: 'Segundo apellido',
+    birthdate: 'Fecha de nacimiento',
+    email: 'Correo electrónico',
+    phoneNumber: 'Teléfono',
+    neighborhood: 'Barrio o vereda',
+    address: 'Dirección',
+    country: 'País',
+    department: 'Departamento',
+    municipality: 'Municipio',
+    area: 'Zona',
+    sex: 'Sexo',
+  };
+
+  //
+  private AFF_FIELD_LABELS: Record<string, string> = {
+    sisbenNumber: 'Número ficha SISBEN',
+    dateOfAffiliated: 'Fecha de afiliación',
+    populationType: 'Tipo de población',
+    eps: 'EPS',
+    affiliatedState: 'Estado de afiliación',
+    level: 'Nivel SISBEN',
+    groupSubgroup: 'Grupo y subgrupo',
+  };
+
+  /*
+   *
+   */
+  private formatValue(value: any): string {
+    if (value === null || value === undefined) return '(sin valor)';
+
+    // Si es objeto (relación)
+    if (typeof value === 'object') {
+      // intenta usar campos "bonitos"
+      if ('name' in value && value.name) return String(value.name);
+      if ('description' in value && value.description)
+        return String(value.description);
+      if ('cod' in value && value.cod) return String(value.cod);
+      if ('code' in value && value.code) return String(value.code);
+      if ('id' in value && value.id) return String(value.id);
+
+      return JSON.stringify(value);
+    }
+
+    return String(value);
+  }
+
+  /*
+   *
    */
   private describeDiff(
-    scope: 'USER' | 'AFFILIATE',
     patch: Record<string, any>,
     original: Record<string, any>,
-  ): string {
+    labels: Record<string, string>,
+  ): string[] {
     const fields = Object.keys(patch);
-    if (!fields.length) return `${scope}: sin cambios`;
+    if (!fields.length) return [];
 
     const changes: string[] = [];
 
@@ -256,24 +332,16 @@ export class BulkAffiliateUsecase {
       const newValue = patch[field];
       const oldValue = original[field];
 
-      // Relaciones tipo { id: X }
-      if (newValue && typeof newValue === 'object') {
-        const newId = newValue?.id ?? JSON.stringify(newValue);
-        const oldId =
-          oldValue && typeof oldValue === 'object'
-            ? (oldValue?.id ?? JSON.stringify(oldValue))
-            : oldValue;
+      const label = labels[field] ?? field;
 
-        changes.push(
-          `${field}: antes=${oldId ?? '(sin valor)'} → ahora=${newId}`,
-        );
-      } else {
-        changes.push(
-          `${field}: antes=${oldValue ?? '(sin valor)'} → ahora=${newValue}`,
-        );
-      }
+      const beforeText = this.formatValue(oldValue);
+      const afterText = this.formatValue(newValue);
+
+      changes.push(
+        `Se realizó cambio en el campo ${label}: antes=${beforeText} → ahora=${afterText}`,
+      );
     }
 
-    return `${scope}: ${changes.join(' | ')}`;
+    return changes;
   }
 }
