@@ -6,7 +6,7 @@ import {
   RequestMethod,
   ValidationPipe,
 } from '@nestjs/common';
-//import { setupSwagger } from './common/util/setup-swagger';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -25,6 +25,7 @@ async function bootstrap() {
     ],
   });
 
+  // 🔹 Tu ValidationPipe se queda igual
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -69,6 +70,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   //setupSwagger(app);
 

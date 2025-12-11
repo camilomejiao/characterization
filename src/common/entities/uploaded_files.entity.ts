@@ -23,7 +23,8 @@ export class UploadedFilesEntity extends AbstractEntity<UploadedFilesEntity> {
 
   @Column({
     name: 'count',
+    type: 'int',
     nullable: true,
   })
-  count: string;
+  count: number;
 }

@@ -1,6 +1,6 @@
 import { Between, DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { UploadedFilesEntity } from '../../../../../../common/entities/uploaded_files.entity';
 import dayjs from 'dayjs';
 
@@ -10,33 +10,37 @@ export class ValidateMonthlyUploadsUsecase {
     private readonly dataSource: DataSource,
   ) {}
 
-  public async handler(organizationId: number | string, period: string) {
-    try {
-      const year = Number(period.slice(0, 4));
-      const month = Number(period.slice(4, 6));
-      const start = dayjs(`${year}-${String(month).padStart(2, '0')}-01`)
-        .startOf('month')
-        .toDate();
-      const end = dayjs(start).endOf('month').toDate();
+  async handler(organizationId: number) {
+    const repo = this.dataSource.getRepository(UploadedFilesEntity);
 
-      const repo = this.dataSource.getRepository(UploadedFilesEntity);
-      const count = await repo.count({
-        where: {
-          organization: { id: Number(organizationId) } as any,
-          created_at: Between(start, end),
-        },
-      });
+    const start = dayjs().startOf('month').toDate();
+    const end = dayjs().endOf('month').toDate();
 
-      console.log('count: ', count);
+    const uploadsThisMonth = await repo.findOne({
+      where: {
+        organization: { id: Number(organizationId) },
+        created_at: Between(start, end),
+      },
+    });
 
-      if (count >= 3) {
-        throw new UnprocessableEntityException(
-          'Superas el número de cargues en este mes',
-        );
-      }
-    } catch (error) {
-      console.error('❌ Error en ValidateMonthlyUploadsUsecase:', error);
-      throw error;
+    if (!uploadsThisMonth) {
+      return { count: 0 };
     }
+
+    const currentCount = Number(uploadsThisMonth.count);
+
+    if (currentCount >= 3) {
+      throw new BadRequestException({
+        errors: [
+          {
+            status: 400,
+            title: 'Errores de validación',
+            detail: `La organización ya realizó ${currentCount} cargas este mes. Solo se permiten 3.`,
+          },
+        ],
+      });
+    }
+
+    return uploadsThisMonth;
   }
 }

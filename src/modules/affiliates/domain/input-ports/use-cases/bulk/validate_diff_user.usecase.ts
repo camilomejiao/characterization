@@ -141,7 +141,7 @@ export class ValidateDiffUserUsecase {
       return patch;
     } catch (error) {
       console.log(error);
-      throw error; // 👈 muy importante para que el BulkAffiliateUsecase lo capture
+      throw error;
     }
   }
 

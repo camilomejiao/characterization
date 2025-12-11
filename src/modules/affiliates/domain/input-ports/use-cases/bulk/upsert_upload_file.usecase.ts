@@ -28,13 +28,13 @@ export class UpsertUploadFileUsecase {
         organization: { id: Number(organizationId) } as any,
         user: { id: Number(systemUserId) } as any,
         fileName,
-        count: '1',
+        count: 1,
       });
       await repo.save(record);
       return;
     }
 
     const count = Number(record.count ?? 0) + 1;
-    await repo.update(record.id, { count: String(count) });
+    await repo.update(record.id, { count: count });
   }
 }

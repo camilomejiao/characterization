@@ -40,10 +40,7 @@ export class BulkAffiliateUsecase {
         throw new BadRequestException('Archivo vacío');
       }
 
-      await this.validateMonthlyUploadsUsecase.handler(
-        dto.organizationId,
-        dto.period,
-      );
+      await this.validateMonthlyUploadsUsecase.handler(dto.organizationId);
 
       const summary = {
         total: dto.rows.length,
@@ -72,13 +69,16 @@ export class BulkAffiliateUsecase {
         );
 
         const map = await this.affiliateRepo.findUsersAndAffiliatesByIdNumbers(
-          Number(dto.organizationId),
+          //Number(dto.organizationId),
+          Number(2),
           chunkNumbers,
         );
 
         const qr = this.dataSource.createQueryRunner();
         await qr.connect();
         await qr.startTransaction();
+
+        console.log('map: ', map);
 
         try {
           for (let k = 0; k < chunk.length; k++) {
@@ -90,6 +90,8 @@ export class BulkAffiliateUsecase {
             );
 
             const entry = map.get(row.identificationNumber)!;
+
+            console.log('entry: ', entry);
 
             if (!entry?.user) {
               summary.notFoundUsers.push({
@@ -127,6 +129,10 @@ export class BulkAffiliateUsecase {
                   userPatch,
                   entry.user,
                   this.USER_FIELD_LABELS,
+                );
+
+                this.logger.debug(
+                  `➡️ Procesando changes ${changes} (${row.identificationNumber})`,
                 );
 
                 for (const description of changes) {
@@ -338,7 +344,7 @@ export class BulkAffiliateUsecase {
       const afterText = this.formatValue(newValue);
 
       changes.push(
-        `Se realizó cambio en el campo ${label}: antes=${beforeText} → ahora=${afterText}`,
+        `Se realizó cambio en el campo ${label}: antes=${beforeText}, ahora=${afterText}`,
       );
     }
 
