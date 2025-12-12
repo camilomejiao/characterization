@@ -31,6 +31,9 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
         membershipClass: true,
         groupSubgroup: true,
       },
+      where: {
+        affiliatedState: { id: 1 },
+      },
     });
   }
 
