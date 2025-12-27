@@ -29,7 +29,7 @@ export class ValidateMonthlyUploadsUsecase {
 
     const currentCount = Number(uploadsThisMonth.count);
 
-    if (currentCount >= 3) {
+    if (currentCount >= 1000) {
       throw new BadRequestException({
         errors: [
           {
