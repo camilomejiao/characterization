@@ -17,7 +17,7 @@ export class Identification_typeSeeder implements Seeder {
       { id: 8, acronym: 'RC', name: 'Registro Civil' },
       { id: 9, acronym: 'SC', name: 'Salvo Conducto' },
       { id: 10, acronym: 'TI', name: 'Tarjeta de Identidad' },
-      { id: 11, acronym: 'PPT', name: 'Permiso de Protección Temporal' },
+      { id: 11, acronym: 'PT', name: 'Permiso de Protección Temporal' },
     ];
 
     for (const data of regs) {

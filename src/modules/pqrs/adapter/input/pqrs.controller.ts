@@ -56,7 +56,6 @@ export interface RequestWithUser extends Request {
     exp?: number;
   };
 }
-
 @Controller('pqrs')
 export class PqrsController {
   constructor(
@@ -208,4 +207,11 @@ export class PqrsController {
       };
     }
   }
+
+  @Get('report-information-pqrs/:month/:year')
+  @UseGuards(AuthGuard('jwt'))
+  public async getReportPqrs(
+    @Param('month') month: number,
+    @Param('year') year: number,
+  ) {}
 }
