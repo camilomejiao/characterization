@@ -19,7 +19,7 @@ export class EpsSeeder implements Seeder {
         id: 3,
         name: 'NUEVA EPS SUBSIDIADO',
         nit: '900156264',
-        cod: 'EPSS41',
+        cod: 'EPS041',
         active: 1,
       },
       {
@@ -33,7 +33,7 @@ export class EpsSeeder implements Seeder {
         id: 5,
         name: 'SALUD TOTAL',
         nit: '800130907',
-        cod: 'EPSS02',
+        cod: 'EPS002',
         active: 1,
       },
       {

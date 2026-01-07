@@ -26,8 +26,9 @@ export class Lma1761436369115 implements MigrationInterface {
           },
           {
             name: 'paid',
-            type: 'float',
-            length: '10',
+            type: 'decimal',
+            precision: 14,
+            scale: 2,
             isNullable: false,
           },
           {
@@ -67,7 +68,13 @@ export class Lma1761436369115 implements MigrationInterface {
             onDelete: 'RESTRICT',
           },
         ],
-        indices: [],
+        indices: [
+          {
+            name: 'uq_lma_affiliate_period',
+            columnNames: ['affiliate_id', 'year', 'month'],
+            isUnique: true,
+          },
+        ],
         engine: 'InnoDB',
       }),
     );

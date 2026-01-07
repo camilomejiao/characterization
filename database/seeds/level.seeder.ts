@@ -11,6 +11,7 @@ export class LevelSeeder implements Seeder {
       { id: 2, name: 'Nivel 2' },
       { id: 3, name: 'D - Afiliado con contribución solidaria' },
       { id: 4, name: 'N' },
+      { id: 5, name: 'Ninguno' },
     ];
 
     for (const data of regs) {

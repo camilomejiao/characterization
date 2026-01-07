@@ -3,13 +3,23 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { OrganizationEntity } from './organization.entity';
 import { System_usersEntity } from './system_users.entity';
 
+export enum UploadFileStatus {
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
 @Entity('upload_files')
 export class UploadedFilesEntity extends AbstractEntity<UploadedFilesEntity> {
-  @ManyToOne(() => OrganizationEntity, (organization) => organization.id)
+  @ManyToOne(() => OrganizationEntity, (organization) => organization.id, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'organization_id' })
   organization: OrganizationEntity;
 
-  @ManyToOne(() => System_usersEntity, (user) => user.id)
+  @ManyToOne(() => System_usersEntity, (user) => user.id, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'system_user_id' })
   user: System_usersEntity;
 
@@ -17,14 +27,24 @@ export class UploadedFilesEntity extends AbstractEntity<UploadedFilesEntity> {
     name: 'file_name',
     type: 'varchar',
     length: 200,
-    nullable: true,
+    nullable: false,
   })
   fileName: string;
 
   @Column({
-    name: 'count',
-    type: 'int',
-    nullable: true,
+    name: 'period',
+    type: 'varchar',
+    length: 6,
+    nullable: false,
   })
-  count: number;
+  period: string;
+
+  @Column({
+    name: 'status',
+    type: 'enum',
+    enum: UploadFileStatus,
+    default: UploadFileStatus.PROCESSING,
+    nullable: false,
+  })
+  status: UploadFileStatus;
 }

@@ -3,7 +3,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { EpsEntity } from './eps.entity';
 import { Population_typeEntity } from './population_type.entity';
-import { EthnicityEntity } from './ethnicity.entity';
 import { Affiliated_stateEntity } from './affiliated_state.entity';
 
 @Entity('special_population')

@@ -34,7 +34,7 @@ export class BulkAffiliateRowDto {
   dateOfAffiliated?: string; // 'YYYY-MM-DD'
   sisbenNumber?: string;
 
-  valorLMA: number;
+  valorLMA?: number;
 }
 
 export class BulkAffiliateDto {
@@ -47,7 +47,7 @@ export class BulkAffiliateDto {
   userId: number;
 
   @IsString()
-  @Matches(/^(MS(CM)?|MC(CM)?)\d{6}$/) // nombre de archivo sin extensión
+  @Matches(/^(MS(CM)?|MS(LMA)?|MC(CM)?)\d{6}$/) // nombre de archivo sin extensión
   fileName: string;
 
   @IsIn([1, 2])

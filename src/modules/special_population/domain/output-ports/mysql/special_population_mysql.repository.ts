@@ -35,7 +35,9 @@ export class SpecialPopulationMysqlRepository
     return await this.repository.findOne({
       where: { id },
       relations: {
-        user: true,
+        user: {
+          identificationType: true,
+        },
         populationType: true,
         eps: true,
         affiliatedState: true,

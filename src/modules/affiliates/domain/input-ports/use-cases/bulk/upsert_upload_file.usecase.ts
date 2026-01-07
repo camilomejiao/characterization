@@ -1,40 +1,45 @@
 import { DataSource } from 'typeorm';
-import { UploadedFilesEntity } from '../../../../../../common/entities/uploaded_files.entity';
+import {
+  UploadedFilesEntity,
+  UploadFileStatus,
+} from '../../../../../../common/entities/uploaded_files.entity';
 
 export class UpsertUploadFileUsecase {
-  constructor() {}
-
   public async handler(
     dataSource: DataSource,
     organizationId: number | string,
     systemUserId: number | string,
     fileName: string,
     period: string,
-  ) {
+    status: UploadFileStatus,
+  ): Promise<{ record: UploadedFilesEntity; created: boolean }> {
     const repo = dataSource.getRepository(UploadedFilesEntity);
 
-    let record = await repo.findOne({
-      where: {
-        organization: { id: Number(organizationId) } as any,
-        user: { id: Number(systemUserId) } as any,
-        fileName,
-        // si tienes columna period, agrega: period
-      } as any,
-      relations: { organization: true, user: true },
-    });
+    const where = {
+      organization: { id: Number(organizationId) } as any,
+      fileName,
+      period,
+    } as any;
 
-    if (!record) {
-      record = repo.create({
-        organization: { id: Number(organizationId) } as any,
-        user: { id: Number(systemUserId) } as any,
-        fileName,
-        count: 1,
-      });
-      await repo.save(record);
-      return;
+    const existing = await repo.findOne({ where });
+
+    if (existing) {
+      if (existing.status !== status) {
+        await repo.update(existing.id, { status } as any);
+        existing.status = status;
+      }
+      return { record: existing, created: false };
     }
 
-    const count = Number(record.count ?? 0) + 1;
-    await repo.update(record.id, { count: count });
+    const record: UploadedFilesEntity = repo.create({
+      organization: { id: Number(organizationId) } as any,
+      user: { id: Number(systemUserId) } as any,
+      fileName,
+      period,
+      status,
+    });
+
+    const saved: UploadedFilesEntity = await repo.save(record);
+    return { record: saved, created: true };
   }
 }

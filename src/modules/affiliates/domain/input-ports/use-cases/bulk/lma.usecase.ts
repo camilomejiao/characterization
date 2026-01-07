@@ -11,12 +11,19 @@ export class LmaUsecase {
   ) {
     const repo = manager.getRepository(LMAEntity);
     try {
+      const year = Number(period.slice(0, 4));
+      const month = Number(period.slice(4, 6));
+
       const rec = repo.create({
-        affiliate: { id: affiliateId } as any,
+        affiliate: { id: affiliateId },
         description: `LMA ${period}`,
-        paid: valorLMA,
+        paid: Number(valorLMA).toFixed(2),
+        month,
+        year,
       });
       await repo.save(rec);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

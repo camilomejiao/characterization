@@ -11,6 +11,7 @@ import { ValidateDiffAffiliateUsecase } from './validate_diff_affiliate.usecase'
 import { LmaUsecase } from './lma.usecase';
 import { AffiliateHistoryUsecase } from './affiliate_history.usecase';
 import { UpsertUploadFileUsecase } from './upsert_upload_file.usecase';
+import { UploadFileStatus } from '../../../../../../common/entities/uploaded_files.entity';
 
 export class BulkAffiliateUsecase {
   private readonly logger = new Logger(BulkAffiliateUsecase.name);
@@ -30,6 +31,7 @@ export class BulkAffiliateUsecase {
 
   public async handler(dto: BulkAffiliateDto) {
     try {
+      // 1) validar nombre de archivo
       await this.validateFileNameUsecase.handler(
         dto.fileName,
         dto.regime,
@@ -40,7 +42,11 @@ export class BulkAffiliateUsecase {
         throw new BadRequestException('Archivo vacío');
       }
 
-      await this.validateMonthlyUploadsUsecase.handler(dto.organizationId);
+      //2) validar límite mensual ANTES de procesar
+      await this.validateMonthlyUploadsUsecase.handler(
+        Number(dto.organizationId),
+        dto.period,
+      );
 
       const summary = {
         total: dto.rows.length,
@@ -69,8 +75,7 @@ export class BulkAffiliateUsecase {
         );
 
         const map = await this.affiliateRepo.findUsersAndAffiliatesByIdNumbers(
-          //Number(dto.organizationId),
-          Number(2),
+          Number(dto.organizationId),
           chunkNumbers,
         );
 
@@ -78,20 +83,12 @@ export class BulkAffiliateUsecase {
         await qr.connect();
         await qr.startTransaction();
 
-        console.log('map: ', map);
-
         try {
           for (let k = 0; k < chunk.length; k++) {
             const row = chunk[k];
             const globalIndex = i + k;
 
-            this.logger.debug(
-              `➡️ Procesando fila ${globalIndex} (${row.identificationNumber})`,
-            );
-
-            const entry = map.get(row.identificationNumber)!;
-
-            console.log('entry: ', entry);
+            const entry = map.get(row.identificationNumber);
 
             if (!entry?.user) {
               summary.notFoundUsers.push({
@@ -108,7 +105,7 @@ export class BulkAffiliateUsecase {
             }
 
             try {
-              // ====== USER DIFF ======
+              // USER DIFF
               const userPatch = await this.validateDiffUserUsecase.handler(
                 entry.user,
                 row,
@@ -130,11 +127,6 @@ export class BulkAffiliateUsecase {
                   entry.user,
                   this.USER_FIELD_LABELS,
                 );
-
-                this.logger.debug(
-                  `➡️ Procesando changes ${changes} (${row.identificationNumber})`,
-                );
-
                 for (const description of changes) {
                   await this.affiliateHistoryUsecase.handler(
                     qr.manager,
@@ -144,7 +136,7 @@ export class BulkAffiliateUsecase {
                 }
               }
 
-              // ====== AFFILIATE DIFF ======
+              // AFFILIATE DIFF
               const affPatch = await this.validateDiffAffiliateUsecase.handler(
                 entry.affiliate,
                 row,
@@ -153,6 +145,7 @@ export class BulkAffiliateUsecase {
               if (affPatch && Object.keys(affPatch).length) {
                 const updateAffPatch =
                   this.sanitizePatchForUpdate<AffiliatesEntity>(affPatch);
+
                 await qr.manager.update(
                   AffiliatesEntity,
                   { id: entry.affiliate.id },
@@ -165,7 +158,6 @@ export class BulkAffiliateUsecase {
                   entry.affiliate,
                   this.AFF_FIELD_LABELS,
                 );
-
                 for (const description of changesAff) {
                   await this.affiliateHistoryUsecase.handler(
                     qr.manager,
@@ -175,7 +167,7 @@ export class BulkAffiliateUsecase {
                 }
               }
 
-              // ====== LMA ======
+              // LMA
               if (
                 entry.affiliate?.id &&
                 row.valorLMA !== undefined &&
@@ -196,9 +188,8 @@ export class BulkAffiliateUsecase {
 
               summary.success++;
             } catch (e: any) {
-              // ⛔️ Error específico en ESTA fila → detenemos todo
               this.logger.error(
-                `❌ Error procesando fila ${globalIndex} (${row.identificationNumber}): ${e?.message}`,
+                `Error procesando fila ${globalIndex} (${row.identificationNumber}): ${e?.message}`,
                 e?.stack,
               );
 
@@ -208,10 +199,8 @@ export class BulkAffiliateUsecase {
                 message: e?.message ?? 'Error de proceso',
               });
 
-              // rollback del chunk completo
               await qr.rollbackTransaction();
 
-              // lanzamos 400 hacia el controller con el summary actualizado
               throw new BadRequestException({
                 message: `Error al procesar la fila ${globalIndex} (id=${row.identificationNumber})`,
                 summary,
@@ -225,52 +214,43 @@ export class BulkAffiliateUsecase {
         }
       }
 
-      // Si llegó aquí, no hubo errores de filas
+      // 2) Si terminó OK, marcar COMPLETED
       await this.upsertUploadFileUsecase.handler(
         this.dataSource,
         dto.organizationId,
         dto.userId,
         dto.fileName,
         dto.period,
+        UploadFileStatus.COMPLETED,
       );
 
       return summary;
     } catch (error: any) {
       this.logger.error(
-        `💥 [BulkAffiliateUsecase.handler] Error inesperado: ${error.name} - ${error.message}`,
+        `[BulkAffiliateUsecase.handler] Error inesperado: ${error.name} - ${error.message}`,
         error.stack,
       );
 
-      // Si ya es BadRequestException (con summary y todo) la dejamos igual
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
+      if (error instanceof BadRequestException) throw error;
 
-      // Cualquier otra cosa la envolvemos genéricamente
       throw new BadRequestException(
         `Error interno en carga masiva: ${error.message}`,
       );
     }
   }
 
-  //
   private sanitizePatchForUpdate<T extends object>(
     patch: Partial<T>,
   ): Partial<T> {
     const out: any = {};
-
     for (const [key, value] of Object.entries(patch)) {
-      if (value && typeof value === 'object' && 'id' in value) {
+      if (value && typeof value === 'object' && 'id' in value)
         out[key] = { id: (value as any).id };
-      } else {
-        out[key] = value;
-      }
+      else out[key] = value;
     }
-
     return out;
   }
 
-  //
   private USER_FIELD_LABELS: Record<string, string> = {
     firstName: 'Primer nombre',
     middleName: 'Segundo nombre',
@@ -288,7 +268,6 @@ export class BulkAffiliateUsecase {
     sex: 'Sexo',
   };
 
-  //
   private AFF_FIELD_LABELS: Record<string, string> = {
     sisbenNumber: 'Número ficha SISBEN',
     dateOfAffiliated: 'Fecha de afiliación',
@@ -299,31 +278,20 @@ export class BulkAffiliateUsecase {
     groupSubgroup: 'Grupo y subgrupo',
   };
 
-  /*
-   *
-   */
   private formatValue(value: any): string {
     if (value === null || value === undefined) return '(sin valor)';
-
-    // Si es objeto (relación)
     if (typeof value === 'object') {
-      // intenta usar campos "bonitos"
       if ('name' in value && value.name) return String(value.name);
       if ('description' in value && value.description)
         return String(value.description);
       if ('cod' in value && value.cod) return String(value.cod);
       if ('code' in value && value.code) return String(value.code);
       if ('id' in value && value.id) return String(value.id);
-
       return JSON.stringify(value);
     }
-
     return String(value);
   }
 
-  /*
-   *
-   */
   private describeDiff(
     patch: Record<string, any>,
     original: Record<string, any>,
@@ -331,23 +299,11 @@ export class BulkAffiliateUsecase {
   ): string[] {
     const fields = Object.keys(patch);
     if (!fields.length) return [];
-
-    const changes: string[] = [];
-
-    for (const field of fields) {
-      const newValue = patch[field];
-      const oldValue = original[field];
-
+    return fields.map((field) => {
       const label = labels[field] ?? field;
-
-      const beforeText = this.formatValue(oldValue);
-      const afterText = this.formatValue(newValue);
-
-      changes.push(
-        `Se realizó cambio en el campo ${label}: antes=${beforeText}, ahora=${afterText}`,
-      );
-    }
-
-    return changes;
+      const beforeText = this.formatValue(original[field]);
+      const afterText = this.formatValue(patch[field]);
+      return `Se realizó cambio en el campo ${label}: antes=${beforeText}, ahora=${afterText}`;
+    });
   }
 }

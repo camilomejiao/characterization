@@ -6,7 +6,7 @@ export class ValidateFileNameUsecase {
   public async handler(fileName: string, regime: 1 | 2, period: string) {
     try {
       // MS202510 | MSCM202510 | MC202510 | MCCM202510
-      const re = /^(MS(CM)?|MC(CM)?)\d{6}$/;
+      const re = /^(MS(CM)?|MS(LMA)?|MC(CM)?)\d{6}$/;
       if (!re.test(fileName)) {
         throw new UnprocessableEntityException('Nombre de archivo inválido');
       }

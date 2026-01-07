@@ -16,38 +16,52 @@ export class UploadFiles1762115245824 implements MigrationInterface {
           {
             name: 'organization_id',
             type: 'int',
-            isNullable: true,
+            isNullable: false,
           },
           {
             name: 'system_user_id',
             type: 'int',
             isNullable: false,
           },
+
+          // metadata archivo
           {
             name: 'file_name',
             type: 'varchar',
             length: '200',
-            isNullable: true,
+            isNullable: false,
           },
+
+          // AAAAMM (el periodo del archivo, ej: 202512)
           {
-            name: 'count',
-            type: 'int',
-            isNullable: true,
+            name: 'period',
+            type: 'varchar',
+            length: '6',
+            isNullable: false,
+          },
+
+          // estado del proceso
+          {
+            name: 'status',
+            type: 'enum',
+            enum: ['PROCESSING', 'COMPLETED', 'FAILED'],
+            isNullable: false,
+            default: "'PROCESSING'",
           },
           {
             name: 'created_at',
-            type: 'datetime',
-            default: 'CURRENT_TIMESTAMP',
+            type: 'datetime(6)',
+            default: 'CURRENT_TIMESTAMP(6)',
           },
           {
             name: 'updated_at',
-            type: 'datetime',
-            default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP',
+            type: 'datetime(6)',
+            default: 'CURRENT_TIMESTAMP(6)',
+            onUpdate: 'CURRENT_TIMESTAMP(6)',
           },
           {
             name: 'deleted_at',
-            type: 'datetime',
+            type: 'datetime(6)',
             isNullable: true,
           },
         ],

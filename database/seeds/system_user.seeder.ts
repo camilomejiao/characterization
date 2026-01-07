@@ -38,7 +38,7 @@ export class System_userSeeder implements Seeder {
       {
         id: 2,
         name: 'ADMINISTRADOR',
-        email: 'cmejia1@gmail.com',
+        email: 'admin@gmail.com',
         password: await bcrypt.hash('Mon1014*', 10),
         organization: organization2,
         active: 1,
@@ -56,7 +56,7 @@ export class System_userSeeder implements Seeder {
       {
         id: 4,
         name: 'AFFILIATES',
-        email: 'affiliates@gmail.com',
+        email: 'aseguramiento@gmail.com',
         password: await bcrypt.hash('Mon1014*', 10),
         organization: organization2,
         active: 1,
