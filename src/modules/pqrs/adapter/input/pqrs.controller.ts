@@ -4,6 +4,7 @@ import {
   Delete,
   FileTypeValidator,
   Get,
+  Header,
   HttpException,
   HttpStatus,
   Inject,
@@ -14,6 +15,7 @@ import {
   Post,
   Put,
   Req,
+  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -43,6 +45,7 @@ import { RoleEntity } from '../../../../common/entities/role.entity';
 import { DepartmentEntity } from '../../../../common/entities/department.entity';
 import { MunicipalityEntity } from '../../../../common/entities/municipality.entity';
 import { PqrsEntity } from '../../../../common/entities/pqrs.entity';
+import { GetPqrExcelReportUsecase } from '../../domain/input-ports/usecase/get-pqr-excelReport.usecase';
 
 export interface RequestWithUser extends Request {
   user: {
@@ -73,6 +76,8 @@ export class PqrsController {
     private readonly createNotoficationPqrsUsecase: Create_notification_pqrsUsecase,
     @Inject(Delete_pqrsUsecase)
     private readonly deletePqrsUsecase: Delete_pqrsUsecase,
+    @Inject(GetPqrExcelReportUsecase)
+    private readonly getPqrExcelReportUsecase: GetPqrExcelReportUsecase,
   ) {}
 
   @Post('create')
@@ -120,11 +125,14 @@ export class PqrsController {
   @UseGuards(AuthGuard('jwt'))
   public async getByIdentification(
     @Param('identificationNumber') identificationNumber: number,
-  ): Promise<{ data: any }> {
+  ): Promise<{ type: string; data: any }> {
     const pqrsList = await this.getPqrsByDocument.handler(identificationNumber);
 
     if (pqrsList.length > 0) {
-      return { data: pqrsList };
+      return {
+        type: 'pqrs',
+        data: pqrsList,
+      };
     }
 
     throw new HttpException('No PQRS found for the user', HttpStatus.NOT_FOUND);
@@ -208,10 +216,20 @@ export class PqrsController {
     }
   }
 
-  @Get('report-information-pqrs/:month/:year')
+  @Get('report-information-pqrs/:start/:end')
   @UseGuards(AuthGuard('jwt'))
-  public async getReportPqrs(
-    @Param('month') month: number,
-    @Param('year') year: number,
-  ) {}
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  public async getReportPqrsExcel(
+    @Param('start') start: string,
+    @Param('end') end: string,
+  ) {
+    const file = await this.getPqrExcelReportUsecase.handler(start, end);
+
+    return new StreamableFile(file.buffer, {
+      disposition: `attachment; filename="${file.filename}"`,
+    });
+  }
 }

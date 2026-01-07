@@ -168,6 +168,26 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
   async reportInformationGrafics(month: number, year: number) {
     const ACTIVE_STATE_ID = 1;
 
+    const REGIMES = ['SUBSIDIADO', 'CONTRIBUTIVO'];
+
+    const emptyAgeGroups = () => ({
+      'Menores de 1 año': 0,
+      '1 - 4 años': 0,
+      '5 - 14 años': 0,
+      '15 - 44 años': 0,
+      '45 - 59 años': 0,
+      '60 y más': 0,
+    });
+
+    const initRegimeMap = <T>(factory: () => T) =>
+      REGIMES.reduce(
+        (acc, r) => {
+          acc[r] = factory();
+          return acc;
+        },
+        {} as Record<string, T>,
+      );
+
     // 1) Total de afiliados activos
     const totalAffiliates = await this.repository
       .createQueryBuilder('a')
@@ -185,7 +205,6 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
       .andWhere('lma.month = :month', { month })
       .andWhere('lma.year = :year', { year })
-      // paid es string, lo casteamos a decimal
       .select('COALESCE(SUM(CAST(lma.paid AS DECIMAL(18,2))), 0)', 'totalPaid')
       .getRawOne<{ totalPaid: string }>();
 
@@ -197,113 +216,129 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
       .innerJoin('a.affiliatedState', 'state')
       .innerJoin('a.regime', 'regime')
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
-      .select('regime.name', 'regime')
+      .select('UPPER(regime.name)', 'regime')
       .addSelect('COUNT(*)', 'total')
       .groupBy('regime.id')
       .getRawMany<{ regime: string; total: string }>();
 
-    const byRegime: Record<string, number> = {};
+    const byRegime: Record<string, number> = initRegimeMap(() => 0);
     rawByRegime.forEach((row) => {
       byRegime[row.regime] = Number(row.total);
     });
 
-    // 4) Afiliados activos por EPS
-    const rawByEps = await this.repository
+    // 4) EPS por régimen (Subsidiado/Contributivo)
+    const rawEpsByRegime = await this.repository
       .createQueryBuilder('a')
       .innerJoin('a.affiliatedState', 'state')
+      .innerJoin('a.regime', 'regime')
       .leftJoin('a.eps', 'eps')
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
-      .select("COALESCE(eps.name, 'SIN EPS')", 'eps')
+      .select('UPPER(regime.name)', 'regime')
+      .addSelect("COALESCE(eps.name, 'SIN EPS')", 'eps')
       .addSelect('COUNT(*)', 'total')
-      .groupBy('eps')
-      .getRawMany<{ eps: string; total: string }>();
+      .groupBy('UPPER(regime.name)')
+      .addGroupBy("COALESCE(eps.name, 'SIN EPS')")
+      .getRawMany<{ regime: string; eps: string; total: string }>();
 
-    const byEps: Record<string, number> = {};
-    rawByEps.forEach((row) => {
-      byEps[row.eps] = Number(row.total);
+    const byEpsByRegime = initRegimeMap(() => ({}) as Record<string, number>);
+    rawEpsByRegime.forEach((row) => {
+      const r = row.regime;
+      if (!byEpsByRegime[r]) byEpsByRegime[r] = {};
+      byEpsByRegime[r][row.eps] = Number(row.total);
     });
 
-    // 5) Afiliados activos por sexo / género
-    const rawByGender = await this.entityManager
+    // 5) Sexo por régimen
+    const rawGenderByRegime = await this.entityManager
       .getRepository(UserEntity)
       .createQueryBuilder('u')
       .innerJoin('u.affiliate', 'a')
       .innerJoin('a.affiliatedState', 'state')
+      .innerJoin('a.regime', 'regime')
       .innerJoin('u.sex', 'sex')
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
-      .select('sex.name', 'gender')
+      .select('UPPER(regime.name)', 'regime')
+      .addSelect('UPPER(sex.name)', 'gender')
       .addSelect('COUNT(*)', 'total')
-      .groupBy('sex.id')
-      .getRawMany<{ gender: string; total: string }>();
+      .groupBy('UPPER(regime.name)')
+      .addGroupBy('UPPER(sex.name)')
+      .getRawMany<{ regime: string; gender: string; total: string }>();
 
-    const byGender: Record<string, number> = {};
-    rawByGender.forEach((row) => {
-      byGender[row.gender.toUpperCase()] = Number(row.total);
+    const byGenderByRegime = initRegimeMap(
+      () => ({}) as Record<string, number>,
+    );
+    rawGenderByRegime.forEach((row) => {
+      const r = row.regime;
+      if (!byGenderByRegime[r]) byGenderByRegime[r] = {};
+      byGenderByRegime[r][row.gender] = Number(row.total);
     });
 
-    // 6) Afiliados activos por rangos de edad (según fecha de nacimiento)
-    const rawByAge = await this.entityManager
+    // 6) Distribución por edades por régimen
+    const rawAgeByRegime = await this.entityManager
       .getRepository(UserEntity)
       .createQueryBuilder('u')
       .innerJoin('u.affiliate', 'a')
       .innerJoin('a.affiliatedState', 'state')
+      .innerJoin('a.regime', 'regime')
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
-      .select(
+      .select('UPPER(regime.name)', 'regime')
+      .addSelect(
         `
-        CASE
-          WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) < 1 THEN 'Menores de 1 año'
-          WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 1 AND 4 THEN '1 - 4 años'
-          WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 5 AND 14 THEN '5 - 14 años'
-          WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 15 AND 44 THEN '15 - 44 años'
-          WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 45 AND 59 THEN '45 - 59 años'
-          ELSE '60 y más'
-        END
-      `,
+      CASE
+        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) < 1 THEN 'Menores de 1 año'
+        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 1 AND 4 THEN '1 - 4 años'
+        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 5 AND 14 THEN '5 - 14 años'
+        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 15 AND 44 THEN '15 - 44 años'
+        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 45 AND 59 THEN '45 - 59 años'
+        ELSE '60 y más'
+      END
+    `,
         'ageGroup',
       )
       .addSelect('COUNT(*)', 'total')
-      .groupBy('ageGroup')
-      .getRawMany<{ ageGroup: string; total: string }>();
+      .groupBy('UPPER(regime.name)')
+      .addGroupBy('ageGroup')
+      .getRawMany<{ regime: string; ageGroup: string; total: string }>();
 
-    // Inicializo todos los grupos con 0 para que el front siempre reciba el mismo shape
-    const byAgeGroup: Record<string, number> = {
-      'Menores de 1 año': 0,
-      '1 - 4 años': 0,
-      '5 - 14 años': 0,
-      '15 - 44 años': 0,
-      '45 - 59 años': 0,
-      '60 y más': 0,
-    };
-    rawByAge.forEach((row) => {
-      if (byAgeGroup[row.ageGroup] !== undefined) {
-        byAgeGroup[row.ageGroup] = Number(row.total);
+    const byAgeGroupByRegime = initRegimeMap(() => emptyAgeGroups());
+    rawAgeByRegime.forEach((row) => {
+      const r = row.regime;
+      if (!byAgeGroupByRegime[r]) byAgeGroupByRegime[r] = emptyAgeGroups();
+      if (byAgeGroupByRegime[r][row.ageGroup] !== undefined) {
+        byAgeGroupByRegime[r][row.ageGroup] = Number(row.total);
       }
     });
 
-    // 7) Afiliados activos por tipo de población
-    const rawByPopulation = await this.repository
+    // 7) Tipo de población por régimen
+    const rawPopulationByRegime = await this.repository
       .createQueryBuilder('a')
       .innerJoin('a.affiliatedState', 'state')
+      .innerJoin('a.regime', 'regime')
       .leftJoin('a.populationType', 'pt')
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
-      .select("COALESCE(pt.name, 'Ninguna')", 'populationType')
+      .select('UPPER(regime.name)', 'regime')
+      .addSelect("COALESCE(pt.name, 'Ninguna')", 'populationType')
       .addSelect('COUNT(*)', 'total')
-      .groupBy('populationType')
-      .getRawMany<{ populationType: string; total: string }>();
+      .groupBy('UPPER(regime.name)')
+      .addGroupBy("COALESCE(pt.name, 'Ninguna')")
+      .getRawMany<{ regime: string; populationType: string; total: string }>();
 
-    const byPopulationType: Record<string, number> = {};
-    rawByPopulation.forEach((row) => {
-      byPopulationType[row.populationType] = Number(row.total);
+    const byPopulationTypeByRegime = initRegimeMap(
+      () => ({}) as Record<string, number>,
+    );
+    rawPopulationByRegime.forEach((row) => {
+      const r = row.regime;
+      if (!byPopulationTypeByRegime[r]) byPopulationTypeByRegime[r] = {};
+      byPopulationTypeByRegime[r][row.populationType] = Number(row.total);
     });
 
     return {
       totalAffiliates,
       lmaAmount,
       byRegime,
-      byEps,
-      byGender,
-      byAgeGroup,
-      byPopulationType,
+      byEpsByRegime,
+      byGenderByRegime,
+      byAgeGroupByRegime,
+      byPopulationTypeByRegime,
     };
   }
 }

@@ -24,9 +24,7 @@ export class ValidateMonthlyUploadsUsecase {
       })
       .getCount();
 
-    console.log('qbCount: ', qbCount);
-
-    if (qbCount >= 3) {
+    if (qbCount > 5) {
       throw new BadRequestException({
         errors: [
           {

@@ -14,6 +14,8 @@ export interface IPqrsRepository {
   update(entity: PqrsEntity): Promise<PqrsEntity>;
 
   delete(id: number);
+
+  getInformationDetailExcel(startDate, endDate);
 }
 
 export const IPqrsRepository = Symbol('IPqrsRepository');

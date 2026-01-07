@@ -23,7 +23,6 @@ export class UploadFiles1762115245824 implements MigrationInterface {
             type: 'int',
             isNullable: false,
           },
-
           // metadata archivo
           {
             name: 'file_name',
@@ -31,7 +30,6 @@ export class UploadFiles1762115245824 implements MigrationInterface {
             length: '200',
             isNullable: false,
           },
-
           // AAAAMM (el periodo del archivo, ej: 202512)
           {
             name: 'period',
@@ -39,7 +37,6 @@ export class UploadFiles1762115245824 implements MigrationInterface {
             length: '6',
             isNullable: false,
           },
-
           // estado del proceso
           {
             name: 'status',

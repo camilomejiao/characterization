@@ -32,10 +32,11 @@ export interface IAffiliateRepository {
     totalAffiliates: number;
     lmaAmount: number;
     byRegime: Record<string, number>;
-    byEps: Record<string, number>;
-    byGender: Record<string, number>;
-    byAgeGroup: Record<string, number>;
-    byPopulationType: Record<string, number>;
+
+    byEpsByRegime: Record<string, Record<string, number>>;
+    byGenderByRegime: Record<string, Record<string, number>>;
+    byAgeGroupByRegime: Record<string, Record<string, number>>;
+    byPopulationTypeByRegime: Record<string, Record<string, number>>;
   }>;
 }
 

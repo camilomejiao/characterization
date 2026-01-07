@@ -50,6 +50,7 @@ import { GetPqrsDetailByIdUsecase } from './domain/input-ports/usecase/get-pqrs-
 
 //Adapter
 import { S3FileStorageAdapter } from './adapter/output/s3/s3-file-storage.adapter';
+import { GetPqrExcelReportUsecase } from './domain/input-ports/usecase/get-pqr-excelReport.usecase';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { S3FileStorageAdapter } from './adapter/output/s3/s3-file-storage.adapte
     Validate_and_assign_relationsUsecase,
     Create_notification_pqrsUsecase,
     Delete_pqrsUsecase,
+    GetPqrExcelReportUsecase,
     {
       provide: IPqrsRepository,
       useClass: Pqrs_mysqlRepository,
