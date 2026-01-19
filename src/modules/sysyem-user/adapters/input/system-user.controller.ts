@@ -12,6 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
+//
+import { System_usersEntity } from '../../../../common/entities/system_users.entity';
+
 //Guard
 import { AuthGuard } from '@nestjs/passport';
 
@@ -85,7 +88,7 @@ export class SystemUserController {
   public async updateUser(
     @Param('id') id: number,
     @Body() updateUserDto: Update_userDto,
-  ) {
+  ): Promise<System_usersEntity> {
     return await this.updateUserUsecase.handler(id, updateUserDto);
   }
 
