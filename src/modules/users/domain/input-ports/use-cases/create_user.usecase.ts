@@ -1,4 +1,4 @@
-import { Inject, NotFoundException } from '@nestjs/common';
+import { ConflictException, Inject, NotFoundException } from '@nestjs/common';
 
 //
 import { UserEntity } from '../../../../../common/entities/user.entity';
@@ -47,6 +47,16 @@ export class Create_userUsecase {
     userId?: number,
   ): Promise<UserEntity> {
     try {
+      const existing = await this.userRepository.findOneBy({
+        identificationNumber: userDto.identification_number,
+      });
+
+      if (existing) {
+        throw new ConflictException(
+          'Ya existe un usuario registrado con este número de identificación.',
+        );
+      }
+
       const country = await this.getCountry(userDto.country_id);
       const department = await this.getDepartment(userDto.department_id);
       const municipality = await this.getMunicipality(userDto.municipality_id);
