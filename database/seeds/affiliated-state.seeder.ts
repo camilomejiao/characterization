@@ -10,6 +10,8 @@ export class AffiliatedStateSeeder implements Seeder {
       { id: 1, cod: 'AC', description: 'ACTIVO' },
       { id: 2, cod: 'AF', description: 'FALLECIDO' },
       { id: 3, cod: 'RE', description: 'RETIRADO' },
+      { id: 4, cod: 'PL', description: 'PROTECCIÓN LABORAL' },
+      { id: 5, cod: 'SM', description: 'SUSPENDIDO POR MORA' },
     ];
 
     for (const data of regs) {
