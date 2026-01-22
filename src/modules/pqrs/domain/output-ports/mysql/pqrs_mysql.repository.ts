@@ -93,7 +93,7 @@ export class Pqrs_mysqlRepository implements IPqrsRepository {
       .andWhere('pqrs.created_at <= :endDate', {
         endDate: `${endDate} 23:59:59`,
       })
-      .orderBy('pqrs.created_at', 'DESC');
+      .orderBy('pqrs.created_at', 'ASC');
 
     //console.log('SQL:', qb.getSql());
     const rows = await qb.getMany();

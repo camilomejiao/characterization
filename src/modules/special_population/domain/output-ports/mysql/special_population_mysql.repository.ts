@@ -37,6 +37,14 @@ export class SpecialPopulationMysqlRepository
       relations: {
         user: {
           identificationType: true,
+          department: true,
+          municipality: true,
+          sex: true,
+          area: true,
+          disabilityType: true,
+          organization: true,
+          country: true,
+          ethnicity: true,
         },
         populationType: true,
         eps: true,

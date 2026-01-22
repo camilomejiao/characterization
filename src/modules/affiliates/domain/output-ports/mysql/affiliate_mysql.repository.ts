@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { IAffiliateRepository } from '../affiliate.repository';
 import { UserEntity } from '../../../../../common/entities/user.entity';
 import { AffiliatesEntity } from '../../../../../common/entities/affiliate.entity';
@@ -33,7 +33,7 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
         regime: true,
       },
       where: {
-        affiliatedState: { id: 1 },
+        affiliatedState: { id: In([1, 3]) },
       },
     });
   }
@@ -42,7 +42,17 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
     return await this.repository.findOne({
       where: { id },
       relations: {
-        user: true,
+        user: {
+          identificationType: true,
+          department: true,
+          municipality: true,
+          sex: true,
+          area: true,
+          disabilityType: true,
+          organization: true,
+          country: true,
+          ethnicity: true,
+        },
         regime: true,
         populationType: true,
         eps: true,
