@@ -15,6 +15,6 @@ export class Pqrs_notificationEntity extends AbstractEntity<Pqrs_notificationEnt
   @JoinColumn({ name: 'status_id' })
   status: Application_statusEntity;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column({ type: 'text', nullable: false })
   notification: string;
 }

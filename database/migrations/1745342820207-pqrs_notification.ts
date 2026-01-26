@@ -25,8 +25,7 @@ export class PqrsNotification1745342820207 implements MigrationInterface {
           },
           {
             name: 'notification',
-            type: 'varchar',
-            length: '255',
+            type: 'text',
             isNullable: false,
           },
           {
