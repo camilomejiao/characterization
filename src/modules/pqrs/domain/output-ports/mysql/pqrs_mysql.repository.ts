@@ -105,6 +105,8 @@ export class Pqrs_mysqlRepository implements IPqrsRepository {
       affiliate:
         `${pqrs.user?.firstName ?? ''} ${pqrs.user?.middleName ?? ''} ${pqrs.user?.firstLastName ?? ''} ${pqrs.user?.middleLastName ?? ''}`.trim(),
       identification: pqrs.user?.identificationNumber ?? '',
+      address: pqrs.user?.address ?? '',
+      phoneNumber: pqrs.user?.phoneNumber ?? '',
       pqrsType: pqrs.pqrsType?.name ?? '',
       status: pqrs.applicationStatus?.name ?? '',
       department: pqrs.department?.name ?? '',
