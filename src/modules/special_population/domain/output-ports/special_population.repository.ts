@@ -12,6 +12,8 @@ export interface ISpecialPopulationRepository {
   ): Promise<SpecialPopulationEntity>;
 
   update(entity: SpecialPopulationEntity): Promise<SpecialPopulationEntity>;
+
+  delete(id: number): Promise<void>;
 }
 
 export const ISpecialPopulationRepository = Symbol(

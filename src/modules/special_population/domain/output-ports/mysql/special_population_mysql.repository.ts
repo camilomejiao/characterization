@@ -64,4 +64,8 @@ export class SpecialPopulationMysqlRepository
   ): Promise<SpecialPopulationEntity> {
     return this.repository.save(entity);
   }
+
+  async delete(id: number): Promise<void> {
+    await this.repository.delete(id);
+  }
 }

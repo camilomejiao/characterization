@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -18,6 +19,7 @@ import { GetSpecialPopulationListUsecase } from '../../domain/input-ports/use-ca
 import { GetSpecialPopulationUserByIdUsecase } from '../../domain/input-ports/use-case/get_special_population_user_by_id.usecase';
 import { UpdateDto } from './dto/update.dto';
 import { UpdateSpecialPopulationUsecase } from '../../domain/input-ports/use-case/update_special_population.usecase';
+import { DeleteSpecialPopulationUsecase } from '../../domain/input-ports/use-case/delete_special_population_usecase';
 
 @Controller('special-population')
 export class SpecialPopulationController {
@@ -30,6 +32,8 @@ export class SpecialPopulationController {
     private getSpecialPopulationUserByIdUsecase: GetSpecialPopulationUserByIdUsecase,
     @Inject(UpdateSpecialPopulationUsecase)
     private updateSpecialPopulationUsecase: UpdateSpecialPopulationUsecase,
+    @Inject(DeleteSpecialPopulationUsecase)
+    private deleteSpecialPopulationUsecase: DeleteSpecialPopulationUsecase,
   ) {}
 
   @Post('create')
@@ -87,5 +91,11 @@ export class SpecialPopulationController {
     }
 
     return { data: updateSpecial };
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  public async delete(@Param('id') id: number) {
+    return await this.deleteSpecialPopulationUsecase.handler(id);
   }
 }

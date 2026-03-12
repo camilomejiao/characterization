@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-//
+//Module
 import { UsersModule } from '../users/users.module';
 
 //Controller
@@ -13,6 +13,7 @@ import { GetSpecialPopulationListUsecase } from './domain/input-ports/use-case/g
 import { GetSpecialPopulationUserByIdUsecase } from './domain/input-ports/use-case/get_special_population_user_by_id.usecase';
 import { UpdateSpecialPopulationUsecase } from './domain/input-ports/use-case/update_special_population.usecase';
 import { Validate_and_assign_relationsUsecase } from './domain/input-ports/use-case/validate_and_assign_relations.usecase';
+import { DeleteSpecialPopulationUsecase } from './domain/input-ports/use-case/delete_special_population_usecase';
 
 //Entity
 import { SpecialPopulationEntity } from '../../common/entities/special_population.entity';
@@ -53,6 +54,7 @@ import { Application_status_mysqlRepository } from '../common/domain/output-port
     GetSpecialPopulationUserByIdUsecase,
     UpdateSpecialPopulationUsecase,
     Validate_and_assign_relationsUsecase,
+    DeleteSpecialPopulationUsecase,
     {
       provide: ISpecialPopulationRepository,
       useClass: SpecialPopulationMysqlRepository,
