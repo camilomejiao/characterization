@@ -21,7 +21,9 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
   async findAll(): Promise<AffiliatesEntity[]> {
     return await this.repository.find({
       relations: {
-        user: true,
+        user: {
+          identificationType: true,
+        },
         populationType: true,
         eps: true,
         affiliatedState: true,
