@@ -140,6 +140,7 @@ export class BulkAffiliateUsecase {
               const affPatch = await this.validateDiffAffiliateUsecase.handler(
                 entry.affiliate,
                 row,
+                dto.regime,
               );
 
               if (affPatch && Object.keys(affPatch).length) {

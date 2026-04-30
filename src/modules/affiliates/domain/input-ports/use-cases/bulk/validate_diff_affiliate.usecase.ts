@@ -28,6 +28,7 @@ export class ValidateDiffAffiliateUsecase {
   public async handler(
     current: AffiliatesEntity,
     row: BulkAffiliateRowDto,
+    regimen,
   ): Promise<Partial<AffiliatesEntity>> {
     try {
       const patch: Partial<AffiliatesEntity> = {};
@@ -95,6 +96,10 @@ export class ValidateDiffAffiliateUsecase {
           'subgroup',
           'Grupo y Subgrupo',
         );
+      }
+
+      if (patch.regime != regimen) {
+        patch.regime = regimen;
       }
 
       return patch;
