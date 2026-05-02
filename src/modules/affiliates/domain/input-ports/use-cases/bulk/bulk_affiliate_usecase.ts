@@ -1,9 +1,17 @@
 import { BadRequestException, Inject, Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { BulkAffiliateDto } from '../../../../adapters/input/dto/dataBulk.dto';
+
+import {
+  BulkAffiliateDto,
+  BulkAffiliateRowDto,
+} from '../../../../adapters/input/dto/dataBulk.dto';
+
 import { UserEntity } from '../../../../../../common/entities/user.entity';
 import { AffiliatesEntity } from '../../../../../../common/entities/affiliate.entity';
+import { UploadFileStatus } from '../../../../../../common/entities/uploaded_files.entity';
+
 import { IAffiliateRepository } from '../../../output-ports/affiliate.repository';
+
 import { ValidateFileNameUsecase } from './validate_file_name.usecase';
 import { ValidateMonthlyUploadsUsecase } from './validate_monthly_uploads.usecase';
 import { ValidateDiffUserUsecase } from './validate_diff_user.usecase';
@@ -11,15 +19,18 @@ import { ValidateDiffAffiliateUsecase } from './validate_diff_affiliate.usecase'
 import { LmaUsecase } from './lma.usecase';
 import { AffiliateHistoryUsecase } from './affiliate_history.usecase';
 import { UpsertUploadFileUsecase } from './upsert_upload_file.usecase';
-import { UploadFileStatus } from '../../../../../../common/entities/uploaded_files.entity';
+import { CreateBulkUserUsecase } from './create_bulk_user.usecase';
+import { CreateBulkAffiliateUsecase } from './create_bulk_affiliate.usecase';
 
 export class BulkAffiliateUsecase {
   private readonly logger = new Logger(BulkAffiliateUsecase.name);
 
   constructor(
     private readonly dataSource: DataSource,
+
     @Inject(IAffiliateRepository)
     private readonly affiliateRepo: IAffiliateRepository,
+
     private readonly validateFileNameUsecase: ValidateFileNameUsecase,
     private readonly validateMonthlyUploadsUsecase: ValidateMonthlyUploadsUsecase,
     private readonly validateDiffUserUsecase: ValidateDiffUserUsecase,
@@ -27,11 +38,12 @@ export class BulkAffiliateUsecase {
     private readonly lmaUsecase: LmaUsecase,
     private readonly affiliateHistoryUsecase: AffiliateHistoryUsecase,
     private readonly upsertUploadFileUsecase: UpsertUploadFileUsecase,
+    private readonly createBulkUserUsecase: CreateBulkUserUsecase,
+    private readonly createBulkAffiliateUsecase: CreateBulkAffiliateUsecase,
   ) {}
 
   public async handler(dto: BulkAffiliateDto) {
     try {
-      // 1) validar nombre de archivo
       await this.validateFileNameUsecase.handler(
         dto.fileName,
         dto.regime,
@@ -42,7 +54,6 @@ export class BulkAffiliateUsecase {
         throw new BadRequestException('Archivo vacío');
       }
 
-      //2) validar límite mensual ANTES de procesar
       await this.validateMonthlyUploadsUsecase.handler(
         Number(dto.organizationId),
         dto.period,
@@ -51,11 +62,11 @@ export class BulkAffiliateUsecase {
       const summary = {
         total: dto.rows.length,
         success: 0,
+        userCreated: 0,
+        affiliateCreated: 0,
         userUpdated: 0,
         affiliateUpdated: 0,
         lmaInserted: 0,
-        notFoundUsers: [] as Array<{ identificationNumber: number }>,
-        usersWithoutAffiliate: [] as Array<{ identificationNumber: number }>,
         skippedLmaWithoutAffiliate: [] as Array<{
           identificationNumber: number;
         }>,
@@ -70,14 +81,26 @@ export class BulkAffiliateUsecase {
 
       for (let i = 0; i < dto.rows.length; i += BATCH) {
         const chunk = dto.rows.slice(i, i + BATCH);
+
         const chunkNumbers = Array.from(
           new Set(chunk.map((r) => r.identificationNumber)),
         );
 
+        /**
+         * Aquí consultamos cuáles cédulas ya existen.
+         *
+         * Si existe:
+         * map.get(cedula) devuelve { user, affiliate }
+         *
+         * Si NO existe:
+         * map.get(cedula) devuelve null
+         */
         const map = await this.affiliateRepo.findUsersAndAffiliatesByIdNumbers(
           Number(dto.organizationId),
           chunkNumbers,
         );
+
+        //console.log('map: ', map);
 
         const qr = this.dataSource.createQueryRunner();
         await qr.connect();
@@ -88,24 +111,83 @@ export class BulkAffiliateUsecase {
             const row = chunk[k];
             const globalIndex = i + k;
 
-            const entry = map.get(row.identificationNumber);
-
-            if (!entry?.user) {
-              summary.notFoundUsers.push({
-                identificationNumber: row.identificationNumber,
-              });
-              continue;
-            }
-
-            if (!entry.affiliate) {
-              summary.usersWithoutAffiliate.push({
-                identificationNumber: row.identificationNumber,
-              });
-              continue;
-            }
-
             try {
-              // USER DIFF
+              const entry = map.get(row.identificationNumber);
+
+              //console.log(entry);
+
+              /**
+               * CASO 1:
+               * No existe usuario.
+               * Se crea usuario + afiliado + LMA.
+               * No se hace diff porque no hay información anterior para comparar.
+               */
+              if (!entry?.user) {
+                const newUser = await this.createBulkUserUsecase.handler(
+                  qr.manager,
+                  row,
+                  Number(dto.organizationId),
+                );
+
+                summary.userCreated++;
+
+                const newAffiliate =
+                  await this.createBulkAffiliateUsecase.handler(
+                    qr.manager,
+                    row,
+                    newUser,
+                    Number(dto.regime),
+                  );
+
+                summary.affiliateCreated++;
+
+                await this.insertLmaIfApplies(
+                  qr.manager,
+                  newAffiliate.id,
+                  row,
+                  dto,
+                  summary,
+                );
+
+                summary.success++;
+                continue;
+              }
+
+              /**
+               * CASO 2:
+               * Existe usuario, pero no tiene afiliado.
+               * Se crea afiliado.
+               * Luego sigue el flujo de LMA.
+               */
+              if (!entry.affiliate) {
+                const newAffiliate =
+                  await this.createBulkAffiliateUsecase.handler(
+                    qr.manager,
+                    row,
+                    entry.user,
+                    Number(dto.regime),
+                  );
+
+                entry.affiliate = newAffiliate;
+                summary.affiliateCreated++;
+
+                await this.insertLmaIfApplies(
+                  qr.manager,
+                  newAffiliate.id,
+                  row,
+                  dto,
+                  summary,
+                );
+
+                summary.success++;
+                continue;
+              }
+
+              /**
+               * CASO 3:
+               * Existe usuario y existe afiliado.
+               * Aquí sí se comparan datos actuales vs datos del Excel.
+               */
               const userPatch = await this.validateDiffUserUsecase.handler(
                 entry.user,
                 row,
@@ -120,6 +202,7 @@ export class BulkAffiliateUsecase {
                   { id: entry.user.id },
                   updateUserPatch,
                 );
+
                 summary.userUpdated++;
 
                 const changes = this.describeDiff(
@@ -127,6 +210,7 @@ export class BulkAffiliateUsecase {
                   entry.user,
                   this.USER_FIELD_LABELS,
                 );
+
                 for (const description of changes) {
                   await this.affiliateHistoryUsecase.handler(
                     qr.manager,
@@ -136,7 +220,6 @@ export class BulkAffiliateUsecase {
                 }
               }
 
-              // AFFILIATE DIFF
               const affPatch = await this.validateDiffAffiliateUsecase.handler(
                 entry.affiliate,
                 row,
@@ -152,6 +235,7 @@ export class BulkAffiliateUsecase {
                   { id: entry.affiliate.id },
                   updateAffPatch,
                 );
+
                 summary.affiliateUpdated++;
 
                 const changesAff = this.describeDiff(
@@ -159,6 +243,7 @@ export class BulkAffiliateUsecase {
                   entry.affiliate,
                   this.AFF_FIELD_LABELS,
                 );
+
                 for (const description of changesAff) {
                   await this.affiliateHistoryUsecase.handler(
                     qr.manager,
@@ -168,24 +253,13 @@ export class BulkAffiliateUsecase {
                 }
               }
 
-              // LMA
-              if (
-                entry.affiliate?.id &&
-                row.valorLMA !== undefined &&
-                row.valorLMA !== null
-              ) {
-                await this.lmaUsecase.handler(
-                  qr.manager,
-                  entry.affiliate.id,
-                  dto.period,
-                  row.valorLMA,
-                );
-                summary.lmaInserted++;
-              } else {
-                summary.skippedLmaWithoutAffiliate.push({
-                  identificationNumber: row.identificationNumber,
-                });
-              }
+              await this.insertLmaIfApplies(
+                qr.manager,
+                entry.affiliate.id,
+                row,
+                dto,
+                summary,
+              );
 
               summary.success++;
             } catch (e: any) {
@@ -215,7 +289,6 @@ export class BulkAffiliateUsecase {
         }
       }
 
-      // 2) Si terminó OK, marcar COMPLETED
       await this.upsertUploadFileUsecase.handler(
         this.dataSource,
         dto.organizationId,
@@ -240,15 +313,46 @@ export class BulkAffiliateUsecase {
     }
   }
 
+  private async insertLmaIfApplies(
+    manager: any,
+    affiliateId: number,
+    row: BulkAffiliateRowDto,
+    dto: BulkAffiliateDto,
+    summary: {
+      lmaInserted: number;
+      skippedLmaWithoutAffiliate: Array<{ identificationNumber: number }>;
+    },
+  ): Promise<void> {
+    if (affiliateId && row.valorLMA !== undefined && row.valorLMA !== null) {
+      await this.lmaUsecase.handler(
+        manager,
+        affiliateId,
+        dto.period,
+        row.valorLMA,
+      );
+
+      summary.lmaInserted++;
+      return;
+    }
+
+    summary.skippedLmaWithoutAffiliate.push({
+      identificationNumber: row.identificationNumber,
+    });
+  }
+
   private sanitizePatchForUpdate<T extends object>(
     patch: Partial<T>,
   ): Partial<T> {
     const out: any = {};
+
     for (const [key, value] of Object.entries(patch)) {
-      if (value && typeof value === 'object' && 'id' in value)
+      if (value && typeof value === 'object' && 'id' in value) {
         out[key] = { id: (value as any).id };
-      else out[key] = value;
+      } else {
+        out[key] = value;
+      }
     }
+
     return out;
   }
 
@@ -281,15 +385,19 @@ export class BulkAffiliateUsecase {
 
   private formatValue(value: any): string {
     if (value === null || value === undefined) return '(sin valor)';
+
     if (typeof value === 'object') {
       if ('name' in value && value.name) return String(value.name);
-      if ('description' in value && value.description)
+      if ('description' in value && value.description) {
         return String(value.description);
+      }
       if ('cod' in value && value.cod) return String(value.cod);
       if ('code' in value && value.code) return String(value.code);
       if ('id' in value && value.id) return String(value.id);
+
       return JSON.stringify(value);
     }
+
     return String(value);
   }
 
@@ -299,11 +407,14 @@ export class BulkAffiliateUsecase {
     labels: Record<string, string>,
   ): string[] {
     const fields = Object.keys(patch);
+
     if (!fields.length) return [];
+
     return fields.map((field) => {
       const label = labels[field] ?? field;
       const beforeText = this.formatValue(original[field]);
       const afterText = this.formatValue(patch[field]);
+
       return `Se realizó cambio en el campo ${label}: antes=${beforeText}, ahora=${afterText}`;
     });
   }

@@ -169,12 +169,12 @@ export class Create_userUsecase {
   }
 
   private async getCountry(countryId: number) {
-    const department = await this.countryRepository.findOneBy({
+    const country = await this.countryRepository.findOneBy({
       id: countryId,
     });
-    if (!department)
+    if (!country)
       throw new NotFoundException(`Country with ID ${countryId} not found`);
-    return department;
+    return country;
   }
 
   private async getEthnicity(ethnicityId: number) {

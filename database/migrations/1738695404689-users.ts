@@ -42,7 +42,7 @@ export class Users1738695404689 implements MigrationInterface {
           {
             name: 'sex_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'area_id',

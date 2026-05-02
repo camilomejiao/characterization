@@ -125,8 +125,6 @@ export class AffiliatesController {
       userUpdated: number;
       affiliateUpdated: number;
       lmaInserted: number;
-      notFoundUsers: { identificationNumber: number }[];
-      usersWithoutAffiliate: { identificationNumber: number }[];
       skippedLmaWithoutAffiliate: { identificationNumber: number }[];
       rowErrors: {
         index: number;

@@ -46,6 +46,9 @@ import { ValidateDiffAffiliateUsecase } from './domain/input-ports/use-cases/bul
 import { LmaUsecase } from './domain/input-ports/use-cases/bulk/lma.usecase';
 import { AffiliateHistoryUsecase } from './domain/input-ports/use-cases/bulk/affiliate_history.usecase';
 import { UpsertUploadFileUsecase } from './domain/input-ports/use-cases/bulk/upsert_upload_file.usecase';
+import { GetReportUsecase } from './domain/input-ports/use-cases/get_report.usecase';
+import { CreateBulkUserUsecase } from './domain/input-ports/use-cases/bulk/create_bulk_user.usecase';
+import { CreateBulkAffiliateUsecase } from './domain/input-ports/use-cases/bulk/create_bulk_affiliate.usecase';
 
 //Repository
 import { IAffiliateRepository } from './domain/output-ports/affiliate.repository';
@@ -67,6 +70,7 @@ import { IAreaRepository } from '../common/domain/output-ports/area.repository';
 import { ISexRepository } from '../common/domain/output-ports/sex.repository';
 import { IAffiliatedStateRepository } from '../common/domain/output-ports/affiliated_state.repository';
 import { IApplicationStatusRepository } from '../common/domain/output-ports/application_status.repository';
+import { IIdentificationTypeRepository } from '../common/domain/output-ports/identification_type.repository';
 
 //Mysql
 import { Affiliate_mysqlRepository } from './domain/output-ports/mysql/affiliate_mysql.repository';
@@ -88,7 +92,8 @@ import { Area_mysqlRepository } from '../common/domain/output-ports/mysql/area_m
 import { Sex_mysqlRepository } from '../common/domain/output-ports/mysql/sex_mysql.repository';
 import { AffiliatedStateMysqlRepository } from '../common/domain/output-ports/mysql/affiliated_state_mysql.repository';
 import { Application_status_mysqlRepository } from '../common/domain/output-ports/mysql/application_status_mysql.repository';
-import { GetReportUsecase } from './domain/input-ports/use-cases/get_report.usecase';
+import { Identification_type_mysqlRepository } from '../common/domain/output-ports/mysql/identification_type_mysql.repository';
+import { Identification_typeEntity } from '../../common/entities/identification_type.entity';
 
 @Module({
   imports: [
@@ -115,6 +120,7 @@ import { GetReportUsecase } from './domain/input-ports/use-cases/get_report.usec
       SexEntity,
       Affiliated_stateEntity,
       Application_statusEntity,
+      Identification_typeEntity,
     ]),
     UsersModule,
   ],
@@ -135,6 +141,8 @@ import { GetReportUsecase } from './domain/input-ports/use-cases/get_report.usec
     AffiliateHistoryUsecase,
     UpsertUploadFileUsecase,
     GetReportUsecase,
+    CreateBulkUserUsecase,
+    CreateBulkAffiliateUsecase,
     {
       provide: IAffiliateRepository,
       useClass: Affiliate_mysqlRepository,
@@ -210,6 +218,10 @@ import { GetReportUsecase } from './domain/input-ports/use-cases/get_report.usec
     {
       provide: IApplicationStatusRepository,
       useClass: Application_status_mysqlRepository,
+    },
+    {
+      provide: IIdentificationTypeRepository,
+      useClass: Identification_type_mysqlRepository,
     },
   ],
   exports: [AffiliatesModule],

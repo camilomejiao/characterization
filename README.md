@@ -26,6 +26,10 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Arquitectura
+
+La documentacion de arquitectura hexagonal del proyecto esta en [`docs/arquitectura-hexagonal.md`](/C:/Users/UBITS/Documents/projects-udemy/Alcaldia/Salud/characterization/docs/arquitectura-hexagonal.md).
+
 ## Installation
 
 ```bash

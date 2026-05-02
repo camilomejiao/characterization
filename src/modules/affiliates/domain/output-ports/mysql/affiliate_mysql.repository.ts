@@ -152,8 +152,6 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
       .where('org.id = :orgId', { orgId: organizationId })
       .andWhere('u.identificationNumber IN (:...ids)', { ids: numbers });
 
-    // Si llegara a existir más de un user con el mismo número (no debería),
-    // nos quedamos con el más “reciente” por número:
     const users = await qb
       .orderBy('u.identificationNumber', 'ASC')
       .addOrderBy('u.updated_at', 'DESC')
