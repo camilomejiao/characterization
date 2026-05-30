@@ -62,7 +62,7 @@ export class CreateBulkAffiliateUsecase {
     const eps = await this.getRelation(
       row.eps,
       this.epsRepository,
-      'code',
+      'cod',
       'EPS',
     );
 

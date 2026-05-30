@@ -11,7 +11,9 @@ export class GetReportUsecase {
 
   public async handler(month: number, year: number) {
     try {
-      return await this.affiliateRepo.reportInformationGrafics(month, year);
+      const a = await this.affiliateRepo.reportInformationGrafics(month, year);
+      console.log(a);
+      return a;
     } catch (error) {
       this.logger.error(error);
       throw error;

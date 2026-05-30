@@ -34,13 +34,11 @@ export class Lma1761436369115 implements MigrationInterface {
           {
             name: 'month',
             type: 'int',
-            length: '3',
             isNullable: false,
           },
           {
             name: 'year',
             type: 'int',
-            length: '5',
             isNullable: false,
           },
           {
@@ -70,9 +68,9 @@ export class Lma1761436369115 implements MigrationInterface {
         ],
         indices: [
           {
-            name: 'uq_lma_affiliate_period',
-            columnNames: ['affiliate_id', 'year', 'month'],
-            isUnique: true,
+            name: 'idx_lma_affiliate_id',
+            columnNames: ['affiliate_id'],
+            isUnique: false,
           },
         ],
         engine: 'InnoDB',

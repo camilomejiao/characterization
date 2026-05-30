@@ -141,6 +141,11 @@ export class BulkAffiliateUsecase {
 
                 summary.affiliateCreated++;
 
+                map.set(row.identificationNumber, {
+                  user: newUser,
+                  affiliate: newAffiliate,
+                });
+
                 await this.insertLmaIfApplies(
                   qr.manager,
                   newAffiliate.id,

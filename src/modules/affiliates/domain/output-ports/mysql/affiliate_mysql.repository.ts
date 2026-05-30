@@ -181,12 +181,12 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
     const REGIMES = ['SUBSIDIADO', 'CONTRIBUTIVO'];
 
     const emptyAgeGroups = () => ({
-      'Menores de 1 año': 0,
-      '1 - 4 años': 0,
-      '5 - 14 años': 0,
-      '15 - 44 años': 0,
-      '45 - 59 años': 0,
-      '60 y más': 0,
+      'Primera Infancia (0-5)': 0,
+      'Infancia (6-11)': 0,
+      'Adolescencia (12-17)': 0,
+      'Juventud (18-28)': 0,
+      'Adultez (29-59)': 0,
+      'Vejez (60+)': 0,
     });
 
     const initRegimeMap = <T>(factory: () => T) =>
@@ -292,16 +292,14 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
       .where('state.id = :stateId', { stateId: ACTIVE_STATE_ID })
       .select('UPPER(regime.name)', 'regime')
       .addSelect(
-        `
-      CASE
-        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) < 1 THEN 'Menores de 1 año'
-        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 1 AND 4 THEN '1 - 4 años'
-        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 5 AND 14 THEN '5 - 14 años'
-        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 15 AND 44 THEN '15 - 44 años'
-        WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 45 AND 59 THEN '45 - 59 años'
-        ELSE '60 y más'
-      END
-    `,
+        `CASE
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 0 AND 5 THEN 'Primera Infancia (0-5)'
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 6 AND 11 THEN 'Infancia (6-11)'
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 12 AND 17 THEN 'Adolescencia (12-17)'
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 18 AND 28 THEN 'Juventud (18-28)'
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURDATE()) BETWEEN 29 AND 59 THEN 'Adultez (29-59)'
+                    ELSE 'Vejez (60+)'
+                  END`,
         'ageGroup',
       )
       .addSelect('COUNT(*)', 'total')
