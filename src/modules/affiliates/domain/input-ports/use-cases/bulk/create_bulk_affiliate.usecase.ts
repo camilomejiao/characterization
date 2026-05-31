@@ -69,7 +69,7 @@ export class CreateBulkAffiliateUsecase {
     const affiliatedState = await this.getRelation(
       row.state,
       this.affiliatedStateRepository,
-      'code',
+      'cod',
       'Estado de afiliación',
     );
 
