@@ -23,6 +23,7 @@ export class Affiliate_mysqlRepository implements IAffiliateRepository {
       relations: {
         user: {
           identificationType: true,
+          sex: true,
         },
         populationType: true,
         eps: true,
